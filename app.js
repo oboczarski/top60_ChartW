@@ -116,10 +116,10 @@ function buildSummaryChips() {
             --chip-line: linear-gradient(90deg, ${item.lineStart}, ${item.lineEnd});
             --chip-dot: linear-gradient(135deg, ${item.lineStart}, ${item.lineEnd});
             box-shadow:
-              0 14px 38px rgba(0,0,0,0.28),
+              0 2px 8px rgba(0,0,0,0.28),
               inset 0 1px 0 rgba(255,255,255,0.03),
               0 0 0 1px rgba(255,255,255,0.02),
-              0 0 30px ${item.glow};
+              0 -3px 10px ${item.glow};
           "
         >
           <div class="stat-chip-top">
@@ -167,7 +167,7 @@ function buildSeries() {
     symbol: "none",
     z: 3,
     lineStyle: {
-      width: 3.1,
+      width: 3,
       color: lineGradient(item.lineStart, item.lineEnd),
       cap: "round",
       join: "round"
@@ -249,7 +249,7 @@ function initChart() {
       type: "value",
       min: 0,
       max: 60,
-      interval: 6,
+      interval: 12,
       axisLabel: {
         color: "rgba(255,255,255,0.76)",
         fontSize: 11,
