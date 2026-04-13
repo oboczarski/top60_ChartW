@@ -252,7 +252,8 @@ function initChart() {
       interval: 6,
       axisLabel: {
         color: "rgba(255,255,255,0.76)",
-        fontSize: 12,
+        fontSize: 11,
+        fontWeight: 300,
         fontFamily: "'Product Sans', 'Google Sans', sans-serif",
         formatter(value) {
           return Number.isInteger(value) ? String(value) : "";
@@ -277,12 +278,13 @@ function initChart() {
       interval: 2,
       axisLabel: {
         color: "rgba(255,255,255,0.76)",
-        fontSize: 12,
+        fontSize: 11,
+        fontWeight: 300,
         fontFamily: "'Product Sans', 'Google Sans', sans-serif"
       },
       axisLine: {
         lineStyle: {
-          color: "rgba(255,255,255,0.14)"
+          color: "rgba(255,255,255,0)"
         }
       },
       axisTick: {
@@ -291,8 +293,8 @@ function initChart() {
       splitLine: {
         show: true,
         lineStyle: {
-          color: "rgba(255,255,255,0.12)",
-          type: "dashed"
+          color: "rgba(255,255,255,0.05)",
+          type: "dotted"
         }
       }
     },
