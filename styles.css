@@ -32,8 +32,8 @@ body {
 }
 
 .widget-card {
-  width: 400px;
-  max-width: calc(100vw - 24px);
+  width: 360px;
+  max-width: 375px;
   background: var(--surface);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 26px;
@@ -42,8 +42,8 @@ body {
 }
 
 .widget-header {
-  padding: 14px 16px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 10px 16px 4px;
+  border-bottom: 0px solid rgba(255, 255, 255, 0.08);
 }
 
 .widget-header h2 {
@@ -63,12 +63,12 @@ body {
 }
 
 .widget-body {
-  padding: 8px 5px 8px 7px;
+  padding: 0px 5px 8px 7px;
 }
 
 .chart-shell {
   position: relative;
-  height: 332px;
+  height: 302px;
   background: var(--surface);
   border-radius: 22px;
   padding: 2px 2px 2px 7px;
@@ -108,7 +108,7 @@ body {
   padding-inline: 2px;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 4px;
+  gap: 2px;
 }
 
 .stat-chip {
@@ -118,7 +118,7 @@ body {
   background: var(--surface);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 11px;
-  padding: 8px 8px 7px;
+  padding: 8px 5px 7px 8px;
   box-shadow:
     0 14px 38px rgba(0, 0, 0, 0.28),
     inset 0 1px 0 rgba(255, 255, 255, 0.03),
@@ -136,25 +136,26 @@ body {
 .stat-chip-top {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 14px;
   margin-bottom: 4px;
   min-width: 0;
 }
 
 .stat-dot {
-  width: 12px;
-  height: 12px;
+  width: 13px;
+  height: 13px;
   border-radius: 999px;
   background: var(--chip-dot);
   flex: 0 0 auto;
+  margin-bottom: 1px;
 }
 
 .stat-label {
   min-width: 0;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1;
-  font-weight: 700;
-  letter-spacing: 0.16em;
+  font-weight: 800;
+  letter-spacing: 0;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.82);
   white-space: nowrap;
@@ -162,8 +163,9 @@ body {
 
 .stat-chip-bottom {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 }
 
 .stat-count {
@@ -181,7 +183,7 @@ body {
 
 .stat-sub {
   display: block;
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -194,6 +196,7 @@ body {
   font-size: 12px;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.9);
+  text-align: center;
 }
 
 ::-webkit-scrollbar {
