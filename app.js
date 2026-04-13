@@ -203,7 +203,8 @@ function initChart() {
       borderWidth: 1,
       textStyle: {
         color: "#fff",
-        fontSize: 12
+        fontSize: 12,
+        fontFamily: "'Product Sans', 'Google Sans', sans-serif"
       },
       axisPointer: {
         type: "line",
@@ -252,6 +253,7 @@ function initChart() {
       axisLabel: {
         color: "rgba(255,255,255,0.76)",
         fontSize: 12,
+        fontFamily: "'Product Sans', 'Google Sans', sans-serif",
         formatter(value) {
           return Number.isInteger(value) ? String(value) : "";
         }
@@ -275,7 +277,8 @@ function initChart() {
       interval: 2,
       axisLabel: {
         color: "rgba(255,255,255,0.76)",
-        fontSize: 12
+        fontSize: 12,
+        fontFamily: "'Product Sans', 'Google Sans', sans-serif"
       },
       axisLine: {
         lineStyle: {
