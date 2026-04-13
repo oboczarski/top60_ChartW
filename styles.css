@@ -148,7 +148,7 @@ body {
   border-radius: 999px;
   background: var(--chip-dot);
   flex: 0 0 auto;
-  margin-bottom: 1px;
+  margin-bottom: 2px;
 }
 
 .stat-label {
