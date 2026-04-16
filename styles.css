@@ -48,7 +48,7 @@ body {
 
 .widget-header h2 {
   margin: 0;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.2;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -69,11 +69,11 @@ body {
 
 .chart-shell {
   position: relative;
-  height: 271px;
+  height: 288px;
   background: var(--surface);
   border-radius: 22px;
   padding: 0px 0px 0px 0px;
-  margin: -3px -15px -9px -29px;
+  margin: -3px -15px -14px -29px;
 }
 
 .chart {

@@ -157,10 +157,13 @@ function initChart() {
       min: 0,
       max: 20,
       interval: 5,
+      axisLine: { show: false },
+      axisTick: { show: false },
       axisLabel: {
         color: "rgba(255,255,255,0.76)",
         fontSize: 11,
         fontWeight: 500,
+        margin: 0,
       },
       splitLine: { show: true, lineStyle: { color: "rgba(255,255,255,0.05)", type: "dotted" } }
     },
