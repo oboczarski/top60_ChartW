@@ -181,7 +181,7 @@ function initChart() {
           name: {
             color: "rgba(255,255,255,0.76)",
             fontSize: 9,
-            fontWeight: 400,
+            fontWeight: 600,
             fontFamily: "'Product Sans', 'Google Sans', sans-serif"
           },
           posQB: { color: "#d37be9", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },

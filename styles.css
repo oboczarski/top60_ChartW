@@ -211,3 +211,8 @@ body {
   background: rgba(255, 255, 255, 0.14);
   border-radius: 999px;
 }
+
+/* Force negative letter spacing on ECharts text */
+#posChart svg text {
+  letter-spacing: -0.04em;
+}
