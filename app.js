@@ -14,14 +14,13 @@ const chartData = [
   { name: "Brock Bowers", pos: "TE", ktc: 10, adp: 13.2 },
   { name: "Caleb Williams", pos: "QB", ktc: 8, adp: 14.1 },
   { name: "Trey McBride", pos: "TE", ktc: 15, adp: 15.4 }
-].sort((a, b) => b.adp - a.adp); // Reverse order so ADP #1 is at top
+].sort((a, b) => b.adp - a.adp);
 
-function formatName(name, pos) {
+function formatName(name) {
   const parts = name.split(" ");
   const firstInitial = parts[0][0];
   const lastName = parts.slice(1).join(" ");
-  // Using unicode spaces to force alignment before position.
-  return `${firstInitial}. ${lastName}  ${pos}`;
+  return `${firstInitial}. ${lastName}`;
 }
 
 const colorKTC = "#ff4187";
@@ -30,55 +29,47 @@ const colorADP = "#6a00ff";
 function buildSummaryChips() {
   const chips = document.getElementById("summaryChips");
   
-  // Calculate analytics directly from provided data
-  const valDiscrepancies = chartData.map(p => ({
-    ...p,
-    diff: p.adp - p.ktc // Positive means KTC ranks them higher (number is lower) than ADP
-  }));
-  
-  const biggestValue = [...valDiscrepancies].sort((a, b) => b.diff - a.diff)[0];
-  const mostOvervalued = [...valDiscrepancies].sort((a, b) => a.diff - b.diff)[0];
-  
-  const qbCount = chartData.filter(d => d.pos === "QB").length;
-  const wrCount = chartData.filter(d => d.pos === "WR").length;
-
-  const summaries = [
-    {
-      label: "Best KTC Value",
-      val: biggestValue.name.split(" ").pop(),
-      sub: `Diff: +${biggestValue.diff.toFixed(1)}`,
-      line: colorKTC
-    },
-    {
-      label: "Lowest Value",
-      val: mostOvervalued.name.split(" ").pop(),
-      sub: `Diff: ${mostOvervalued.diff.toFixed(1)}`,
-      line: colorADP
-    },
-    {
-      label: "Top 15 QBs",
-      val: qbCount,
-      sub: "Count",
-      line: "#1ac2ff"
-    },
-    {
-      label: "Top 15 WRs",
-      val: wrCount,
-      sub: "Count",
-      line: "#0299fe"
-    }
+  const positions = [
+    { key: "QB", lineStart: "#ff9a3d", lineEnd: "#ff4187", glow: "rgba(255,120,90,0.34)" },
+    { key: "RB", lineStart: "#1ac2ff", lineEnd: "#06ff97", glow: "rgba(100,216,255,0.34)" },
+    { key: "WR", lineStart: "#8153ff", lineEnd: "#0299fe", glow: "rgba(124,111,255,0.34)" },
+    { key: "TE", lineStart: "#ff4187", lineEnd: "#6a00ff", glow: "rgba(255,107,200,0.30)" }
   ];
+
+  const summaries = positions.map(posGroup => {
+    const players = chartData.filter(d => d.pos === posGroup.key);
+    const count = players.length;
+    let avgDiff = 0;
+    if (count > 0) {
+      const totalDiff = players.reduce((sum, p) => sum + (p.adp - p.ktc), 0);
+      avgDiff = totalDiff / count;
+    }
+    
+    return {
+      ...posGroup,
+      count,
+      avgDiff
+    };
+  });
 
   chips.innerHTML = summaries
     .map(
       (item) => `
-        <div class="stat-chip" style="--chip-line: ${item.line}; box-shadow: 0 2px 8px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.03), 0 0 0 1px rgba(255,255,255,0.02);">
-          <div class="stat-chip-top" style="justify-content:center; margin-bottom: 2px;">
-            <span class="stat-label" style="font-size:9px; color:rgba(255,255,255,0.6);">${item.label}</span>
+        <div class="stat-chip" style="--chip-line: linear-gradient(90deg, ${item.lineStart}, ${item.lineEnd}); --chip-dot: linear-gradient(135deg, ${item.lineStart}, ${item.lineEnd}); box-shadow: 0 2px 8px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.03), 0 0 0 1px rgba(255,255,255,0.02), 0 -3px 10px ${item.glow};">
+          <div class="stat-chip-top" style="margin-bottom: 2px;">
+            <span class="stat-dot"></span>
+            <span class="stat-label" style="font-size:13px; color:rgba(255,255,255,0.8);">${item.key}</span>
           </div>
-          <div class="stat-chip-bottom" style="flex-direction:column; gap:2px;">
-            <span class="stat-count" style="font-size:16px; font-weight:700;">${item.val}</span>
-            <span class="stat-sub" style="font-size:10px; color:${item.line};">${item.sub}</span>
+          <div class="stat-chip-bottom" style="flex-direction:row; align-items:center; gap:8px; margin-top:2px;">
+            <div style="display:flex; flex-direction:column; align-items:center;">
+              <span class="stat-count" style="font-size:18px; font-weight:700;">${item.count}</span>
+              <span class="stat-sub" style="font-size:8px; color:rgba(255,255,255,0.4);">COUNT</span>
+            </div>
+            <div style="width:1px; height:16px; background:rgba(255,255,255,0.1);"></div>
+            <div style="display:flex; flex-direction:column; align-items:center;">
+              <span class="stat-count" style="font-size:14px; font-weight:500; color:${item.count > 0 ? (item.avgDiff > 0 ? '#06ff97' : '#ff4187') : 'inherit'}">${item.count > 0 ? (item.avgDiff > 0 ? '+' : '') + item.avgDiff.toFixed(1) : '-'}</span>
+              <span class="stat-sub" style="font-size:8px; color:rgba(255,255,255,0.4);">AVG SHIFT</span>
+            </div>
           </div>
         </div>
       `
@@ -90,7 +81,6 @@ function initChart() {
   const el = document.getElementById("posChart");
   const chart = echarts.init(el, null, { renderer: "svg" });
 
-  const yAxisData = chartData.map(d => formatName(d.name, d.pos));
   const adpData = chartData.map(d => d.adp);
   const ktcData = chartData.map(d => d.ktc);
 
@@ -98,7 +88,7 @@ function initChart() {
     animationDuration: 450,
     backgroundColor: "transparent",
     grid: {
-      left: 110,
+      left: 100, // Reduced from 110 since letter-spacing is down
       right: 20,
       top: 36,
       bottom: 44,
@@ -125,7 +115,11 @@ function initChart() {
       axisPointer: { type: "shadow", shadowStyle: { color: "rgba(255,255,255,0.04)" } },
       extraCssText: "border-radius:12px; box-shadow:0 16px 40px rgba(0,0,0,.45); padding:8px 12px;",
       formatter: function (params) {
-        let title = params[0].axisValue;
+        // Find player object for the raw axis string
+        const pIndex = params[0].dataIndex;
+        const player = chartData[pIndex];
+        let title = player ? formatName(player.name) + " " + player.pos : params[0].name;
+
         let pADP = params.find(p => p.seriesName === "ADP");
         let pKTC = params.find(p => p.seriesName === "KTC Rank");
         
@@ -145,7 +139,7 @@ function initChart() {
     xAxis: {
       type: "value",
       min: 0,
-      max: 15,
+      max: 20,
       interval: 5,
       axisLabel: {
         color: "rgba(255,255,255,0.76)",
@@ -156,13 +150,27 @@ function initChart() {
     },
     yAxis: {
       type: "category",
-      data: yAxisData,
+      data: chartData.map(d => d.name),
       axisLabel: {
-        color: "rgba(255,255,255,0.86)",
-        fontSize: 11,
-        fontWeight: 400,
-        fontFamily: "monospace", // Keeps spacing uniform for the position
-        interval: 0
+        formatter: function (value) {
+          const player = chartData.find(d => d.name === value);
+          if (!player) return value;
+          const formattedName = formatName(player.name);
+          return `{name|${formattedName}}   {pos${player.pos}|${player.pos}}`;
+        },
+        rich: {
+          name: {
+            color: "rgba(255,255,255,0.86)",
+            fontSize: 9,
+            fontFamily: "'Product Sans', 'Google Sans', sans-serif"
+          },
+          posQB: { color: "#ff7aab", fontSize: 10, fontWeight: 700, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
+          posRB: { color: "#4bffd2", fontSize: 10, fontWeight: 700, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
+          posWR: { color: "#609dff", fontSize: 10, fontWeight: 700, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
+          posTE: { color: "#9767ff", fontSize: 10, fontWeight: 700, fontFamily: "'Product Sans', 'Google Sans', sans-serif" }
+        },
+        interval: 0,
+        margin: 8
       },
       axisLine: { show: false },
       axisTick: { show: false }
@@ -184,11 +192,11 @@ function initChart() {
             type: "rect",
             transition: ["shape"],
             shape: {
-              x: minX,
-              y: y - 4,
-              width: width,
-              height: 8,
-              r: 4
+              x: minX - 6,
+              y: y - 6,
+              width: width + 12,
+              height: 12,
+              r: 6
             },
             style: api.style({
               fill: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
@@ -199,14 +207,14 @@ function initChart() {
           };
         },
         data: chartData.map((d, i) => [d.ktc, d.adp, i]),
-        z: 1,
+        z: 3,
         tooltip: { show: false }
       },
       {
         name: "KTC Rank",
         type: "scatter",
         symbol: "circle",
-        symbolSize: 10,
+        symbolSize: 12,
         itemStyle: { color: colorKTC },
         data: ktcData,
         z: 2
@@ -215,7 +223,7 @@ function initChart() {
         name: "ADP",
         type: "scatter",
         symbol: "circle",
-        symbolSize: 10,
+        symbolSize: 12,
         itemStyle: { color: colorADP },
         data: adpData,
         z: 2
