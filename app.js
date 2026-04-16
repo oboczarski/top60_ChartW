@@ -21,8 +21,8 @@ function formatName(name) {
 }
 
 const colorKTC = "#4800ff";
-const colorMid = "#7d21ff"; // Editable middle gradient color
-const colorADP = "#b341ff";
+const colorMid = "#ca18fb"; // Editable middle gradient color
+const colorADP = "#ff6441";
 
 function buildSummaryChips() {
   const chips = document.getElementById("summaryChips");
