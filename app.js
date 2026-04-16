@@ -76,8 +76,8 @@ const seriesMeta = [
     key: "RB",
     count: 20,
     pct: 33.3,
-    lineStart: "#64d8ff",
-    lineEnd: "#06ffa8",
+    lineStart: "#1ac2ff",
+    lineEnd: "#06ff97",
     areaStart: "#64d8ff",
     areaEnd: "#06ffa8",
     glow: "rgba(100, 216, 255, 0.34)"
@@ -86,18 +86,18 @@ const seriesMeta = [
     key: "WR",
     count: 17,
     pct: 28.3,
-    lineStart: "#9e6bff",
-    lineEnd: "#3881ff",
-    areaStart: "#9e6bff",
-    areaEnd: "#3881ff",
+    lineStart: "#8153ff",
+    lineEnd: "#0299fe",
+    areaStart: "#6e10fb",
+    areaEnd: "#0d72ff",
     glow: "rgba(124, 111, 255, 0.34)"
   },
   {
     key: "TE",
     count: 2,
     pct: 3.3,
-    lineStart: "#ff6bc8",
-    lineEnd: "#7f2fff",
+    lineStart: "#ff4187",
+    lineEnd: "#6a00ff",
     areaStart: "#ff6bc8",
     areaEnd: "#7f2fff",
     glow: "rgba(255, 107, 200, 0.30)"
@@ -116,10 +116,10 @@ function buildSummaryChips() {
             --chip-line: linear-gradient(90deg, ${item.lineStart}, ${item.lineEnd});
             --chip-dot: linear-gradient(135deg, ${item.lineStart}, ${item.lineEnd});
             box-shadow:
-              0 14px 38px rgba(0,0,0,0.28),
+              0 2px 8px rgba(0,0,0,0.28),
               inset 0 1px 0 rgba(255,255,255,0.03),
               0 0 0 1px rgba(255,255,255,0.02),
-              0 0 30px ${item.glow};
+              0 -3px 10px ${item.glow};
           "
         >
           <div class="stat-chip-top">
@@ -151,10 +151,10 @@ function lineGradient(start, end) {
 
 function areaGradient(start, end) {
   return new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-    { offset: 0, color: echarts.color.modifyAlpha(start, 0.34) },
-    { offset: 0.4, color: echarts.color.modifyAlpha(start, 0.22) },
-    { offset: 0.82, color: echarts.color.modifyAlpha(end, 0.1) },
-    { offset: 1, color: echarts.color.modifyAlpha(end, 0.04) }
+    { offset: 0, color: echarts.color.modifyAlpha(start, 0.44) },
+    { offset: 0.4, color: echarts.color.modifyAlpha(start, 0.32) },
+    { offset: 0.82, color: echarts.color.modifyAlpha(end, 0.21) },
+    { offset: 1, color: echarts.color.modifyAlpha(end, 0.14) }
   ]);
 }
 
@@ -167,7 +167,7 @@ function buildSeries() {
     symbol: "none",
     z: 3,
     lineStyle: {
-      width: 3.1,
+      width: 3,
       color: lineGradient(item.lineStart, item.lineEnd),
       cap: "round",
       join: "round"
@@ -203,7 +203,8 @@ function initChart() {
       borderWidth: 1,
       textStyle: {
         color: "#fff",
-        fontSize: 12
+        fontSize: 12,
+        fontFamily: "'Product Sans', 'Google Sans', sans-serif"
       },
       axisPointer: {
         type: "line",
@@ -248,10 +249,12 @@ function initChart() {
       type: "value",
       min: 0,
       max: 60,
-      interval: 6,
+      interval: 12,
       axisLabel: {
         color: "rgba(255,255,255,0.76)",
-        fontSize: 12,
+        fontSize: 11,
+        fontWeight: 300,
+        fontFamily: "'Product Sans', 'Google Sans', sans-serif",
         formatter(value) {
           return Number.isInteger(value) ? String(value) : "";
         }
@@ -275,11 +278,13 @@ function initChart() {
       interval: 2,
       axisLabel: {
         color: "rgba(255,255,255,0.76)",
-        fontSize: 12
+        fontSize: 11,
+        fontWeight: 300,
+        fontFamily: "'Product Sans', 'Google Sans', sans-serif"
       },
       axisLine: {
         lineStyle: {
-          color: "rgba(255,255,255,0.14)"
+          color: "rgba(255,255,255,0)"
         }
       },
       axisTick: {
@@ -288,8 +293,8 @@ function initChart() {
       splitLine: {
         show: true,
         lineStyle: {
-          color: "rgba(255,255,255,0.12)",
-          type: "dashed"
+          color: "rgba(255,255,255,0.05)",
+          type: "dotted"
         }
       }
     },
