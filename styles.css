@@ -18,26 +18,24 @@ body {
   background: var(--surface);
   color: var(--text);
   font-family:
-    Inter,
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
+    "Product Sans",
+    "Google Sans",
     sans-serif;
 }
 
 .page {
   min-height: 100vh;
-  display: grid;
-  place-items: start center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
   padding: 14px;
   background: var(--surface);
 }
 
 .widget-card {
-  width: 400px;
-  max-width: calc(100vw - 24px);
+  width: 330px;
+  max-width: 375px;
   background: var(--surface);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 26px;
@@ -45,18 +43,28 @@ body {
   box-shadow: 0 24px 90px rgba(0, 0, 0, 0.45);
 }
 
+.widget-card-polar {
+  width: min(96vw, 468px);
+  max-width: 468px;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 34px 120px rgba(0, 0, 0, 0.52),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
 .widget-header {
-  padding: 14px 16px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 8px 16px 2px;
+  border-bottom: 0px solid rgba(255, 255, 255, 0.08);
 }
 
 .widget-header h2 {
   margin: 0;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.2;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--text);
+  word-spacing: 0.12em;
 }
 
 .widget-header p {
@@ -67,15 +75,32 @@ body {
 }
 
 .widget-body {
-  padding: 8px 10px 8px;
+  padding: 0px 4px 7px 4px;
+}
+
+.widget-body-polar {
+  padding: 0 10px 14px;
 }
 
 .chart-shell {
   position: relative;
-  height: 350px;
+  height: 288px;
   background: var(--surface);
   border-radius: 22px;
-  padding: 2px 2px 12px;
+  padding: 0px 0px 0px 0px;
+  margin: -3px -15px -14px -29px;
+}
+
+.chart-shell-polar {
+  height: 508px;
+  margin: -2px -2px 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background:
+    radial-gradient(circle at 50% 58%, rgba(255, 255, 255, 0.03), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0) 44%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .chart {
@@ -88,7 +113,7 @@ body {
   pointer-events: none;
   font-size: 14px;
   line-height: 1;
-  font-weight: 700;
+  font-weight: 300;
   letter-spacing: 0.01em;
   color: rgba(255, 255, 255, 0.84);
   user-select: none;
@@ -112,7 +137,7 @@ body {
   padding-inline: 2px;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 4px;
+  gap: 2px;
 }
 
 .stat-chip {
@@ -121,8 +146,8 @@ body {
   overflow: hidden;
   background: var(--surface);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 18px;
-  padding: 8px 8px 7px;
+  border-radius: 11px;
+  padding: 8px 5px 7px 8px;
   box-shadow:
     0 14px 38px rgba(0, 0, 0, 0.28),
     inset 0 1px 0 rgba(255, 255, 255, 0.03),
@@ -140,25 +165,26 @@ body {
 .stat-chip-top {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 14px;
   margin-bottom: 4px;
   min-width: 0;
 }
 
 .stat-dot {
-  width: 12px;
-  height: 12px;
+  width: 13px;
+  height: 13px;
   border-radius: 999px;
   background: var(--chip-dot);
   flex: 0 0 auto;
+  margin-bottom: 2px;
 }
 
 .stat-label {
   min-width: 0;
-  font-size: 12px;
+  font-size: 15px;
   line-height: 1;
-  font-weight: 700;
-  letter-spacing: 0.16em;
+  font-weight: 800;
+  letter-spacing: 0;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.82);
   white-space: nowrap;
@@ -166,15 +192,16 @@ body {
 
 .stat-chip-bottom {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0;
 }
 
 .stat-count {
-  font-size: 25px;
+  font-size: 24px;
   line-height: 0.95;
-  font-weight: 700;
+  font-weight: 300;
   color: var(--text);
 }
 
@@ -199,6 +226,61 @@ body {
   font-size: 12px;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+}
+
+.chart-legend {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  pointer-events: none;
+}
+
+.chart-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.chart-legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.chart-legend-swatch-adp {
+  background: #ff6441;
+}
+
+.chart-legend-swatch-ktc {
+  background: #4800ff;
+}
+
+.chart-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  min-width: 160px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-9999px, -9999px);
+  transition: opacity 120ms ease;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 11, 16, 0.95);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(10px);
 }
 
 ::-webkit-scrollbar {
@@ -209,4 +291,19 @@ body {
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.14);
   border-radius: 999px;
+}
+
+/* Force negative letter spacing on ECharts text */
+#posChart svg text {
+  letter-spacing: -0.04em;
+}
+
+#polarChart svg text {
+  letter-spacing: -0.02em;
+}
+
+#polarChart svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
