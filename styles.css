@@ -42,7 +42,7 @@ body {
 }
 
 .widget-header {
-  padding: 10px 16px 4px;
+  padding: 8px 16px 2px;
   border-bottom: 0px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -64,16 +64,16 @@ body {
 }
 
 .widget-body {
-  padding: 0px 4px 8px 4px;
+  padding: 0px 4px 7px 4px;
 }
 
 .chart-shell {
   position: relative;
-  height: 302px;
+  height: 271px;
   background: var(--surface);
   border-radius: 22px;
   padding: 0px 0px 0px 0px;
-  margin: -4px -10px -4px -40px;
+  margin: -3px -15px -9px -29px;
 }
 
 .chart {

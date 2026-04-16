@@ -1,19 +1,19 @@
 const chartData = [
-  { name: "J. Allen", pos: "QB", ktc: 3, adp: 1.5 },
-  { name: "Bijan", pos: "RB", ktc: 2, adp: 2.6 },
-  { name: "Maye", pos: "QB", ktc: 6, adp: 3.4 },
-  { name: "Chase", pos: "WR", ktc: 1, adp: 4.4 },
-  { name: "Gibbs", pos: "RB", ktc: 5, adp: 5.9 },
-  { name: "Nacua", pos: "WR", ktc: 7, adp: 6.4 },
-  { name: "JSN", pos: "WR", ktc: 4, adp: 7.5 },
-  { name: "Daniels", pos: "QB", ktc: 11, adp: 8 },
-  { name: "St.Brown", pos: "WR", ktc: 13, adp: 9.1 },
-  { name: "Burrow", pos: "QB", ktc: 18, adp: 10.4 },
-  { name: "Jackson", pos: "QB", ktc: 14, adp: 11.8 },
-  { name: "Nabers", pos: "WR", ktc: 9, adp: 12.8 },
-  { name: "Bowers", pos: "TE", ktc: 10, adp: 13.2 },
-  { name: "C.Williams", pos: "QB", ktc: 8, adp: 14.1 },
-  { name: "McBride", pos: "TE", ktc: 15, adp: 15.4 }
+  { name: "J. Allen", fullName: "Josh Allen", pos: "QB", ktc: 3, adp: 1.5 },
+  { name: "Bijan", fullName: "Bijan Robinson", pos: "RB", ktc: 2, adp: 2.6 },
+  { name: "Maye", fullName: "Drake Maye", pos: "QB", ktc: 6, adp: 3.4 },
+  { name: "Chase", fullName: "Ja'Marr Chase", pos: "WR", ktc: 1, adp: 4.4 },
+  { name: "Gibbs", fullName: "Jahmyr Gibbs", pos: "RB", ktc: 5, adp: 5.9 },
+  { name: "Nacua", fullName: "Puka Nacua", pos: "WR", ktc: 7, adp: 6.4 },
+  { name: "JSN", fullName: "Jaxon Smith-Njigba", pos: "WR", ktc: 4, adp: 7.5 },
+  { name: "Daniels", fullName: "Jayden Daniels", pos: "QB", ktc: 11, adp: 8 },
+  { name: "St.Brown", fullName: "Amon-Ra St. Brown", pos: "WR", ktc: 13, adp: 9.1 },
+  { name: "Burrow", fullName: "Joe Burrow", pos: "QB", ktc: 18, adp: 10.4 },
+  { name: "Jackson", fullName: "Lamar Jackson", pos: "QB", ktc: 14, adp: 11.8 },
+  { name: "Nabers", fullName: "Malik Nabers", pos: "WR", ktc: 9, adp: 12.8 },
+  { name: "Bowers", fullName: "Brock Bowers", pos: "TE", ktc: 10, adp: 13.2 },
+  { name: "C.Williams", fullName: "Caleb Williams", pos: "QB", ktc: 8, adp: 14.1 },
+  { name: "McBride", fullName: "Trey McBride", pos: "TE", ktc: 15, adp: 15.4 }
 ].sort((a, b) => b.adp - a.adp);
 
 function formatName(name) {
@@ -86,7 +86,7 @@ function initChart() {
     animationDuration: 450,
     backgroundColor: "transparent",
     grid: {
-      left: 100, // Reduced from 110 since letter-spacing is down
+      left: 70, // Reduced from 100 since label is stacked
       right: 20,
       top: 6,
       bottom: 24,
@@ -119,7 +119,7 @@ function initChart() {
         // Find player object for the raw axis string
         const pIndex = params[0].dataIndex;
         const player = chartData[pIndex];
-        let title = player ? formatName(player.name) : params[0].name;
+        let title = player && player.fullName ? player.fullName : (player ? formatName(player.name) : params[0].name);
         let pos = player ? player.pos : "";
 
         let pADP = params.find(p => p.seriesName === "ADP");
@@ -132,10 +132,10 @@ function initChart() {
         if (pos === "TE") posBadge = `<span style="background:rgba(126,81,252,0.15); color:#7e51fc; padding:2px 6px; border-radius:4px; font-weight:600; font-size:10px; margin-left:6px;">TE</span>`;
 
         return `
-          <div style="font-size:14px; font-weight:600; color:rgba(255,255,255,0.9); margin-bottom:10px; display:flex; align-items:center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px;">
+          <div style="font-size:12px; font-weight:600; color:rgba(255,255,255,0.9); margin-bottom:6px; display:flex; align-items:center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 4px;">
             ${title}${posBadge}
           </div>
-          <div style="display:flex; justify-content:space-between; gap:24px; margin-bottom:6px; align-items: center;">
+          <div style="display:flex; justify-content:space-between; gap:24px; margin-bottom:2px; align-items: center;">
             <div style="display:flex; align-items:center; gap:6px;">
               <span style="width:8px; height:8px; border-radius:50%; background:${colorADP};"></span>
               <span style="color:rgba(255,255,255,0.7); font-size:12px;">ADP</span>
@@ -172,19 +172,21 @@ function initChart() {
           const player = chartData.find(d => d.name === value);
           if (!player) return value;
           const formattedName = formatName(player.name);
-          return `{name|${formattedName}} {pos${player.pos}|${player.pos}}`;
+          return `{name|${formattedName}}\n{pos${player.pos}|${player.pos}}`;
         },
         rich: {
           name: {
             color: "rgba(255,255,255,0.76)",
             fontSize: 9,
             fontWeight: 400,
-            fontFamily: "'Product Sans', 'Google Sans', sans-serif"
+            fontFamily: "'Product Sans', 'Google Sans', sans-serif",
+            align: 'right',
+            lineHeight: 9
           },
-          posQB: { color: "#d37be9", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
-          posRB: { color: "#66fccc", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
-          posWR: { color: "#60b5ff", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
-          posTE: { color: "#7e51fc", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" }
+          posQB: { color: "#d37be9", fontSize: 8, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif", align: 'right', lineHeight: 8 },
+          posRB: { color: "#66fccc", fontSize: 8, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif", align: 'right', lineHeight: 8 },
+          posWR: { color: "#60b5ff", fontSize: 8, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif", align: 'right', lineHeight: 8 },
+          posTE: { color: "#7e51fc", fontSize: 8, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif", align: 'right', lineHeight: 8 }
         },
         interval: 0,
         margin: 4
