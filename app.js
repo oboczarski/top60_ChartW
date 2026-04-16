@@ -88,7 +88,7 @@ function initChart() {
       left: 100, // Reduced from 110 since letter-spacing is down
       right: 20,
       top: 6,
-      bottom: 8,
+      bottom: 24,
       containLabel: false
     },
     legend: {
@@ -142,10 +142,9 @@ function initChart() {
       max: 20,
       interval: 5,
       axisLabel: {
-        show: false,
         color: "rgba(255,255,255,0.76)",
         fontSize: 11,
-        fontWeight: 300,
+        fontWeight: 500,
       },
       splitLine: { show: true, lineStyle: { color: "rgba(255,255,255,0.05)", type: "dotted" } }
     },
@@ -157,7 +156,7 @@ function initChart() {
           const player = chartData.find(d => d.name === value);
           if (!player) return value;
           const formattedName = formatName(player.name);
-          return `{name|${formattedName}}   {pos${player.pos}|${player.pos}}`;
+          return `{name|${formattedName}} {pos${player.pos}|${player.pos}}`;
         },
         rich: {
           name: {
