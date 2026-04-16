@@ -86,7 +86,7 @@ function initChart() {
     animationDuration: 450,
     backgroundColor: "transparent",
     grid: {
-      left: 70, // Reduced from 100 since label is stacked
+      left: 90, // Increased since label is inline again
       right: 20,
       top: 6,
       bottom: 24,
@@ -175,21 +175,19 @@ function initChart() {
           const player = chartData.find(d => d.name === value);
           if (!player) return value;
           const formattedName = formatName(player.name);
-          return `{name|${formattedName}}\n{pos${player.pos}|${player.pos}}`;
+          return `{name|${formattedName}  •  }{pos${player.pos}|${player.pos}}`;
         },
         rich: {
           name: {
             color: "rgba(255,255,255,0.76)",
             fontSize: 9,
             fontWeight: 400,
-            fontFamily: "'Product Sans', 'Google Sans', sans-serif",
-            align: 'right',
-            lineHeight: 9
+            fontFamily: "'Product Sans', 'Google Sans', sans-serif"
           },
-          posQB: { color: "#d37be9", fontSize: 8, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif", align: 'right', lineHeight: 8 },
-          posRB: { color: "#66fccc", fontSize: 8, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif", align: 'right', lineHeight: 8 },
-          posWR: { color: "#60b5ff", fontSize: 8, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif", align: 'right', lineHeight: 8 },
-          posTE: { color: "#7e51fc", fontSize: 8, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif", align: 'right', lineHeight: 8 }
+          posQB: { color: "#d37be9", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
+          posRB: { color: "#66fccc", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
+          posWR: { color: "#60b5ff", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
+          posTE: { color: "#7e51fc", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" }
         },
         interval: 0,
         margin: 4
