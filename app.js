@@ -20,8 +20,8 @@ function formatName(name) {
   return name;
 }
 
-const colorKTC = "#ff4187";
-const colorADP = "#6a00ff";
+const colorKTC = "#00ffae";
+const colorADP = "#1375ff";
 
 function buildSummaryChips() {
   const chips = document.getElementById("summaryChips");
