@@ -96,8 +96,8 @@ const seriesMeta = [
     key: "TE",
     count: 2,
     pct: 3.3,
-    lineStart: "#ff6bc8",
-    lineEnd: "#7f2fff",
+    lineStart: "#ff4187",
+    lineEnd: "#6a00ff",
     areaStart: "#ff6bc8",
     areaEnd: "#7f2fff",
     glow: "rgba(255, 107, 200, 0.30)"
