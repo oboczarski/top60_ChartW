@@ -163,17 +163,18 @@ function initChart() {
           name: {
             color: "rgba(255,255,255,0.76)",
             fontSize: 9,
+            fontWeight: 300,
             fontFamily: "'Product Sans', 'Google Sans', sans-serif"
           },
-          posQB: { color: "#ff7ad7", fontSize: 10, fontWeight: 300, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
-          posRB: { color: "#66fccc", fontSize: 10, fontWeight: 300, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
-          posWR: { color: "#60b5ff", fontSize: 10, fontWeight: 300, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
-          posTE: { color: "#9767ff", fontSize: 10, fontWeight: 300, fontFamily: "'Product Sans', 'Google Sans', sans-serif" }
+          posQB: { color: "#ff7ad7", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
+          posRB: { color: "#66fccc", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
+          posWR: { color: "#60b5ff", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
+          posTE: { color: "#9767ff", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" }
         },
         interval: 0,
-        margin: 8
+        margin: 4
       },
-      axisLine: { show: false },
+      axisLine: { show: true, lineStyle: { color: "rgba(255,255,255,0.10)" } },
       axisTick: { show: false }
     },
     series: [
