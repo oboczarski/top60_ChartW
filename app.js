@@ -21,6 +21,7 @@ function formatName(name) {
 }
 
 const colorKTC = "#4800ff";
+const colorMid = "#7d21ff"; // Editable middle gradient color
 const colorADP = "#b341ff";
 
 function buildSummaryChips() {
@@ -108,30 +109,45 @@ function initChart() {
     },
     tooltip: {
       trigger: "axis",
-      backgroundColor: "rgba(5,6,11,0.96)",
-      borderColor: "rgba(255,255,255,0.10)",
+      backgroundColor: "rgba(10, 11, 16, 0.95)",
+      borderColor: "rgba(255,255,255,0.08)",
       borderWidth: 1,
-      textStyle: { color: "#fff", fontSize: 12 },
-      axisPointer: { type: "shadow", shadowStyle: { color: "rgba(255,255,255,0.04)" } },
-      extraCssText: "border-radius:12px; box-shadow:0 16px 40px rgba(0,0,0,.45); padding:8px 12px;",
+      textStyle: { color: "#fff", fontSize: 13, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
+      axisPointer: { type: "shadow", shadowStyle: { color: "rgba(255,255,255,0.03)" } },
+      extraCssText: "border-radius: 8px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); padding: 6px 9px; backdrop-filter: blur(8px);",
       formatter: function (params) {
         // Find player object for the raw axis string
         const pIndex = params[0].dataIndex;
         const player = chartData[pIndex];
-        let title = player ? formatName(player.name) + " " + player.pos : params[0].name;
+        let title = player ? formatName(player.name) : params[0].name;
+        let pos = player ? player.pos : "";
 
         let pADP = params.find(p => p.seriesName === "ADP");
         let pKTC = params.find(p => p.seriesName === "KTC Rank");
         
+        let posBadge = "";
+        if (pos === "QB") posBadge = `<span style="background:rgba(211,123,233,0.15); color:#d37be9; padding:2px 6px; border-radius:4px; font-weight:600; font-size:10px; margin-left:6px;">QB</span>`;
+        if (pos === "RB") posBadge = `<span style="background:rgba(102,252,204,0.15); color:#66fccc; padding:2px 6px; border-radius:4px; font-weight:600; font-size:10px; margin-left:6px;">RB</span>`;
+        if (pos === "WR") posBadge = `<span style="background:rgba(96,181,255,0.15); color:#60b5ff; padding:2px 6px; border-radius:4px; font-weight:600; font-size:10px; margin-left:6px;">WR</span>`;
+        if (pos === "TE") posBadge = `<span style="background:rgba(126,81,252,0.15); color:#7e51fc; padding:2px 6px; border-radius:4px; font-weight:600; font-size:10px; margin-left:6px;">TE</span>`;
+
         return `
-          <div style="font-size:11px; color:rgba(255,255,255,.55); margin-bottom:6px;">${title}</div>
-          <div style="display:flex; justify-content:space-between; gap:16px; margin-bottom:4px;">
-            <span style="color:${colorADP};">● ADP</span>
-            <strong>${pADP ? pADP.value : ''}</strong>
+          <div style="font-size:14px; font-weight:600; color:rgba(255,255,255,0.9); margin-bottom:10px; display:flex; align-items:center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px;">
+            ${title}${posBadge}
           </div>
-          <div style="display:flex; justify-content:space-between; gap:16px;">
-            <span style="color:${colorKTC};">● KTC Rank</span>
-            <strong>${pKTC ? pKTC.value : ''}</strong>
+          <div style="display:flex; justify-content:space-between; gap:24px; margin-bottom:6px; align-items: center;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="width:8px; height:8px; border-radius:50%; background:${colorADP};"></span>
+              <span style="color:rgba(255,255,255,0.7); font-size:12px;">ADP</span>
+            </div>
+            <strong style="font-size:14px; color:#fff;">${pADP ? pADP.value : ''}</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; gap:24px; align-items: center;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="width:8px; height:8px; border-radius:50%; background:${colorKTC};"></span>
+              <span style="color:rgba(255,255,255,0.7); font-size:12px;">KTC Rank</span>
+            </div>
+            <strong style="font-size:14px; color:#fff;">${pKTC ? pKTC.value : ''}</strong>
           </div>
         `;
       }
@@ -202,6 +218,7 @@ function initChart() {
             style: api.style({
               fill: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
                 { offset: 0, color: x0 < x1 ? colorKTC : colorADP },
+                { offset: 0.5, color: colorMid },
                 { offset: 1, color: x0 < x1 ? colorADP : colorKTC }
               ])
             })
