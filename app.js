@@ -1,20 +1,20 @@
 const chartData = [
-  { name: "J. Allen", fullName: "Josh Allen", pos: "QB", ktc: 3, adp: 1.5 },
+  { name: "J.Allen", fullName: "Josh Allen", pos: "QB", ktc: 3, adp: 1.5 },
   { name: "Bijan", fullName: "Bijan Robinson", pos: "RB", ktc: 2, adp: 2.6 },
+  { name: "J.Chase", fullName: "Ja'Marr Chase", pos: "WR", ktc: 1, adp: 4.4 },
   { name: "Maye", fullName: "Drake Maye", pos: "QB", ktc: 6, adp: 3.4 },
-  { name: "Chase", fullName: "Ja'Marr Chase", pos: "WR", ktc: 1, adp: 4.4 },
   { name: "Gibbs", fullName: "Jahmyr Gibbs", pos: "RB", ktc: 5, adp: 5.9 },
-  { name: "Nacua", fullName: "Puka Nacua", pos: "WR", ktc: 7, adp: 6.4 },
   { name: "JSN", fullName: "Jaxon Smith-Njigba", pos: "WR", ktc: 4, adp: 7.5 },
+  { name: "Nacua", fullName: "Puka Nacua", pos: "WR", ktc: 7, adp: 6.4 },
   { name: "Daniels", fullName: "Jayden Daniels", pos: "QB", ktc: 11, adp: 8 },
-  { name: "St.Brown", fullName: "Amon-Ra St. Brown", pos: "WR", ktc: 13, adp: 9.1 },
-  { name: "Burrow", fullName: "Joe Burrow", pos: "QB", ktc: 18, adp: 10.4 },
-  { name: "Jackson", fullName: "Lamar Jackson", pos: "QB", ktc: 14, adp: 11.8 },
   { name: "Nabers", fullName: "Malik Nabers", pos: "WR", ktc: 9, adp: 12.8 },
-  { name: "Bowers", fullName: "Brock Bowers", pos: "TE", ktc: 10, adp: 13.2 },
+  { name: "St.Brown", fullName: "Amon-Ra St. Brown", pos: "WR", ktc: 13, adp: 9.1 },
   { name: "C.Williams", fullName: "Caleb Williams", pos: "QB", ktc: 8, adp: 14.1 },
-  { name: "McBride", fullName: "Trey McBride", pos: "TE", ktc: 15, adp: 15.4 }
-].sort((a, b) => b.adp - a.adp);
+  { name: "Bowers", fullName: "Brock Bowers", pos: "TE", ktc: 10, adp: 13.2 },
+  { name: "L.Jackson", fullName: "Lamar Jackson", pos: "QB", ktc: 14, adp: 11.8 },
+  { name: "Jefferson", fullName: "Justin Jefferson", pos: "WR", ktc: 12, adp: 16.3 },
+  { name: "Burrow", fullName: "Joe Burrow", pos: "QB", ktc: 18, adp: 10.4 }
+].reverse();
 
 function formatName(name) {
   return name;
