@@ -1,26 +1,23 @@
 const chartData = [
-  { name: "Josh Allen", pos: "QB", ktc: 3, adp: 1.5 },
-  { name: "Bijan Robinson", pos: "RB", ktc: 2, adp: 2.6 },
-  { name: "Drake Maye", pos: "QB", ktc: 6, adp: 3.4 },
-  { name: "Ja'Marr Chase", pos: "WR", ktc: 1, adp: 4.4 },
-  { name: "Jahmyr Gibbs", pos: "RB", ktc: 5, adp: 5.9 },
-  { name: "Puka Nacua", pos: "WR", ktc: 7, adp: 6.4 },
-  { name: "Jaxon Smith-Njigba", pos: "WR", ktc: 4, adp: 7.5 },
-  { name: "Jayden Daniels", pos: "QB", ktc: 11, adp: 8 },
-  { name: "Amon-Ra St. Brown", pos: "WR", ktc: 13, adp: 9.1 },
-  { name: "Joe Burrow", pos: "QB", ktc: 18, adp: 10.4 },
-  { name: "Lamar Jackson", pos: "QB", ktc: 14, adp: 11.8 },
-  { name: "Malik Nabers", pos: "WR", ktc: 9, adp: 12.8 },
-  { name: "Brock Bowers", pos: "TE", ktc: 10, adp: 13.2 },
-  { name: "Caleb Williams", pos: "QB", ktc: 8, adp: 14.1 },
-  { name: "Trey McBride", pos: "TE", ktc: 15, adp: 15.4 }
+  { name: "J. Allen", pos: "QB", ktc: 3, adp: 1.5 },
+  { name: "Bijan", pos: "RB", ktc: 2, adp: 2.6 },
+  { name: "Maye", pos: "QB", ktc: 6, adp: 3.4 },
+  { name: "Chase", pos: "WR", ktc: 1, adp: 4.4 },
+  { name: "Gibbs", pos: "RB", ktc: 5, adp: 5.9 },
+  { name: "Nacua", pos: "WR", ktc: 7, adp: 6.4 },
+  { name: "JSN", pos: "WR", ktc: 4, adp: 7.5 },
+  { name: "J. Daniels", pos: "QB", ktc: 11, adp: 8 },
+  { name: "St. Brown", pos: "WR", ktc: 13, adp: 9.1 },
+  { name: "Burrow", pos: "QB", ktc: 18, adp: 10.4 },
+  { name: "Jackson", pos: "QB", ktc: 14, adp: 11.8 },
+  { name: "Nabers", pos: "WR", ktc: 9, adp: 12.8 },
+  { name: "Bowers", pos: "TE", ktc: 10, adp: 13.2 },
+  { name: "C. Williams", pos: "QB", ktc: 8, adp: 14.1 },
+  { name: "McBride", pos: "TE", ktc: 15, adp: 15.4 }
 ].sort((a, b) => b.adp - a.adp);
 
 function formatName(name) {
-  const parts = name.split(" ");
-  const firstInitial = parts[0][0];
-  const lastName = parts.slice(1).join(" ");
-  return `${firstInitial}. ${lastName}`;
+  return name;
 }
 
 const colorKTC = "#ff4187";
@@ -60,7 +57,7 @@ function buildSummaryChips() {
             <span class="stat-dot"></span>
             <span class="stat-label" style="font-size:13px; color:rgba(255,255,255,0.8);">${item.key}</span>
           </div>
-          <div class="stat-chip-bottom" style="flex-direction:row; align-items:center; gap:8px; margin-top:2px;">
+          <div class="stat-chip-bottom" style="flex-direction:row; align-items:center; gap:4px; margin-top:2px;">
             <div style="display:flex; flex-direction:column; align-items:center;">
               <span class="stat-count" style="font-size:18px; font-weight:700;">${item.count}</span>
               <span class="stat-sub" style="font-size:8px; color:rgba(255,255,255,0.4);">COUNT</span>
@@ -90,19 +87,22 @@ function initChart() {
     grid: {
       left: 100, // Reduced from 110 since letter-spacing is down
       right: 20,
-      top: 36,
-      bottom: 44,
+      top: 6,
+      bottom: 8,
       containLabel: false
     },
     legend: {
-      data: ["ADP", "KTC Rank"],
-      top: 4,
-      right: 16,
-      icon: "circle",
-      itemHeight: 8,
+      top: 6,
+      right: 24,
+      itemHeight: 14,
+      itemWidth: 14,
+      data: [
+        { name: "ADP", icon: "roundRect" },
+        { name: "KTC Rank", icon: "roundRect" }
+      ],
       textStyle: {
         color: "rgba(255,255,255,0.8)",
-        fontSize: 11,
+        fontSize: 12,
         fontFamily: "'Product Sans', 'Google Sans', sans-serif"
       }
     },
@@ -142,6 +142,7 @@ function initChart() {
       max: 20,
       interval: 5,
       axisLabel: {
+        show: false,
         color: "rgba(255,255,255,0.76)",
         fontSize: 11,
         fontWeight: 300,
@@ -160,14 +161,14 @@ function initChart() {
         },
         rich: {
           name: {
-            color: "rgba(255,255,255,0.86)",
+            color: "rgba(255,255,255,0.76)",
             fontSize: 9,
             fontFamily: "'Product Sans', 'Google Sans', sans-serif"
           },
-          posQB: { color: "#ff7aab", fontSize: 10, fontWeight: 700, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
-          posRB: { color: "#4bffd2", fontSize: 10, fontWeight: 700, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
-          posWR: { color: "#609dff", fontSize: 10, fontWeight: 700, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
-          posTE: { color: "#9767ff", fontSize: 10, fontWeight: 700, fontFamily: "'Product Sans', 'Google Sans', sans-serif" }
+          posQB: { color: "#ff7ad7", fontSize: 10, fontWeight: 300, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
+          posRB: { color: "#66fccc", fontSize: 10, fontWeight: 300, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
+          posWR: { color: "#60b5ff", fontSize: 10, fontWeight: 300, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
+          posTE: { color: "#9767ff", fontSize: 10, fontWeight: 300, fontFamily: "'Product Sans', 'Google Sans', sans-serif" }
         },
         interval: 0,
         margin: 8
