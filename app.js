@@ -14,7 +14,7 @@ const chartData = [
   { name: "L.Jackson", fullName: "Lamar Jackson", pos: "QB", ktc: 14, adp: 11.8 },
   { name: "Jefferson", fullName: "Justin Jefferson", pos: "WR", ktc: 12, adp: 16.3 },
   { name: "Burrow", fullName: "Joe Burrow", pos: "QB", ktc: 18, adp: 10.4 }
-].reverse();
+].sort((a, b) => b.adp - a.adp);
 
 function formatName(name) {
   return name;
