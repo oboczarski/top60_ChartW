@@ -6,13 +6,13 @@ const chartData = [
   { name: "Gibbs", pos: "RB", ktc: 5, adp: 5.9 },
   { name: "Nacua", pos: "WR", ktc: 7, adp: 6.4 },
   { name: "JSN", pos: "WR", ktc: 4, adp: 7.5 },
-  { name: "J. Daniels", pos: "QB", ktc: 11, adp: 8 },
-  { name: "St. Brown", pos: "WR", ktc: 13, adp: 9.1 },
+  { name: "Daniels", pos: "QB", ktc: 11, adp: 8 },
+  { name: "St.Brown", pos: "WR", ktc: 13, adp: 9.1 },
   { name: "Burrow", pos: "QB", ktc: 18, adp: 10.4 },
   { name: "Jackson", pos: "QB", ktc: 14, adp: 11.8 },
   { name: "Nabers", pos: "WR", ktc: 9, adp: 12.8 },
   { name: "Bowers", pos: "TE", ktc: 10, adp: 13.2 },
-  { name: "C. Williams", pos: "QB", ktc: 8, adp: 14.1 },
+  { name: "C.Williams", pos: "QB", ktc: 8, adp: 14.1 },
   { name: "McBride", pos: "TE", ktc: 15, adp: 15.4 }
 ].sort((a, b) => b.adp - a.adp);
 
@@ -20,8 +20,8 @@ function formatName(name) {
   return name;
 }
 
-const colorKTC = "#00ffae";
-const colorADP = "#1375ff";
+const colorKTC = "#4800ff";
+const colorADP = "#b341ff";
 
 function buildSummaryChips() {
   const chips = document.getElementById("summaryChips");
@@ -162,13 +162,13 @@ function initChart() {
           name: {
             color: "rgba(255,255,255,0.76)",
             fontSize: 9,
-            fontWeight: 300,
+            fontWeight: 400,
             fontFamily: "'Product Sans', 'Google Sans', sans-serif"
           },
-          posQB: { color: "#ff7ad7", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
+          posQB: { color: "#d37be9", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
           posRB: { color: "#66fccc", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
           posWR: { color: "#60b5ff", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" },
-          posTE: { color: "#9767ff", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" }
+          posTE: { color: "#7e51fc", fontSize: 9, fontWeight: 400, fontFamily: "'Product Sans', 'Google Sans', sans-serif" }
         },
         interval: 0,
         margin: 4
