@@ -44,6 +44,13 @@ const tierMeta = {
   }
 };
 
+const positionMeta = {
+  QB: { color: "#fc3688" },
+  RB: { color: "#25f4c5" },
+  WR: { color: "#48d1ff" },
+  TE: { color: "#8d63ff" }
+};
+
 const REFERENCE_CENTER_X = 600;
 const REFERENCE_CENTER_Y = 600;
 
@@ -79,6 +86,11 @@ const tierAngles = {
 
 const centerConfig = {
   nodeRadius: 102
+};
+
+const playerRadiusOffsets = {
+  "Jonah Coleman": 34,
+  "Emmett Johnson": 34
 };
 
 const chartPadding = {
@@ -153,10 +165,12 @@ function buildReferencePlayers() {
     const tierPlayers = playersByTier[player.tier];
     const index = tierPlayers.findIndex((item) => item.name === player.name);
     const angle = tierAngles[player.tier][index];
+    const radius =
+      tierBands[player.tier].radius + (playerRadiusOffsets[player.name] || 0);
     const position = polarToCartesian(
       REFERENCE_CENTER_X,
       REFERENCE_CENTER_Y,
-      tierBands[player.tier].radius,
+      radius,
       angle
     );
 
@@ -250,6 +264,7 @@ function buildRawLayout(width, height) {
       color: tierMeta[player.tier].color,
       rgb: tierMeta[player.tier].rgb,
       glow: tierMeta[player.tier].glow,
+      posColor: positionMeta[player.pos].color,
       x: center.x + (player.x - REFERENCE_CENTER_X) * scale,
       y: center.y + (player.y - REFERENCE_CENTER_Y) * scale,
       nodeRadius,
@@ -269,9 +284,9 @@ function buildRawLayout(width, height) {
       nameFontSize: isCenter
         ? clamp(nodeRadius * 0.34, 11, 14.2)
         : getOuterNameSize(player, nodeRadius),
-      posOffsetY: isCenter ? -nodeRadius * 0.62 : -nodeRadius * 0.55,
-      gradeOffsetY: isCenter ? nodeRadius * 0.04 : -nodeRadius * 0.05,
-      nameOffsetY: isCenter ? nodeRadius * 0.72 : nodeRadius * 0.62
+      posOffsetY: isCenter ? -nodeRadius * 0.57 : -nodeRadius * 0.55,
+      gradeOffsetY: isCenter ? -nodeRadius * 0.01 : -nodeRadius * 0.05,
+      nameOffsetY: isCenter ? nodeRadius * 0.56 : nodeRadius * 0.62
     };
   });
 
@@ -647,7 +662,7 @@ function buildNodeSeries(data, isCenter) {
           silent: true,
           style: {
             text: item.pos,
-            fill: item.color,
+            fill: item.posColor,
             font: `700 ${item.posFontSize}px "Product Sans", "Google Sans", sans-serif`,
             textAlign: "center",
             textVerticalAlign: "middle"
