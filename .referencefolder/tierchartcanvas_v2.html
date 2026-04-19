@@ -1,0 +1,492 @@
+import React from "react";
+import { motion } from "framer-motion";
+import { Card, CardContent } from "@/components/ui/card";
+
+const players = [
+  { name: "Jeremiyah Love", grade: 94, tier: 1, pos: "RB" },
+  { name: "Fernando Mendoza", grade: 90, tier: 2, pos: "QB" },
+  { name: "Carnell Tate", grade: 89, tier: 2, pos: "WR" },
+  { name: "Makai Lemon", grade: 88, tier: 2, pos: "WR" },
+  { name: "Jordyn Tyson", grade: 87, tier: 2, pos: "WR" },
+  { name: "KC Concepcion", grade: 84, tier: 3, pos: "WR" },
+  { name: "Kenyon Sadiq", grade: 80, tier: 3, pos: "TE" },
+  { name: "Omar Cooper", grade: 81, tier: 3, pos: "WR" },
+  { name: "Denzel Boston", grade: 80, tier: 3, pos: "WR" },
+  { name: "Jadarian Price", grade: 74, tier: 4, pos: "RB" },
+  { name: "Ty Simpson", grade: 76, tier: 4, pos: "QB" },
+  { name: "Eli Stowers", grade: 77, tier: 4, pos: "TE" },
+  { name: "Mike Washington", grade: 73, tier: 4, pos: "RB" },
+  { name: "Jonah Coleman", grade: 72, tier: 4, pos: "RB" },
+  { name: "Elijah Sarratt", grade: 75, tier: 4, pos: "WR" },
+  { name: "Emmett Johnson", grade: 70, tier: 4, pos: "RB" },
+];
+
+const positionColors = {
+  QB: "#49D7FF",
+  RB: "#25F4C5",
+  WR: "#A86BFF",
+  TE: "#FF58D6",
+};
+
+const tierBands = {
+  2: {
+    radius: 214,
+    width: 90,
+    nodeRadius: 58,
+    gradeSize: 32,
+    bandColor: "rgba(168,107,255,0.050)",
+    ringColor: "rgba(168,107,255,0.34)",
+    labelPos: { x: 346, y: 392 },
+  },
+  3: {
+    radius: 326,
+    width: 82,
+    nodeRadius: 52,
+    gradeSize: 28,
+    bandColor: "rgba(73,215,255,0.040)",
+    ringColor: "rgba(73,215,255,0.26)",
+    labelPos: { x: 248, y: 294 },
+  },
+  4: {
+    radius: 432,
+    width: 74,
+    nodeRadius: 46,
+    gradeSize: 24,
+    bandColor: "rgba(37,244,197,0.032)",
+    ringColor: "rgba(37,244,197,0.20)",
+    labelPos: { x: 154, y: 176 },
+  },
+};
+
+const tierAngles = {
+  2: [0, 106, 180, 276],
+  3: [56, 140, 228, 318],
+  4: [34, 72, 126, 180, 234, 288, 326],
+};
+
+const centerConfig = {
+  nodeRadius: 102,
+  gradeSize: 84,
+};
+
+function polarToCartesian(cx, cy, radius, angleFromTop) {
+  const angle = ((angleFromTop - 90) * Math.PI) / 180;
+  return {
+    x: cx + radius * Math.cos(angle),
+    y: cy + radius * Math.sin(angle),
+  };
+}
+
+function vectorFromAngle(angleFromTop) {
+  const angle = ((angleFromTop - 90) * Math.PI) / 180;
+  return {
+    x: Math.cos(angle),
+    y: Math.sin(angle),
+  };
+}
+
+function formatShortName(name) {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return name;
+  const first = parts[0];
+  const last = parts[parts.length - 1];
+  return `${first.charAt(0)}. ${last}`;
+}
+
+function Starfield({ size }) {
+  const stars = Array.from({ length: 130 }, (_, i) => {
+    const x = ((i * 97 + 53) % 1000) / 1000;
+    const y = ((i * 173 + 127) % 1000) / 1000;
+    const r = 0.65 + (i % 3) * 0.55;
+    const o = 0.14 + (i % 5) * 0.055;
+    return { x: x * size, y: y * size, r, o };
+  });
+
+  return (
+    <>
+      {stars.map((star, idx) => (
+        <circle
+          key={idx}
+          cx={star.x}
+          cy={star.y}
+          r={star.r}
+          fill={`rgba(255,255,255,${star.o})`}
+        />
+      ))}
+    </>
+  );
+}
+
+function TierBadge({ x, y, label }) {
+  return (
+    <g transform={`translate(${x}, ${y})`}>
+      <rect
+        x={-42}
+        y={-14}
+        rx={14}
+        width={84}
+        height={28}
+        fill="rgba(12,18,42,0.90)"
+        stroke="rgba(255,255,255,0.14)"
+      />
+      <text
+        x="0"
+        y="1"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fontSize="11"
+        fontWeight="700"
+        letterSpacing="0.2em"
+        fill="rgba(255,255,255,0.70)"
+        style={{ textTransform: "uppercase" }}
+      >
+        {label}
+      </text>
+    </g>
+  );
+}
+
+function PlayerNode({ player, isCenter = false }) {
+  const color = positionColors[player.pos];
+  const shortName = formatShortName(player.name);
+  const posY = isCenter ? player.y - 46 : player.y - player.nodeRadius * 0.42;
+  const gradeY = isCenter ? player.y + 2 : player.y - 2;
+  const nameY = isCenter ? player.y + 52 : player.y + player.nodeRadius * 0.45;
+  const nameSize = isCenter ? 15 : player.tier === 4 ? 10 : 11;
+
+  return (
+    <g>
+      <circle
+        cx={player.x}
+        cy={player.y}
+        r={player.nodeRadius + (isCenter ? 34 : 15)}
+        fill={isCenter ? "#A86BFF" : color}
+        opacity={isCenter ? "0.14" : "0.13"}
+        filter="url(#softGlow)"
+      />
+
+      <circle
+        cx={player.x}
+        cy={player.y}
+        r={player.nodeRadius + (isCenter ? 10 : 0)}
+        fill={isCenter ? "rgba(255,255,255,0.04)" : "rgba(8,13,34,0.96)"}
+        stroke={isCenter ? "rgba(255,255,255,0.12)" : color}
+        strokeWidth={isCenter ? "2" : "2.2"}
+      />
+
+      <circle
+        cx={player.x}
+        cy={player.y}
+        r={isCenter ? player.nodeRadius : player.nodeRadius - 6}
+        fill={isCenter ? "url(#centerFill)" : "rgba(12,18,42,0.95)"}
+        stroke={isCenter ? color : "rgba(255,255,255,0.07)"}
+        strokeWidth={isCenter ? "3.2" : "1"}
+      />
+
+      {isCenter && (
+        <circle
+          cx={player.x}
+          cy={player.y}
+          r={player.nodeRadius - 14}
+          fill="rgba(24,14,49,0.28)"
+          stroke="rgba(255,255,255,0.18)"
+          strokeWidth="1"
+        />
+      )}
+
+      <text
+        x={player.x}
+        y={posY}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fontSize={isCenter ? 11 : 9}
+        fontWeight="700"
+        letterSpacing={isCenter ? "0.24em" : "0.22em"}
+        fill={color}
+        style={{ textTransform: "uppercase" }}
+      >
+        {player.pos}
+      </text>
+
+      <text
+        x={player.x}
+        y={gradeY}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fontSize={player.gradeSize}
+        fontWeight={isCenter ? "800" : "700"}
+        fill="#FFFFFF"
+      >
+        {player.grade}
+      </text>
+
+      <text
+        x={player.x}
+        y={nameY}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fontSize={nameSize}
+        fontWeight="600"
+        fill="rgba(255,255,255,0.94)"
+      >
+        {shortName}
+      </text>
+    </g>
+  );
+}
+
+export default function TierInfographicRadialChart() {
+  const size = 1200;
+  const center = size / 2;
+
+  const playersByTier = {
+    2: players.filter((player) => player.tier === 2),
+    3: players.filter((player) => player.tier === 3),
+    4: players.filter((player) => player.tier === 4),
+  };
+
+  const laidOutPlayers = players.map((player) => {
+    if (player.tier === 1) {
+      return {
+        ...player,
+        x: center,
+        y: center,
+        angle: 0,
+        ...centerConfig,
+      };
+    }
+
+    const tierIndex = playersByTier[player.tier].findIndex((p) => p.name === player.name);
+    const angle = tierAngles[player.tier][tierIndex];
+    const band = tierBands[player.tier];
+    const { x, y } = polarToCartesian(center, center, band.radius, angle);
+
+    return {
+      ...player,
+      x,
+      y,
+      angle,
+      nodeRadius: band.nodeRadius,
+      gradeSize: band.gradeSize,
+    };
+  });
+
+  const centerPlayer = laidOutPlayers.find((player) => player.tier === 1);
+  const outerPlayers = laidOutPlayers.filter((player) => player.tier !== 1);
+
+  return (
+    <div className="min-h-screen bg-[#040714] p-5 text-white md:p-10">
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55, ease: "easeOut" }}
+        className="mx-auto max-w-7xl"
+      >
+        <Card className="relative overflow-hidden rounded-[32px] border border-white/10 bg-[#050918]/95 shadow-[0_30px_120px_rgba(0,0,0,0.55)]">
+          <div className="pointer-events-none absolute inset-0 overflow-hidden">
+            <div className="absolute left-[8%] top-[10%] h-56 w-56 rounded-full bg-fuchsia-500/15 blur-3xl" />
+            <div className="absolute right-[10%] top-[18%] h-48 w-48 rounded-full bg-cyan-400/12 blur-3xl" />
+            <div className="absolute bottom-[8%] left-[18%] h-56 w-56 rounded-full bg-violet-500/10 blur-3xl" />
+            <div className="absolute bottom-[18%] right-[16%] h-48 w-48 rounded-full bg-emerald-400/10 blur-3xl" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(132,64,255,0.09),transparent_36%),radial-gradient(circle_at_center,rgba(0,220,255,0.05),transparent_58%)]" />
+          </div>
+
+          <CardContent className="relative p-5 md:p-8">
+            <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.28em] text-white/65">
+                  Tier Infographic
+                </div>
+                <h1 className="text-2xl font-semibold tracking-tight text-white md:text-4xl">
+                  Prospect Tier Map
+                </h1>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-white/65 md:text-base">
+                  Tier 1 is isolated at center. Every other prospect connects directly back to the middle anchor.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {Object.entries(positionColors).map(([pos, color]) => (
+                  <div
+                    key={pos}
+                    className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/80"
+                  >
+                    <span
+                      className="h-2.5 w-2.5 rounded-full"
+                      style={{ backgroundColor: color, boxShadow: `0 0 14px ${color}` }}
+                    />
+                    <span className="font-medium">{pos}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="relative aspect-square w-full overflow-hidden rounded-[28px] border border-white/8 bg-[linear-gradient(180deg,rgba(5,9,24,0.84),rgba(7,10,28,0.98))]">
+              <svg viewBox={`0 0 ${size} ${size}`} className="h-full w-full">
+                <defs>
+                  <radialGradient id="bgGlow" cx="50%" cy="50%" r="58%">
+                    <stop offset="0%" stopColor="rgba(165,94,255,0.24)" />
+                    <stop offset="35%" stopColor="rgba(112,72,255,0.12)" />
+                    <stop offset="65%" stopColor="rgba(15,20,46,0.02)" />
+                    <stop offset="100%" stopColor="rgba(0,0,0,0)" />
+                  </radialGradient>
+
+                  <radialGradient id="centerFill" cx="50%" cy="45%" r="70%">
+                    <stop offset="0%" stopColor="#F6EDFF" stopOpacity="0.98" />
+                    <stop offset="24%" stopColor="#DEC1FF" stopOpacity="0.96" />
+                    <stop offset="58%" stopColor="#9B3FFF" stopOpacity="0.97" />
+                    <stop offset="100%" stopColor="#341164" stopOpacity="1" />
+                  </radialGradient>
+
+                  <filter id="softGlow" x="-250%" y="-250%" width="600%" height="600%">
+                    <feGaussianBlur stdDeviation="10" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+
+                  <filter id="lineGlow" x="-250%" y="-250%" width="600%" height="600%">
+                    <feGaussianBlur stdDeviation="3.3" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+
+                <rect width={size} height={size} fill="#050918" />
+                <rect width={size} height={size} fill="url(#bgGlow)" />
+                <Starfield size={size} />
+
+                <circle cx={center} cy={center} r={490} fill="none" stroke="rgba(103,94,255,0.10)" strokeWidth="1.1" />
+
+                {Object.entries(tierBands).map(([tier, band]) => (
+                  <g key={tier}>
+                    <circle
+                      cx={center}
+                      cy={center}
+                      r={band.radius}
+                      fill="none"
+                      stroke={band.bandColor}
+                      strokeWidth={band.width}
+                    />
+                    <circle
+                      cx={center}
+                      cy={center}
+                      r={band.radius}
+                      fill="none"
+                      stroke={band.ringColor}
+                      strokeWidth="1.5"
+                      strokeDasharray="7 11"
+                    />
+                    <circle
+                      cx={center}
+                      cy={center}
+                      r={band.radius - band.width / 2}
+                      fill="none"
+                      stroke="rgba(255,255,255,0.06)"
+                      strokeWidth="1"
+                    />
+                    <circle
+                      cx={center}
+                      cy={center}
+                      r={band.radius + band.width / 2}
+                      fill="none"
+                      stroke="rgba(255,255,255,0.05)"
+                      strokeWidth="1"
+                    />
+                    <TierBadge x={band.labelPos.x} y={band.labelPos.y} label={`Tier ${tier}`} />
+                  </g>
+                ))}
+
+                <circle cx={center} cy={center} r={118} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1.1" />
+                <circle cx={center} cy={center} r={146} fill="none" stroke="rgba(168,107,255,0.15)" strokeWidth="1" strokeDasharray="4 12" />
+                <circle cx={center} cy={center} r={170} fill="none" stroke="rgba(73,215,255,0.10)" strokeWidth="1" strokeDasharray="2 9" />
+
+                {outerPlayers.map((player) => {
+                  const color = positionColors[player.pos];
+                  const direction = vectorFromAngle(player.angle);
+                  const connectorStartX = center + direction.x * (centerConfig.nodeRadius + 12);
+                  const connectorStartY = center + direction.y * (centerConfig.nodeRadius + 12);
+
+                  return (
+                    <g key={player.name}>
+                      <line
+                        x1={connectorStartX}
+                        y1={connectorStartY}
+                        x2={player.x}
+                        y2={player.y}
+                        stroke={color}
+                        strokeOpacity="0.58"
+                        strokeWidth={player.tier === 2 ? 2.1 : player.tier === 3 ? 1.8 : 1.5}
+                        strokeLinecap="round"
+                        filter="url(#lineGlow)"
+                      />
+                      <PlayerNode player={player} />
+                    </g>
+                  );
+                })}
+
+                <g>
+                  {Array.from({ length: 28 }, (_, index) => {
+                    const angle = index * (360 / 28);
+                    const inner = polarToCartesian(center, center, 118, angle);
+                    const outer = polarToCartesian(center, center, 156, angle);
+                    return (
+                      <line
+                        key={index}
+                        x1={inner.x}
+                        y1={inner.y}
+                        x2={outer.x}
+                        y2={outer.y}
+                        stroke="rgba(168,107,255,0.18)"
+                        strokeWidth={index % 2 === 0 ? 4 : 2}
+                        strokeLinecap="round"
+                      />
+                    );
+                  })}
+
+                  <circle
+                    cx={center}
+                    cy={center}
+                    r={156}
+                    fill="none"
+                    stroke="rgba(168,107,255,0.12)"
+                    strokeWidth="20"
+                    strokeDasharray="5 12"
+                  />
+                  <circle
+                    cx={center}
+                    cy={center}
+                    r={128}
+                    fill="none"
+                    stroke="rgba(255,88,214,0.14)"
+                    strokeWidth="8"
+                    strokeDasharray="1 7"
+                  />
+
+                  <text
+                    x={center}
+                    y={center - 72}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    fontSize="13"
+                    fontWeight="700"
+                    letterSpacing="0.34em"
+                    fill="rgba(255,255,255,0.78)"
+                    style={{ textTransform: "uppercase" }}
+                  >
+                    Tier 1
+                  </text>
+
+                  <PlayerNode player={centerPlayer} isCenter />
+                </g>
+              </svg>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </div>
+  );
+}
