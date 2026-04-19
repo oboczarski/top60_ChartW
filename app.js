@@ -289,10 +289,10 @@ function buildRawLayout(width, height) {
       nameOffsetY: isCenter
         ? nodeRadius * 0.56
         : player.tier === 4
-          ? nodeRadius * 0.75
+          ? nodeRadius * 0.78
           : player.tier === 3
-          ? nodeRadius * 0.72
-          : nodeRadius * 0.65
+          ? nodeRadius * 0.75
+          : nodeRadius * 0.68
     };
   });
 
