@@ -276,7 +276,7 @@ function buildRawLayout(width, height) {
         : Math.max(6.5, nodeRadius - Math.max(2.5, 6 * scale)),
       innerRadius: isCenter ? Math.max(14, nodeRadius - Math.max(4, 14 * scale)) : 0,
       posFontSize: isCenter
-        ? clamp(nodeRadius * 0.28, 9, 11.5)
+        ? clamp(nodeRadius * 0.31, 9.6, 12.3)
         : clamp(nodeRadius * 0.42, 6.2, 8.7),
       gradeFontSize: isCenter
         ? clamp(nodeRadius * 0.74, 23, 32)
@@ -285,8 +285,12 @@ function buildRawLayout(width, height) {
         ? clamp(nodeRadius * 0.34, 11, 14.2)
         : getOuterNameSize(player, nodeRadius),
       posOffsetY: isCenter ? -nodeRadius * 0.57 : -nodeRadius * 0.55,
-      gradeOffsetY: isCenter ? -nodeRadius * 0.01 : -nodeRadius * 0.05,
-      nameOffsetY: isCenter ? nodeRadius * 0.56 : nodeRadius * 0.62
+      gradeOffsetY: isCenter ? -nodeRadius * 0.01 : nodeRadius * 0.04,
+      nameOffsetY: isCenter
+        ? nodeRadius * 0.56
+        : player.tier >= 3
+          ? nodeRadius * 0.69
+          : nodeRadius * 0.62
     };
   });
 
