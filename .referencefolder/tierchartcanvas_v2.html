@@ -1,492 +1,629 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tier Infographic Radial Chart</title>
+  <style>
+    :root {
+      --bg: #040714;
+      --panel: rgba(5, 9, 24, 0.94);
+      --panel-border: rgba(255, 255, 255, 0.08);
+      --text: rgba(255, 255, 255, 0.96);
+      --muted: rgba(255, 255, 255, 0.66);
+      --tier-1: #bb74ff;
+      --tier-2: #8d63ff;
+      --tier-3: #48d1ff;
+      --tier-4: #25f4c5;
+    }
 
-const players = [
-  { name: "Jeremiyah Love", grade: 94, tier: 1, pos: "RB" },
-  { name: "Fernando Mendoza", grade: 90, tier: 2, pos: "QB" },
-  { name: "Carnell Tate", grade: 89, tier: 2, pos: "WR" },
-  { name: "Makai Lemon", grade: 88, tier: 2, pos: "WR" },
-  { name: "Jordyn Tyson", grade: 87, tier: 2, pos: "WR" },
-  { name: "KC Concepcion", grade: 84, tier: 3, pos: "WR" },
-  { name: "Kenyon Sadiq", grade: 80, tier: 3, pos: "TE" },
-  { name: "Omar Cooper", grade: 81, tier: 3, pos: "WR" },
-  { name: "Denzel Boston", grade: 80, tier: 3, pos: "WR" },
-  { name: "Jadarian Price", grade: 74, tier: 4, pos: "RB" },
-  { name: "Ty Simpson", grade: 76, tier: 4, pos: "QB" },
-  { name: "Eli Stowers", grade: 77, tier: 4, pos: "TE" },
-  { name: "Mike Washington", grade: 73, tier: 4, pos: "RB" },
-  { name: "Jonah Coleman", grade: 72, tier: 4, pos: "RB" },
-  { name: "Elijah Sarratt", grade: 75, tier: 4, pos: "WR" },
-  { name: "Emmett Johnson", grade: 70, tier: 4, pos: "RB" },
-];
+    * { box-sizing: border-box; }
 
-const positionColors = {
-  QB: "#49D7FF",
-  RB: "#25F4C5",
-  WR: "#A86BFF",
-  TE: "#FF58D6",
-};
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at 18% 14%, rgba(168, 107, 255, 0.12), transparent 18%),
+        radial-gradient(circle at 82% 20%, rgba(73, 215, 255, 0.08), transparent 16%),
+        radial-gradient(circle at 22% 86%, rgba(168, 107, 255, 0.08), transparent 18%),
+        radial-gradient(circle at 78% 82%, rgba(37, 244, 197, 0.07), transparent 16%),
+        linear-gradient(180deg, #040714 0%, #050918 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
 
-const tierBands = {
-  2: {
-    radius: 214,
-    width: 90,
-    nodeRadius: 58,
-    gradeSize: 32,
-    bandColor: "rgba(168,107,255,0.050)",
-    ringColor: "rgba(168,107,255,0.34)",
-    labelPos: { x: 346, y: 392 },
-  },
-  3: {
-    radius: 326,
-    width: 82,
-    nodeRadius: 52,
-    gradeSize: 28,
-    bandColor: "rgba(73,215,255,0.040)",
-    ringColor: "rgba(73,215,255,0.26)",
-    labelPos: { x: 248, y: 294 },
-  },
-  4: {
-    radius: 432,
-    width: 74,
-    nodeRadius: 46,
-    gradeSize: 24,
-    bandColor: "rgba(37,244,197,0.032)",
-    ringColor: "rgba(37,244,197,0.20)",
-    labelPos: { x: 154, y: 176 },
-  },
-};
+    body { padding: 28px; }
 
-const tierAngles = {
-  2: [0, 106, 180, 276],
-  3: [56, 140, 228, 318],
-  4: [34, 72, 126, 180, 234, 288, 326],
-};
+    .shell {
+      width: min(1440px, 100%);
+      margin: 0 auto;
+    }
 
-const centerConfig = {
-  nodeRadius: 102,
-  gradeSize: 84,
-};
+    .panel {
+      position: relative;
+      overflow: hidden;
+      border-radius: 32px;
+      border: 1px solid var(--panel-border);
+      background: rgba(5, 9, 24, 0.94);
+      box-shadow: 0 30px 120px rgba(0, 0, 0, 0.55);
+      padding: 24px;
+    }
 
-function polarToCartesian(cx, cy, radius, angleFromTop) {
-  const angle = ((angleFromTop - 90) * Math.PI) / 180;
-  return {
-    x: cx + radius * Math.cos(angle),
-    y: cy + radius * Math.sin(angle),
-  };
-}
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 14% 14%, rgba(168, 107, 255, 0.16), transparent 16%),
+        radial-gradient(circle at 84% 18%, rgba(73, 215, 255, 0.12), transparent 14%),
+        radial-gradient(circle at 20% 84%, rgba(168, 107, 255, 0.10), transparent 18%),
+        radial-gradient(circle at 78% 82%, rgba(37, 244, 197, 0.08), transparent 16%);
+      filter: blur(34px);
+      opacity: 0.95;
+    }
 
-function vectorFromAngle(angleFromTop) {
-  const angle = ((angleFromTop - 90) * Math.PI) / 180;
-  return {
-    x: Math.cos(angle),
-    y: Math.sin(angle),
-  };
-}
+    .header {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
 
-function formatShortName(name) {
-  const parts = name.trim().split(/\s+/);
-  if (parts.length === 1) return name;
-  const first = parts[0];
-  const last = parts[parts.length - 1];
-  return `${first.charAt(0)}. ${last}`;
-}
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      background: rgba(255, 255, 255, 0.04);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
 
-function Starfield({ size }) {
-  const stars = Array.from({ length: 130 }, (_, i) => {
-    const x = ((i * 97 + 53) % 1000) / 1000;
-    const y = ((i * 173 + 127) % 1000) / 1000;
-    const r = 0.65 + (i % 3) * 0.55;
-    const o = 0.14 + (i % 5) * 0.055;
-    return { x: x * size, y: y * size, r, o };
-  });
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
 
-  return (
-    <>
-      {stars.map((star, idx) => (
-        <circle
-          key={idx}
-          cx={star.x}
-          cy={star.y}
-          r={star.r}
-          fill={`rgba(255,255,255,${star.o})`}
-        />
-      ))}
-    </>
-  );
-}
+    .subcopy {
+      margin: 10px 0 0;
+      max-width: 760px;
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--muted);
+    }
 
-function TierBadge({ x, y, label }) {
-  return (
-    <g transform={`translate(${x}, ${y})`}>
-      <rect
-        x={-42}
-        y={-14}
-        rx={14}
-        width={84}
-        height={28}
-        fill="rgba(12,18,42,0.90)"
-        stroke="rgba(255,255,255,0.14)"
-      />
-      <text
-        x="0"
-        y="1"
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fontSize="11"
-        fontWeight="700"
-        letterSpacing="0.2em"
-        fill="rgba(255,255,255,0.70)"
-        style={{ textTransform: "uppercase" }}
-      >
-        {label}
-      </text>
-    </g>
-  );
-}
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(98px, auto));
+      gap: 10px;
+    }
 
-function PlayerNode({ player, isCenter = false }) {
-  const color = positionColors[player.pos];
-  const shortName = formatShortName(player.name);
-  const posY = isCenter ? player.y - 46 : player.y - player.nodeRadius * 0.42;
-  const gradeY = isCenter ? player.y + 2 : player.y - 2;
-  const nameY = isCenter ? player.y + 52 : player.y + player.nodeRadius * 0.45;
-  const nameSize = isCenter ? 15 : player.tier === 4 ? 10 : 11;
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      background: rgba(255, 255, 255, 0.04);
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.84);
+    }
 
-  return (
-    <g>
-      <circle
-        cx={player.x}
-        cy={player.y}
-        r={player.nodeRadius + (isCenter ? 34 : 15)}
-        fill={isCenter ? "#A86BFF" : color}
-        opacity={isCenter ? "0.14" : "0.13"}
-        filter="url(#softGlow)"
-      />
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex: 0 0 10px;
+      box-shadow: 0 0 14px currentColor;
+    }
 
-      <circle
-        cx={player.x}
-        cy={player.y}
-        r={player.nodeRadius + (isCenter ? 10 : 0)}
-        fill={isCenter ? "rgba(255,255,255,0.04)" : "rgba(8,13,34,0.96)"}
-        stroke={isCenter ? "rgba(255,255,255,0.12)" : color}
-        strokeWidth={isCenter ? "2" : "2.2"}
-      />
+    .chart-frame {
+      position: relative;
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      overflow: hidden;
+      min-height: min(84vw, 1120px);
+      background:
+        radial-gradient(circle at center, rgba(132, 64, 255, 0.10), transparent 32%),
+        radial-gradient(circle at center, rgba(0, 220, 255, 0.05), transparent 55%),
+        linear-gradient(180deg, rgba(5, 9, 24, 0.84), rgba(7, 10, 28, 0.98));
+    }
 
-      <circle
-        cx={player.x}
-        cy={player.y}
-        r={isCenter ? player.nodeRadius : player.nodeRadius - 6}
-        fill={isCenter ? "url(#centerFill)" : "rgba(12,18,42,0.95)"}
-        stroke={isCenter ? color : "rgba(255,255,255,0.07)"}
-        strokeWidth={isCenter ? "3.2" : "1"}
-      />
+    .chart-frame::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.55;
+      background-image:
+        radial-gradient(circle at 4% 8%, rgba(255,255,255,0.65) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 11% 18%, rgba(255,255,255,0.48) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 29% 7%, rgba(255,255,255,0.52) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 38% 12%, rgba(255,255,255,0.40) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 48% 6%, rgba(255,255,255,0.38) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 61% 10%, rgba(255,255,255,0.54) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 72% 16%, rgba(255,255,255,0.44) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 88% 10%, rgba(255,255,255,0.42) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 93% 14%, rgba(255,255,255,0.36) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 14% 78%, rgba(255,255,255,0.40) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 28% 84%, rgba(255,255,255,0.34) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 81% 74%, rgba(255,255,255,0.42) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 90% 82%, rgba(255,255,255,0.34) 0 1px, transparent 1.5px);
+    }
 
-      {isCenter && (
-        <circle
-          cx={player.x}
-          cy={player.y}
-          r={player.nodeRadius - 14}
-          fill="rgba(24,14,49,0.28)"
-          stroke="rgba(255,255,255,0.18)"
-          strokeWidth="1"
-        />
-      )}
+    #chart {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      min-height: min(84vw, 1120px);
+    }
 
-      <text
-        x={player.x}
-        y={posY}
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fontSize={isCenter ? 11 : 9}
-        fontWeight="700"
-        letterSpacing={isCenter ? "0.24em" : "0.22em"}
-        fill={color}
-        style={{ textTransform: "uppercase" }}
-      >
-        {player.pos}
-      </text>
+    @media (max-width: 900px) {
+      body { padding: 16px; }
+      .panel { padding: 16px; border-radius: 24px; }
+      .chart-frame, #chart { min-height: 84vw; }
+      .legend { grid-template-columns: repeat(2, minmax(98px, auto)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="panel">
+      <header class="header">
+        <div>
+          <div class="eyebrow">Tier Infographic</div>
+          <h1>Prospect Tier Map</h1>
+          <p class="subcopy">The chart core is centered as one system, with a dedicated left gutter for the tier callouts so the labels point to the real ring positions.</p>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><span class="legend-dot" style="color: var(--tier-1); background: var(--tier-1);"></span>Tier 1</div>
+          <div class="legend-item"><span class="legend-dot" style="color: var(--tier-2); background: var(--tier-2);"></span>Tier 2</div>
+          <div class="legend-item"><span class="legend-dot" style="color: var(--tier-3); background: var(--tier-3);"></span>Tier 3</div>
+          <div class="legend-item"><span class="legend-dot" style="color: var(--tier-4); background: var(--tier-4);"></span>Tier 4</div>
+        </div>
+      </header>
+      <div class="chart-frame">
+        <div id="chart"></div>
+      </div>
+    </section>
+  </div>
 
-      <text
-        x={player.x}
-        y={gradeY}
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fontSize={player.gradeSize}
-        fontWeight={isCenter ? "800" : "700"}
-        fill="#FFFFFF"
-      >
-        {player.grade}
-      </text>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <script>
+    const players = [
+      { name: 'Jeremiyah Love', grade: 94, tier: 1, pos: 'RB' },
+      { name: 'Fernando Mendoza', grade: 90, tier: 2, pos: 'QB' },
+      { name: 'Carnell Tate', grade: 89, tier: 2, pos: 'WR' },
+      { name: 'Makai Lemon', grade: 88, tier: 2, pos: 'WR' },
+      { name: 'Jordyn Tyson', grade: 87, tier: 2, pos: 'WR' },
+      { name: 'KC Concepcion', grade: 84, tier: 3, pos: 'WR' },
+      { name: 'Kenyon Sadiq', grade: 80, tier: 3, pos: 'TE' },
+      { name: 'Omar Cooper', grade: 81, tier: 3, pos: 'WR' },
+      { name: 'Denzel Boston', grade: 80, tier: 3, pos: 'WR' },
+      { name: 'Jadarian Price', grade: 74, tier: 4, pos: 'RB' },
+      { name: 'Ty Simpson', grade: 76, tier: 4, pos: 'QB' },
+      { name: 'Eli Stowers', grade: 77, tier: 4, pos: 'TE' },
+      { name: 'Mike Washington', grade: 73, tier: 4, pos: 'RB' },
+      { name: 'Jonah Coleman', grade: 72, tier: 4, pos: 'RB' },
+      { name: 'Elijah Sarratt', grade: 75, tier: 4, pos: 'WR' },
+      { name: 'Emmett Johnson', grade: 70, tier: 4, pos: 'RB' }
+    ];
 
-      <text
-        x={player.x}
-        y={nameY}
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fontSize={nameSize}
-        fontWeight="600"
-        fill="rgba(255,255,255,0.94)"
-      >
-        {shortName}
-      </text>
-    </g>
-  );
-}
+    const tierColors = {
+      1: '#bb74ff',
+      2: '#8d63ff',
+      3: '#48d1ff',
+      4: '#25f4c5'
+    };
 
-export default function TierInfographicRadialChart() {
-  const size = 1200;
-  const center = size / 2;
+    const SIZE = 1200;
+    const CHART_CENTER_X = 600;
+    const CHART_CENTER_Y = 600;
 
-  const playersByTier = {
-    2: players.filter((player) => player.tier === 2),
-    3: players.filter((player) => player.tier === 3),
-    4: players.filter((player) => player.tier === 4),
-  };
+    const tierBands = {
+      2: { radius: 214, width: 76, nodeRadius: 58, gradeSize: 32, ringColor: 'rgba(141,99,255,0.34)', fillColor: 'rgba(141,99,255,0.030)' },
+      3: { radius: 324, width: 74, nodeRadius: 52, gradeSize: 28, ringColor: 'rgba(72,209,255,0.26)', fillColor: 'rgba(72,209,255,0.024)' },
+      4: { radius: 434, width: 72, nodeRadius: 46, gradeSize: 24, ringColor: 'rgba(37,244,197,0.20)', fillColor: 'rgba(37,244,197,0.020)' }
+    };
 
-  const laidOutPlayers = players.map((player) => {
-    if (player.tier === 1) {
+    const tierAngles = {
+      2: [0, 106, 180, 276],
+      3: [56, 140, 228, 318],
+      4: [34, 72, 126, 180, 234, 288, 326]
+    };
+
+    const centerConfig = { nodeRadius: 102, gradeSize: 84 };
+
+    const tierChipConfig = {
+      4: { angle: 304, radius: () => tierBands[4].radius, offsetX: 116 },
+      3: { angle: 298, radius: () => tierBands[3].radius, offsetX: 116 },
+      2: { angle: 292, radius: () => tierBands[2].radius, offsetX: 116 },
+      1: { angle: 286, radius: () => centerConfig.nodeRadius + 64, offsetX: 116 }
+    };
+
+    function polarToCartesian(cx, cy, radius, angleFromTop) {
+      const angle = ((angleFromTop - 90) * Math.PI) / 180;
+      return { x: cx + radius * Math.cos(angle), y: cy + radius * Math.sin(angle) };
+    }
+
+    function vectorFromAngle(angleFromTop) {
+      const angle = ((angleFromTop - 90) * Math.PI) / 180;
+      return { x: Math.cos(angle), y: Math.sin(angle) };
+    }
+
+    function formatShortName(name) {
+      const parts = name.trim().split(' ').filter(Boolean);
+      if (parts.length === 1) return name;
+      return parts[0].charAt(0) + '. ' + parts[parts.length - 1];
+    }
+
+    function nameFontSize(shortName, tier, center) {
+      if (center) return 15;
+      if (shortName.length >= 13) return tier === 4 ? 8.5 : 9;
+      if (shortName.length >= 10) return tier === 4 ? 9.2 : 10;
+      return tier === 4 ? 10 : 11;
+    }
+
+    function makeGraphicCircle(cx, cy, radius, fill, stroke, lineWidth, extra) {
+      const opts = extra || {};
       return {
-        ...player,
-        x: center,
-        y: center,
-        angle: 0,
-        ...centerConfig,
+        type: 'circle',
+        shape: { cx: cx, cy: cy, r: radius },
+        silent: true,
+        style: Object.assign({ fill: fill, stroke: stroke, lineWidth: lineWidth }, opts.style || {}),
+        z: opts.z,
+        invisible: opts.invisible
       };
     }
 
-    const tierIndex = playersByTier[player.tier].findIndex((p) => p.name === player.name);
-    const angle = tierAngles[player.tier][tierIndex];
-    const band = tierBands[player.tier];
-    const { x, y } = polarToCartesian(center, center, band.radius, angle);
+    function makeGraphicText(x, y, text, style) {
+      return {
+        type: 'text',
+        x: x,
+        y: y,
+        silent: true,
+        style: Object.assign({
+          text: text,
+          fill: '#fff',
+          fontFamily: 'Inter, system-ui, sans-serif',
+          textAlign: 'center',
+          textVerticalAlign: 'middle'
+        }, style || {})
+      };
+    }
 
-    return {
-      ...player,
-      x,
-      y,
-      angle,
-      nodeRadius: band.nodeRadius,
-      gradeSize: band.gradeSize,
+    const tierPlayers = {
+      2: players.filter(function(p) { return p.tier === 2; }),
+      3: players.filter(function(p) { return p.tier === 3; }),
+      4: players.filter(function(p) { return p.tier === 4; })
     };
-  });
 
-  const centerPlayer = laidOutPlayers.find((player) => player.tier === 1);
-  const outerPlayers = laidOutPlayers.filter((player) => player.tier !== 1);
+    const laidOutPlayers = players.map(function(player) {
+      if (player.tier === 1) {
+        return Object.assign({}, player, {
+          x: CHART_CENTER_X,
+          y: CHART_CENTER_Y,
+          angle: 0,
+          nodeRadius: centerConfig.nodeRadius,
+          gradeSize: centerConfig.gradeSize,
+          shortName: formatShortName(player.name)
+        });
+      }
 
-  return (
-    <div className="min-h-screen bg-[#040714] p-5 text-white md:p-10">
-      <motion.div
-        initial={{ opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55, ease: "easeOut" }}
-        className="mx-auto max-w-7xl"
-      >
-        <Card className="relative overflow-hidden rounded-[32px] border border-white/10 bg-[#050918]/95 shadow-[0_30px_120px_rgba(0,0,0,0.55)]">
-          <div className="pointer-events-none absolute inset-0 overflow-hidden">
-            <div className="absolute left-[8%] top-[10%] h-56 w-56 rounded-full bg-fuchsia-500/15 blur-3xl" />
-            <div className="absolute right-[10%] top-[18%] h-48 w-48 rounded-full bg-cyan-400/12 blur-3xl" />
-            <div className="absolute bottom-[8%] left-[18%] h-56 w-56 rounded-full bg-violet-500/10 blur-3xl" />
-            <div className="absolute bottom-[18%] right-[16%] h-48 w-48 rounded-full bg-emerald-400/10 blur-3xl" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(132,64,255,0.09),transparent_36%),radial-gradient(circle_at_center,rgba(0,220,255,0.05),transparent_58%)]" />
-          </div>
+      const index = tierPlayers[player.tier].findIndex(function(p) { return p.name === player.name; });
+      const angle = tierAngles[player.tier][index];
+      const band = tierBands[player.tier];
+      const pos = polarToCartesian(CHART_CENTER_X, CHART_CENTER_Y, band.radius, angle);
 
-          <CardContent className="relative p-5 md:p-8">
-            <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-              <div>
-                <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.28em] text-white/65">
-                  Tier Infographic
-                </div>
-                <h1 className="text-2xl font-semibold tracking-tight text-white md:text-4xl">
-                  Prospect Tier Map
-                </h1>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-white/65 md:text-base">
-                  Tier 1 is isolated at center. Every other prospect connects directly back to the middle anchor.
-                </p>
-              </div>
+      return Object.assign({}, player, {
+        x: pos.x,
+        y: pos.y,
+        angle: angle,
+        nodeRadius: band.nodeRadius,
+        gradeSize: band.gradeSize,
+        shortName: formatShortName(player.name)
+      });
+    });
 
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                {Object.entries(positionColors).map(([pos, color]) => (
-                  <div
-                    key={pos}
-                    className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/80"
-                  >
-                    <span
-                      className="h-2.5 w-2.5 rounded-full"
-                      style={{ backgroundColor: color, boxShadow: `0 0 14px ${color}` }}
-                    />
-                    <span className="font-medium">{pos}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+    const centerPlayer = laidOutPlayers.find(function(p) { return p.tier === 1; });
+    const outerPlayers = laidOutPlayers.filter(function(p) { return p.tier !== 1; });
 
-            <div className="relative aspect-square w-full overflow-hidden rounded-[28px] border border-white/8 bg-[linear-gradient(180deg,rgba(5,9,24,0.84),rgba(7,10,28,0.98))]">
-              <svg viewBox={`0 0 ${size} ${size}`} className="h-full w-full">
-                <defs>
-                  <radialGradient id="bgGlow" cx="50%" cy="50%" r="58%">
-                    <stop offset="0%" stopColor="rgba(165,94,255,0.24)" />
-                    <stop offset="35%" stopColor="rgba(112,72,255,0.12)" />
-                    <stop offset="65%" stopColor="rgba(15,20,46,0.02)" />
-                    <stop offset="100%" stopColor="rgba(0,0,0,0)" />
-                  </radialGradient>
+    const connectorData = outerPlayers.map(function(player) {
+      const direction = vectorFromAngle(player.angle);
+      const color = tierColors[player.tier];
+      return {
+        coords: [
+          [CHART_CENTER_X + direction.x * (centerConfig.nodeRadius + 12), CHART_CENTER_Y + direction.y * (centerConfig.nodeRadius + 12)],
+          [player.x, player.y]
+        ],
+        lineStyle: {
+          color: color,
+          width: player.tier === 2 ? 2.1 : player.tier === 3 ? 1.8 : 1.5,
+          opacity: 0.58,
+          shadowColor: color,
+          shadowBlur: 12
+        }
+      };
+    });
 
-                  <radialGradient id="centerFill" cx="50%" cy="45%" r="70%">
-                    <stop offset="0%" stopColor="#F6EDFF" stopOpacity="0.98" />
-                    <stop offset="24%" stopColor="#DEC1FF" stopOpacity="0.96" />
-                    <stop offset="58%" stopColor="#9B3FFF" stopOpacity="0.97" />
-                    <stop offset="100%" stopColor="#341164" stopOpacity="1" />
-                  </radialGradient>
+    function buildGraphic() {
+      const elements = [];
+      const outerBackdropRadius = tierBands[4].radius + tierBands[4].nodeRadius + 18;
 
-                  <filter id="softGlow" x="-250%" y="-250%" width="600%" height="600%">
-                    <feGaussianBlur stdDeviation="10" result="blur" />
-                    <feMerge>
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
+      elements.push(makeGraphicCircle(CHART_CENTER_X, CHART_CENTER_Y, outerBackdropRadius, 'rgba(0,0,0,0.42)', 'rgba(255,255,255,0.04)', 1));
+      elements.push(makeGraphicCircle(CHART_CENTER_X, CHART_CENTER_Y, tierBands[4].radius + tierBands[4].width / 2 + 8, 'transparent', 'rgba(141,99,255,0.08)', 1));
 
-                  <filter id="lineGlow" x="-250%" y="-250%" width="600%" height="600%">
-                    <feGaussianBlur stdDeviation="3.3" result="blur" />
-                    <feMerge>
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                </defs>
+      Object.keys(tierBands).forEach(function(tier) {
+        const band = tierBands[tier];
+        elements.push(makeGraphicCircle(CHART_CENTER_X, CHART_CENTER_Y, band.radius, 'transparent', band.fillColor, band.width));
+        elements.push(makeGraphicCircle(CHART_CENTER_X, CHART_CENTER_Y, band.radius, 'transparent', band.ringColor, 1.5, { style: { lineDash: [7, 11] } }));
+        elements.push(makeGraphicCircle(CHART_CENTER_X, CHART_CENTER_Y, band.radius - band.width / 2, 'transparent', 'rgba(255,255,255,0.055)', 1));
+        elements.push(makeGraphicCircle(CHART_CENTER_X, CHART_CENTER_Y, band.radius + band.width / 2, 'transparent', 'rgba(255,255,255,0.05)', 1));
+      });
 
-                <rect width={size} height={size} fill="#050918" />
-                <rect width={size} height={size} fill="url(#bgGlow)" />
-                <Starfield size={size} />
+      Object.keys(tierChipConfig).forEach(function(tier) {
+        const cfg = tierChipConfig[tier];
+        const anchor = polarToCartesian(CHART_CENTER_X, CHART_CENTER_Y, cfg.radius(), cfg.angle);
+        const elbowX = anchor.x - 44;
+        const chipX = elbowX - cfg.offsetX;
+        const chipY = anchor.y;
+        const tierColor = tierColors[tier];
 
-                <circle cx={center} cy={center} r={490} fill="none" stroke="rgba(103,94,255,0.10)" strokeWidth="1.1" />
+        elements.push({
+          type: 'polyline',
+          silent: true,
+          z: 48,
+          shape: {
+            points: [
+              [chipX + 42, chipY],
+              [elbowX, chipY],
+              [anchor.x, anchor.y]
+            ]
+          },
+          style: {
+            stroke: tierColor,
+            lineWidth: 1.4,
+            opacity: 0.74,
+            shadowColor: tierColor,
+            shadowBlur: 8,
+            lineJoin: 'round',
+            lineCap: 'round',
+            fill: null
+          }
+        });
 
-                {Object.entries(tierBands).map(([tier, band]) => (
-                  <g key={tier}>
-                    <circle
-                      cx={center}
-                      cy={center}
-                      r={band.radius}
-                      fill="none"
-                      stroke={band.bandColor}
-                      strokeWidth={band.width}
-                    />
-                    <circle
-                      cx={center}
-                      cy={center}
-                      r={band.radius}
-                      fill="none"
-                      stroke={band.ringColor}
-                      strokeWidth="1.5"
-                      strokeDasharray="7 11"
-                    />
-                    <circle
-                      cx={center}
-                      cy={center}
-                      r={band.radius - band.width / 2}
-                      fill="none"
-                      stroke="rgba(255,255,255,0.06)"
-                      strokeWidth="1"
-                    />
-                    <circle
-                      cx={center}
-                      cy={center}
-                      r={band.radius + band.width / 2}
-                      fill="none"
-                      stroke="rgba(255,255,255,0.05)"
-                      strokeWidth="1"
-                    />
-                    <TierBadge x={band.labelPos.x} y={band.labelPos.y} label={`Tier ${tier}`} />
-                  </g>
-                ))}
+        elements.push(makeGraphicCircle(anchor.x, anchor.y, 3.5, tierColor, 'rgba(255,255,255,0.22)', 1, {
+          z: 49,
+          style: { shadowColor: tierColor, shadowBlur: 10 }
+        }));
 
-                <circle cx={center} cy={center} r={118} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1.1" />
-                <circle cx={center} cy={center} r={146} fill="none" stroke="rgba(168,107,255,0.15)" strokeWidth="1" strokeDasharray="4 12" />
-                <circle cx={center} cy={center} r={170} fill="none" stroke="rgba(73,215,255,0.10)" strokeWidth="1" strokeDasharray="2 9" />
+        elements.push({
+          type: 'group',
+          x: chipX,
+          y: chipY,
+          silent: true,
+          z: 50,
+          children: [
+            {
+              type: 'rect',
+              shape: { x: -42, y: -14, width: 84, height: 28, r: 14 },
+              style: {
+                fill: 'rgba(12,18,42,0.94)',
+                stroke: tierColor,
+                lineWidth: 1.2,
+                shadowColor: tierColor,
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowOffsetY: 0
+              }
+            },
+            makeGraphicText(0, 1, 'Tier ' + tier, {
+              fill: 'rgba(255,255,255,0.78)',
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: 3
+            })
+          ]
+        });
+      });
 
-                {outerPlayers.map((player) => {
-                  const color = positionColors[player.pos];
-                  const direction = vectorFromAngle(player.angle);
-                  const connectorStartX = center + direction.x * (centerConfig.nodeRadius + 12);
-                  const connectorStartY = center + direction.y * (centerConfig.nodeRadius + 12);
+      elements.push(makeGraphicCircle(CHART_CENTER_X, CHART_CENTER_Y, 118, 'transparent', 'rgba(255,255,255,0.08)', 1.1));
+      elements.push(makeGraphicCircle(CHART_CENTER_X, CHART_CENTER_Y, 146, 'transparent', 'rgba(168,107,255,0.15)', 1, { style: { lineDash: [4, 12] } }));
+      elements.push(makeGraphicCircle(CHART_CENTER_X, CHART_CENTER_Y, 170, 'transparent', 'rgba(73,215,255,0.10)', 1, { style: { lineDash: [2, 9] } }));
 
-                  return (
-                    <g key={player.name}>
-                      <line
-                        x1={connectorStartX}
-                        y1={connectorStartY}
-                        x2={player.x}
-                        y2={player.y}
-                        stroke={color}
-                        strokeOpacity="0.58"
-                        strokeWidth={player.tier === 2 ? 2.1 : player.tier === 3 ? 1.8 : 1.5}
-                        strokeLinecap="round"
-                        filter="url(#lineGlow)"
-                      />
-                      <PlayerNode player={player} />
-                    </g>
-                  );
-                })}
+      for (let i = 0; i < 28; i += 1) {
+        const angle = i * (360 / 28);
+        const inner = polarToCartesian(CHART_CENTER_X, CHART_CENTER_Y, 118, angle);
+        const outer = polarToCartesian(CHART_CENTER_X, CHART_CENTER_Y, 156, angle);
+        elements.push({
+          type: 'line',
+          silent: true,
+          shape: { x1: inner.x, y1: inner.y, x2: outer.x, y2: outer.y },
+          style: {
+            stroke: 'rgba(168,107,255,0.18)',
+            lineWidth: i % 2 === 0 ? 4 : 2,
+            lineCap: 'round'
+          }
+        });
+      }
 
-                <g>
-                  {Array.from({ length: 28 }, (_, index) => {
-                    const angle = index * (360 / 28);
-                    const inner = polarToCartesian(center, center, 118, angle);
-                    const outer = polarToCartesian(center, center, 156, angle);
-                    return (
-                      <line
-                        key={index}
-                        x1={inner.x}
-                        y1={inner.y}
-                        x2={outer.x}
-                        y2={outer.y}
-                        stroke="rgba(168,107,255,0.18)"
-                        strokeWidth={index % 2 === 0 ? 4 : 2}
-                        strokeLinecap="round"
-                      />
-                    );
-                  })}
+      elements.push(makeGraphicCircle(CHART_CENTER_X, CHART_CENTER_Y, 156, 'transparent', 'rgba(168,107,255,0.12)', 20, { style: { lineDash: [5, 12] } }));
+      elements.push(makeGraphicCircle(CHART_CENTER_X, CHART_CENTER_Y, 128, 'transparent', 'rgba(255,88,214,0.14)', 8, { style: { lineDash: [1, 7] } }));
 
-                  <circle
-                    cx={center}
-                    cy={center}
-                    r={156}
-                    fill="none"
-                    stroke="rgba(168,107,255,0.12)"
-                    strokeWidth="20"
-                    strokeDasharray="5 12"
-                  />
-                  <circle
-                    cx={center}
-                    cy={center}
-                    r={128}
-                    fill="none"
-                    stroke="rgba(255,88,214,0.14)"
-                    strokeWidth="8"
-                    strokeDasharray="1 7"
-                  />
+      return elements;
+    }
 
-                  <text
-                    x={center}
-                    y={center - 72}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fontSize="13"
-                    fontWeight="700"
-                    letterSpacing="0.34em"
-                    fill="rgba(255,255,255,0.78)"
-                    style={{ textTransform: "uppercase" }}
-                  >
-                    Tier 1
-                  </text>
+    function buildNodeSeries(data, center) {
+      return {
+        type: 'custom',
+        coordinateSystem: 'cartesian2d',
+        data: data.map(function(p, i) { return [p.x, p.y, i]; }),
+        silent: false,
+        z: center ? 20 : 10,
+        renderItem: function(params, api) {
+          const item = data[api.value(2)];
+          const point = api.coord([item.x, item.y]);
+          const x = point[0];
+          const y = point[1];
+          const color = tierColors[item.tier];
+          const shortName = item.shortName;
+          const fontSize = nameFontSize(shortName, item.tier, center);
+          const posY = center ? y - 46 : y - item.nodeRadius * 0.42;
+          const gradeY = center ? y + 2 : y - 2;
+          const nameY = center ? y + 52 : y + item.nodeRadius * 0.45;
 
-                  <PlayerNode player={centerPlayer} isCenter />
-                </g>
-              </svg>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-    </div>
-  );
-}
+          const children = [];
+          children.push({
+            type: 'circle',
+            shape: { cx: x, cy: y, r: item.nodeRadius + (center ? 34 : 15) },
+            style: {
+              fill: color,
+              opacity: center ? 0.14 : 0.13,
+              shadowBlur: center ? 36 : 28,
+              shadowColor: color
+            },
+            silent: true
+          });
+          children.push({
+            type: 'circle',
+            shape: { cx: x, cy: y, r: item.nodeRadius + (center ? 10 : 0) },
+            style: {
+              fill: center ? 'rgba(255,255,255,0.04)' : 'rgba(8,13,34,0.96)',
+              stroke: center ? 'rgba(255,255,255,0.12)' : color,
+              lineWidth: center ? 2 : 2.2
+            },
+            silent: true
+          });
+          children.push({
+            type: 'circle',
+            shape: { cx: x, cy: y, r: center ? item.nodeRadius : item.nodeRadius - 6 },
+            style: {
+              fill: center
+                ? new echarts.graphic.RadialGradient(0.5, 0.45, 0.7, [
+                    { offset: 0, color: 'rgba(246,237,255,0.98)' },
+                    { offset: 0.24, color: 'rgba(222,193,255,0.96)' },
+                    { offset: 0.58, color: 'rgba(155,63,255,0.97)' },
+                    { offset: 1, color: 'rgba(52,17,100,1)' }
+                  ])
+                : 'rgba(12,18,42,0.95)',
+              stroke: center ? color : 'rgba(255,255,255,0.07)',
+              lineWidth: center ? 3.2 : 1
+            },
+            silent: true
+          });
+          if (center) {
+            children.push({
+              type: 'circle',
+              shape: { cx: x, cy: y, r: item.nodeRadius - 14 },
+              style: {
+                fill: 'rgba(24,14,49,0.28)',
+                stroke: 'rgba(255,255,255,0.18)',
+                lineWidth: 1
+              },
+              silent: true
+            });
+          }
+          children.push({
+            type: 'text',
+            x: x,
+            y: posY,
+            silent: true,
+            style: {
+              text: item.pos,
+              fill: color,
+              font: (center ? '700 11px Inter, sans-serif' : '700 9px Inter, sans-serif'),
+              letterSpacing: center ? 3 : 2.4,
+              textAlign: 'center',
+              textVerticalAlign: 'middle'
+            }
+          });
+          children.push({
+            type: 'text',
+            x: x,
+            y: gradeY,
+            silent: true,
+            style: {
+              text: String(item.grade),
+              fill: '#fff',
+              font: (center ? '800 ' : '700 ') + item.gradeSize + 'px Inter, sans-serif',
+              textAlign: 'center',
+              textVerticalAlign: 'middle'
+            }
+          });
+          children.push({
+            type: 'text',
+            x: x,
+            y: nameY,
+            silent: true,
+            style: {
+              text: shortName,
+              fill: 'rgba(255,255,255,0.94)',
+              font: '600 ' + fontSize + 'px Inter, sans-serif',
+              textAlign: 'center',
+              textVerticalAlign: 'middle'
+            }
+          });
+          return { type: 'group', children: children };
+        },
+        tooltip: {
+          formatter: function(params) {
+            const item = data[params.dataIndex];
+            return '<div style="font-family: Inter, sans-serif; min-width: 120px;"><strong>' + item.name + '</strong><br>Tier ' + item.tier + ' · ' + item.pos + '<br>Grade: ' + item.grade + '</div>';
+          }
+        }
+      };
+    }
+
+    const chart = echarts.init(document.getElementById('chart'), null, { renderer: 'canvas' });
+
+    function renderChart() {
+      chart.setOption({
+        animationDuration: 700,
+        animationEasing: 'cubicOut',
+        backgroundColor: 'transparent',
+        grid: { left: 0, right: 0, top: 0, bottom: 0, containLabel: false },
+        xAxis: { type: 'value', min: 0, max: SIZE, show: false },
+        yAxis: { type: 'value', min: 0, max: SIZE, inverse: true, show: false },
+        tooltip: {
+          trigger: 'item',
+          backgroundColor: 'rgba(7, 11, 28, 0.96)',
+          borderColor: 'rgba(255,255,255,0.08)',
+          borderWidth: 1,
+          textStyle: { color: '#fff', fontFamily: 'Inter, sans-serif' },
+          extraCssText: 'box-shadow: 0 16px 48px rgba(0,0,0,0.45); border-radius: 14px;'
+        },
+        graphic: buildGraphic(),
+        series: [
+          {
+            type: 'lines',
+            coordinateSystem: 'cartesian2d',
+            polyline: false,
+            data: connectorData,
+            silent: true,
+            z: 2
+          },
+          buildNodeSeries(outerPlayers, false),
+          buildNodeSeries([centerPlayer], true)
+        ]
+      }, true);
+    }
+
+    renderChart();
+    window.addEventListener('resize', function() { chart.resize(); });
+  </script>
+</body>
+</html>

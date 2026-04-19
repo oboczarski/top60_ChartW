@@ -322,9 +322,16 @@
     };
 
     const RADII = {
-      tier2: 180,
-      tier3: 310,
-      tier4: 430
+      tier2: 152,
+      tier3: 246,
+      tier4: 334
+    };
+
+    const NODE_RADII = {
+      tier1: 66,
+      tier2: 44,
+      tier3: 36,
+      tier4: 31
     };
 
     const COLORS = {
@@ -345,6 +352,12 @@
       };
     }
 
+    function abbreviateName(name) {
+      const parts = String(name).trim().split(' ').filter(Boolean);
+      if (parts.length < 2) return name;
+      return parts[0].charAt(0) + '. ' + parts.slice(1).join(' ');
+    }
+
     function makeGradient(color) {
       return new echarts.graphic.RadialGradient(0.32, 0.28, 0.92, [
         { offset: 0, color: color.glow },
@@ -357,75 +370,128 @@
       return Math.min(width, height) / 1000;
     }
 
+    function getTier2Label(node, scale) {
+      const gap = 18 * scale;
+      const angle = ((node.angle % 360) + 360) % 360;
+
+      if (angle === 0) {
+        return { x: node.x, y: node.y - node.radius - gap, align: 'center' };
+      }
+      if (angle === 90) {
+        return { x: node.x + node.radius + gap, y: node.y, align: 'left' };
+      }
+      if (angle === 180) {
+        return { x: node.x, y: node.y + node.radius + gap, align: 'center' };
+      }
+      return { x: node.x - node.radius - gap, y: node.y, align: 'right' };
+    }
+
+    function getRadialLabel(node, centerX, centerY, scale, gap, tangentStrength) {
+      const dx = node.x - centerX;
+      const dy = node.y - centerY;
+      const distance = Math.hypot(dx, dy) || 1;
+      const ux = dx / distance;
+      const uy = dy / distance;
+      const tx = -uy;
+      const ty = ux;
+
+      let tangent = 0;
+      if (Math.abs(ux) > 0.35) {
+        tangent = ux > 0 ? tangentStrength * scale : -tangentStrength * scale;
+      }
+
+      let align = 'center';
+      if (ux > 0.34) align = 'left';
+      if (ux < -0.34) align = 'right';
+
+      return {
+        x: node.x + ux * (node.radius + gap * scale) + tx * tangent,
+        y: node.y + uy * (node.radius + gap * scale) + ty * tangent,
+        align
+      };
+    }
+
+    function getLabelPosition(node, centerX, centerY, scale) {
+      if (node.tier === 1) {
+        return {
+          x: node.x,
+          y: node.y + node.radius + 12 * scale,
+          align: 'center'
+        };
+      }
+
+      if (node.tier === 2) {
+        return getTier2Label(node, scale);
+      }
+
+      if (node.tier === 3) {
+        return getRadialLabel(node, centerX, centerY, scale, 28, 8);
+      }
+
+      return getRadialLabel(node, centerX, centerY, scale, 32, 10);
+    }
+
     function buildNodes(width, height) {
       const scale = getScale(width, height);
       const centerX = width / 2;
       const centerY = height / 2;
-
       const nodes = [];
 
       const centerNode = {
         ...DATA.tier1[0],
+        shortName: abbreviateName(DATA.tier1[0].name),
         x: centerX,
         y: centerY,
-        radius: 58 * scale,
+        radius: NODE_RADII.tier1 * scale,
         color: COLORS.tier1,
         angle: 180
       };
-
-      centerNode.labelX = centerNode.x;
-      centerNode.labelY = centerNode.y + centerNode.radius + 50 * scale;
+      centerNode.label = getLabelPosition(centerNode, centerX, centerY, scale);
       nodes.push(centerNode);
 
       DATA.tier2.forEach((player, i) => {
         const angle = i * (360 / DATA.tier2.length);
         const coords = getCoordinates(centerX, centerY, RADII.tier2 * scale, angle);
-        const radius = 36 * scale;
-        const vectorX = (coords.x - centerX) / (RADII.tier2 * scale);
-        const vectorY = (coords.y - centerY) / (RADII.tier2 * scale);
-        nodes.push({
+        const node = {
           ...player,
+          shortName: abbreviateName(player.name),
           ...coords,
-          radius,
+          radius: NODE_RADII.tier2 * scale,
           angle,
-          color: COLORS.tier2,
-          labelX: coords.x + vectorX * (radius + 58 * scale),
-          labelY: coords.y + vectorY * (radius + 40 * scale)
-        });
+          color: COLORS.tier2
+        };
+        node.label = getLabelPosition(node, centerX, centerY, scale);
+        nodes.push(node);
       });
 
       DATA.tier3.forEach((player, i) => {
         const angle = 45 + i * (360 / DATA.tier3.length);
         const coords = getCoordinates(centerX, centerY, RADII.tier3 * scale, angle);
-        const radius = 30 * scale;
-        const vectorX = (coords.x - centerX) / (RADII.tier3 * scale);
-        const vectorY = (coords.y - centerY) / (RADII.tier3 * scale);
-        nodes.push({
+        const node = {
           ...player,
+          shortName: abbreviateName(player.name),
           ...coords,
-          radius,
+          radius: NODE_RADII.tier3 * scale,
           angle,
-          color: COLORS.tier3,
-          labelX: coords.x + vectorX * (radius + 58 * scale),
-          labelY: coords.y + vectorY * (radius + 40 * scale)
-        });
+          color: COLORS.tier3
+        };
+        node.label = getLabelPosition(node, centerX, centerY, scale);
+        nodes.push(node);
       });
 
       DATA.tier4.forEach((player, i) => {
         const angle = 22.5 + i * (360 / DATA.tier4.length);
         const coords = getCoordinates(centerX, centerY, RADII.tier4 * scale, angle);
-        const radius = 26 * scale;
-        const vectorX = (coords.x - centerX) / (RADII.tier4 * scale);
-        const vectorY = (coords.y - centerY) / (RADII.tier4 * scale);
-        nodes.push({
+        const node = {
           ...player,
+          shortName: abbreviateName(player.name),
           ...coords,
-          radius,
+          radius: NODE_RADII.tier4 * scale,
           angle,
-          color: COLORS.tier4,
-          labelX: coords.x + vectorX * (radius + 52 * scale),
-          labelY: coords.y + vectorY * (radius + 34 * scale)
-        });
+          color: COLORS.tier4
+        };
+        node.label = getLabelPosition(node, centerX, centerY, scale);
+        nodes.push(node);
       });
 
       return { nodes, centerX, centerY, scale };
@@ -435,7 +501,7 @@
       return [
         {
           type: 'circle',
-          shape: { cx: centerX, cy: centerY, r: 470 * scale },
+          shape: { cx: centerX, cy: centerY, r: 386 * scale },
           silent: true,
           z: 0,
           style: {
@@ -480,7 +546,7 @@
         },
         {
           type: 'circle',
-          shape: { cx: centerX, cy: centerY, r: 100 * scale },
+          shape: { cx: centerX, cy: centerY, r: 86 * scale },
           silent: true,
           z: 0,
           style: {
@@ -492,7 +558,7 @@
         },
         {
           type: 'circle',
-          shape: { cx: centerX, cy: centerY, r: 116 * scale },
+          shape: { cx: centerX, cy: centerY, r: 102 * scale },
           silent: true,
           z: 0,
           style: {
@@ -505,7 +571,7 @@
         {
           type: 'text',
           left: centerX,
-          top: centerY - 120 * scale,
+          top: centerY - 104 * scale,
           silent: true,
           z: 1,
           style: {
@@ -514,7 +580,7 @@
             y: 0,
             textAlign: 'center',
             textVerticalAlign: 'middle',
-            fill: 'rgba(255,255,255,0.56)',
+            fill: 'rgba(255,255,255,0.54)',
             font: `${Math.max(10, Math.round(12 * scale))}px Inter, sans-serif`,
             letterSpacing: 4 * scale
           }
@@ -532,12 +598,12 @@
         const active = hoveredId === node.id;
         const isCenter = node.tier === 1;
         const gradeFont = isCenter
-          ? Math.round(34 * scale)
+          ? Math.round(36 * scale)
           : node.tier === 2
-            ? Math.round(20 * scale)
+            ? Math.round(22 * scale)
             : node.tier === 3
-              ? Math.round(17 * scale)
-              : Math.round(15 * scale);
+              ? Math.round(18 * scale)
+              : Math.round(16 * scale);
 
         return {
           id: node.id,
@@ -545,12 +611,12 @@
           x: node.x,
           y: node.y,
           value: node.grade,
-          symbolSize: (node.radius * 2) * (active ? 1.1 : 1),
+          symbolSize: (node.radius * 2) * (active ? 1.08 : 1),
           draggable: false,
           itemStyle: {
             color: makeGradient(node.color),
             opacity: muted ? 0.2 : 1,
-            shadowBlur: isCenter ? 28 * scale : (active ? 24 * scale : 16 * scale),
+            shadowBlur: isCenter ? 30 * scale : (active ? 24 * scale : 18 * scale),
             shadowColor: node.color.glow,
             borderColor: isCenter ? 'rgba(255,255,255,0.38)' : (active ? node.color.glow : 'rgba(255,255,255,0.12)'),
             borderWidth: isCenter ? 2 : (active ? 2 : 1)
@@ -558,9 +624,7 @@
           label: {
             show: true,
             position: 'inside',
-            formatter: isCenter
-              ? `{grade|${node.grade}}`
-              : `{grade|${node.grade}}`,
+            formatter: `{grade|${node.grade}}`,
             rich: {
               grade: {
                 color: '#ffffff',
@@ -580,13 +644,14 @@
 
       const labelData = nodes.map((node) => {
         const muted = hoveredId && hoveredId !== node.id && hoveredId !== 't1-1';
-        const nameSize = node.tier === 1 ? Math.max(14, Math.round(15 * scale)) : Math.max(11, Math.round(12 * scale));
-        const posSize = Math.max(10, Math.round(10 * scale));
+        const fontSize = node.tier === 1 ? Math.max(12, Math.round(12 * scale)) : Math.max(10, Math.round(10.5 * scale));
+        const chipPaddingX = node.tier === 1 ? Math.round(10 * scale) : Math.round(9 * scale);
+        const chipPaddingY = Math.round(4 * scale);
 
         return {
           id: `label-${node.id}`,
-          x: node.labelX,
-          y: node.labelY,
+          x: node.label.x,
+          y: node.label.y,
           value: 1,
           symbolSize: 1,
           itemStyle: {
@@ -596,28 +661,23 @@
           label: {
             show: true,
             position: 'inside',
-            align: 'center',
+            align: node.label.align,
             verticalAlign: 'middle',
             opacity: muted ? 0.24 : 1,
-            padding: [Math.round(8 * scale), Math.round(12 * scale), Math.round(7 * scale), Math.round(12 * scale)],
-            borderRadius: Math.round(10 * scale),
+            padding: [chipPaddingY, chipPaddingX, chipPaddingY, chipPaddingX],
+            borderRadius: Math.round(8 * scale),
             borderWidth: 1,
             borderColor: 'rgba(255,255,255,0.08)',
-            backgroundColor: 'rgba(3, 7, 18, 0.64)',
-            formatter: `{name|${node.name}}\n{pos|${node.pos}}`,
+            backgroundColor: 'rgba(3, 7, 18, 0.66)',
+            formatter: `{line|${node.pos} • ${node.shortName}}`,
             rich: {
-              name: {
+              line: {
                 color: node.color.text,
-                fontSize: nameSize,
+                fontSize,
                 fontWeight: 700,
-                lineHeight: nameSize + 4
-              },
-              pos: {
-                color: node.color.glow,
-                fontSize: posSize,
-                fontWeight: 800,
-                letterSpacing: 1.2,
-                lineHeight: posSize + 8
+                lineHeight: fontSize + 2,
+                align: node.label.align,
+                padding: 0
               }
             }
           }
@@ -659,7 +719,7 @@
           formatter(params) {
             if (!params.data || !params.data.name) return '';
             const d = params.data;
-            return `${d.name}<br/>Tier ${d.tier || d.value?.tier || ''} • ${d.pos || ''}<br/>Grade: ${d.value?.grade || d.grade || d.value || ''}`;
+            return `${d.name}<br/>Tier ${d.tier || ''} • ${d.pos || ''}<br/>Grade: ${d.grade || d.value || ''}`;
           }
         },
         graphic: buildGraphics(centerX, centerY, scale),
