@@ -284,7 +284,13 @@ function buildRawLayout(width, height) {
       nameFontSize: isCenter
         ? clamp(nodeRadius * 0.34, 11, 14.2)
         : getOuterNameSize(player, nodeRadius),
-      posOffsetY: isCenter ? -nodeRadius * 0.57 : -nodeRadius * 0.55,
+      posOffsetY: isCenter
+        ? -nodeRadius * 0.57
+        : player.tier === 2
+          ? -nodeRadius * 0.43
+          : player.tier === 3
+            ? -nodeRadius * 0.48
+            : -nodeRadius * 0.55,
       gradeOffsetY: isCenter ? -nodeRadius * 0.01 : nodeRadius * 0.04,
       nameOffsetY: isCenter
         ? nodeRadius * 0.56
