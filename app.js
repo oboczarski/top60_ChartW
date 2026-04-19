@@ -44,7 +44,6 @@ const tierMeta = {
   }
 };
 
-const TIER_ORDER = [1, 2, 3, 4];
 const REFERENCE_CENTER_X = 600;
 const REFERENCE_CENTER_Y = 600;
 
@@ -82,13 +81,6 @@ const centerConfig = {
   nodeRadius: 102
 };
 
-const tierCalloutConfig = {
-  4: { angle: 304, radius: tierBands[4].radius, offsetX: 88 },
-  3: { angle: 298, radius: tierBands[3].radius, offsetX: 88 },
-  2: { angle: 292, radius: tierBands[2].radius, offsetX: 88 },
-  1: { angle: 286, radius: centerConfig.nodeRadius + 64, offsetX: 88 }
-};
-
 const chartPadding = {
   top: 12,
   right: 10,
@@ -98,7 +90,6 @@ const chartPadding = {
 
 const shellEl = document.querySelector(".chart-shell");
 const chartEl = document.getElementById("posChart");
-const calloutEl = document.getElementById("tierCallouts");
 const chart = echarts.init(chartEl, null, { renderer: "canvas" });
 
 function clamp(value, min, max) {
@@ -138,13 +129,6 @@ function addCircleBounds(bounds, x, y, radius) {
   bounds.maxX = Math.max(bounds.maxX, x + radius);
   bounds.minY = Math.min(bounds.minY, y - radius);
   bounds.maxY = Math.max(bounds.maxY, y + radius);
-}
-
-function addRectBounds(bounds, x, y, width, height) {
-  bounds.minX = Math.min(bounds.minX, x);
-  bounds.maxX = Math.max(bounds.maxX, x + width);
-  bounds.minY = Math.min(bounds.minY, y);
-  bounds.maxY = Math.max(bounds.maxY, y + height);
 }
 
 function buildReferencePlayers() {
@@ -187,31 +171,7 @@ function buildReferencePlayers() {
   });
 }
 
-function buildReferenceCallouts() {
-  return TIER_ORDER.slice().reverse().map((tier) => {
-    const config = tierCalloutConfig[tier];
-    const anchor = polarToCartesian(
-      REFERENCE_CENTER_X,
-      REFERENCE_CENTER_Y,
-      config.radius,
-      config.angle
-    );
-
-    return {
-      tier,
-      anchorX: anchor.x,
-      anchorY: anchor.y,
-      elbowX: anchor.x - 44,
-      targetX: anchor.x - 44 - config.offsetX,
-      targetY: anchor.y,
-      width: 66,
-      height: 22
-    };
-  });
-}
-
 const referencePlayers = buildReferencePlayers();
-const referenceCallouts = buildReferenceCallouts();
 
 function measureReferenceBounds() {
   const bounds = {
@@ -235,58 +195,16 @@ function measureReferenceBounds() {
     addCircleBounds(bounds, player.x, player.y, glowRadius);
   });
 
-  referenceCallouts.forEach((callout) => {
-    addRectBounds(
-      bounds,
-      callout.targetX - callout.width / 2,
-      callout.targetY - callout.height / 2,
-      callout.width,
-      callout.height
-    );
-    addCircleBounds(bounds, callout.anchorX, callout.anchorY, 4);
-  });
-
   return bounds;
 }
 
 const referenceBounds = measureReferenceBounds();
-
-function distributeCalloutTargets(callouts, minY, maxY, gap) {
-  const sorted = [...callouts].sort((a, b) => a.targetY - b.targetY);
-
-  let previousBottom = minY;
-  sorted.forEach((callout) => {
-    const halfHeight = callout.height / 2;
-    const minCenter = previousBottom + gap + halfHeight;
-    callout.y = Math.max(callout.targetY, minCenter);
-    previousBottom = callout.y + halfHeight;
-  });
-
-  const last = sorted[sorted.length - 1];
-  const overflow = last ? last.y + last.height / 2 - maxY : 0;
-
-  if (overflow > 0) {
-    sorted
-      .slice()
-      .reverse()
-      .forEach((callout) => {
-        const next = sorted[sorted.indexOf(callout) + 1];
-        const halfHeight = callout.height / 2;
-        const maxCenter = next
-          ? next.y - next.height / 2 - gap - halfHeight
-          : maxY - halfHeight;
-
-        callout.y = Math.min(callout.y - overflow, maxCenter);
-      });
-  }
-
-  sorted.forEach((callout) => {
-    const halfHeight = callout.height / 2;
-    callout.y = clamp(callout.y, minY + halfHeight, maxY - halfHeight);
-  });
-
-  return callouts;
-}
+const referenceExtents = {
+  left: REFERENCE_CENTER_X - referenceBounds.minX,
+  right: referenceBounds.maxX - REFERENCE_CENTER_X,
+  top: REFERENCE_CENTER_Y - referenceBounds.minY,
+  bottom: referenceBounds.maxY - REFERENCE_CENTER_Y
+};
 
 function getOuterNameSize(player, nodeRadius) {
   let size = clamp(nodeRadius * 0.5, 6, 8.5);
@@ -305,17 +223,14 @@ function buildRawLayout(width, height) {
   const availableHeight = height - chartPadding.top - chartPadding.bottom;
   const scale =
     Math.min(
-      availableWidth / (referenceBounds.maxX - referenceBounds.minX),
-      availableHeight / (referenceBounds.maxY - referenceBounds.minY)
+      availableWidth /
+        (2 * Math.max(referenceExtents.left, referenceExtents.right)),
+      availableHeight /
+        (2 * Math.max(referenceExtents.top, referenceExtents.bottom))
     ) * 0.985;
-
-  const pillWidth = clamp(width * 0.145, 50, 56);
-  const pillHeight = clamp(height * 0.044, 16, 18);
-  const pillFontSize = clamp(width * 0.021, 6.7, 7.8);
-  const pillLetterSpacing = clamp(width * 0.0032, 0.8, 1.2);
   const center = {
-    x: REFERENCE_CENTER_X * scale,
-    y: REFERENCE_CENTER_Y * scale
+    x: chartPadding.left + availableWidth / 2,
+    y: chartPadding.top + availableHeight / 2
   };
 
   const bandLayout = Object.entries(tierBands).map(([tier, band]) => ({
@@ -335,8 +250,8 @@ function buildRawLayout(width, height) {
       color: tierMeta[player.tier].color,
       rgb: tierMeta[player.tier].rgb,
       glow: tierMeta[player.tier].glow,
-      x: player.x * scale,
-      y: player.y * scale,
+      x: center.x + (player.x - REFERENCE_CENTER_X) * scale,
+      y: center.y + (player.y - REFERENCE_CENTER_Y) * scale,
       nodeRadius,
       haloRadius:
         nodeRadius + (isCenter ? Math.max(16, 34 * scale) : Math.max(7, 15 * scale)),
@@ -360,30 +275,6 @@ function buildRawLayout(width, height) {
     };
   });
 
-  const calloutLayout = referenceCallouts.map((callout) => ({
-    ...callout,
-    label: tierMeta[callout.tier].label,
-    color: tierMeta[callout.tier].color,
-    rgb: tierMeta[callout.tier].rgb,
-    x: callout.targetX * scale,
-    y: callout.targetY * scale,
-    targetY: callout.targetY * scale,
-    anchorX: callout.anchorX * scale,
-    anchorY: callout.anchorY * scale,
-    elbowX: callout.elbowX * scale,
-    width: pillWidth,
-    height: pillHeight,
-    fontSize: pillFontSize,
-    letterSpacing: pillLetterSpacing
-  }));
-
-  distributeCalloutTargets(
-    calloutLayout,
-    chartPadding.top,
-    height - chartPadding.bottom,
-    Math.max(5, pillHeight * 0.24)
-  );
-
   return {
     width,
     height,
@@ -396,8 +287,7 @@ function buildRawLayout(width, height) {
     bands: bandLayout,
     players: playerLayout,
     centerPlayer: playerLayout.find((player) => player.tier === 1),
-    outerPlayers: playerLayout.filter((player) => player.tier !== 1),
-    callouts: calloutLayout
+    outerPlayers: playerLayout.filter((player) => player.tier !== 1)
   };
 }
 
@@ -416,39 +306,40 @@ function measureLayoutBounds(layout) {
     addCircleBounds(bounds, player.x, player.y, player.haloRadius);
   });
 
-  layout.callouts.forEach((callout) => {
-    addRectBounds(
-      bounds,
-      callout.x - callout.width / 2,
-      callout.y - callout.height / 2,
-      callout.width,
-      callout.height
-    );
-    addCircleBounds(bounds, callout.anchorX, callout.anchorY, 4);
-  });
-
   return bounds;
 }
 
-function translateLayout(layout, shiftX, shiftY) {
-  const translatePoint = (item, keys = ["x", "y"]) => {
-    const next = { ...item };
+function computeLayout(width, height) {
+  const layout = buildRawLayout(width, height);
+  const bounds = measureLayoutBounds(layout);
+  const minX = chartPadding.left;
+  const maxX = width - chartPadding.right;
+  const minY = chartPadding.top;
+  const maxY = height - chartPadding.bottom;
 
-    keys.forEach((key) => {
-      next[key] += key.endsWith("X") || key === "x" ? shiftX : shiftY;
-    });
+  let shiftX = 0;
+  let shiftY = 0;
 
-    return next;
-  };
+  if (bounds.minX < minX) {
+    shiftX += minX - bounds.minX;
+  } else if (bounds.maxX > maxX) {
+    shiftX += maxX - bounds.maxX;
+  }
 
-  const playersTranslated = layout.players.map((player) => translatePoint(player));
-  const calloutsTranslated = layout.callouts.map((callout) => ({
-    ...callout,
-    x: callout.x + shiftX,
-    y: callout.y + shiftY,
-    anchorX: callout.anchorX + shiftX,
-    anchorY: callout.anchorY + shiftY,
-    elbowX: callout.elbowX + shiftX
+  if (bounds.minY < minY) {
+    shiftY += minY - bounds.minY;
+  } else if (bounds.maxY > maxY) {
+    shiftY += maxY - bounds.maxY;
+  }
+
+  if (!shiftX && !shiftY) {
+    return layout;
+  }
+
+  const players = layout.players.map((player) => ({
+    ...player,
+    x: player.x + shiftX,
+    y: player.y + shiftY
   }));
 
   return {
@@ -457,23 +348,10 @@ function translateLayout(layout, shiftX, shiftY) {
       x: layout.center.x + shiftX,
       y: layout.center.y + shiftY
     },
-    players: playersTranslated,
-    centerPlayer: playersTranslated.find((player) => player.tier === 1),
-    outerPlayers: playersTranslated.filter((player) => player.tier !== 1),
-    callouts: calloutsTranslated
+    players,
+    centerPlayer: players.find((player) => player.tier === 1),
+    outerPlayers: players.filter((player) => player.tier !== 1)
   };
-}
-
-function computeLayout(width, height) {
-  const rawLayout = buildRawLayout(width, height);
-  const bounds = measureLayoutBounds(rawLayout);
-  const usableWidth = width - chartPadding.left - chartPadding.right;
-  const usableHeight = height - chartPadding.top - chartPadding.bottom;
-  const shiftX = chartPadding.left + (usableWidth - (bounds.maxX - bounds.minX)) / 2 - bounds.minX;
-  const shiftY =
-    chartPadding.top + (usableHeight - (bounds.maxY - bounds.minY)) / 2 - bounds.minY;
-
-  return translateLayout(rawLayout, shiftX, shiftY);
 }
 
 function buildConnectorData(layout) {
@@ -594,51 +472,6 @@ function buildGraphic(layout) {
         "transparent",
         "rgba(255,255,255,0.05)",
         1
-      )
-    );
-  });
-
-  layout.callouts.forEach((callout) => {
-    const lineStartX = callout.x + callout.width / 2;
-
-    elements.push({
-      type: "polyline",
-      silent: true,
-      z: 24,
-      shape: {
-        points: [
-          [lineStartX, callout.y],
-          [callout.elbowX, callout.y],
-          [callout.anchorX, callout.anchorY]
-        ]
-      },
-      style: {
-        stroke: callout.color,
-        lineWidth: Math.max(1.2, 1.4 * layout.scale * 2.2),
-        opacity: 0.72,
-        shadowColor: callout.color,
-        shadowBlur: Math.max(6, 8 * layout.scale * 2.2),
-        lineJoin: "round",
-        lineCap: "round",
-        fill: null
-      }
-    });
-
-    elements.push(
-      makeGraphicCircle(
-        callout.anchorX,
-        callout.anchorY,
-        Math.max(2.6, 3.5 * layout.scale * 2.2),
-        callout.color,
-        "rgba(255,255,255,0.22)",
-        1,
-        {
-          z: 25,
-          style: {
-            shadowColor: callout.color,
-            shadowBlur: Math.max(6, 10 * layout.scale * 2.2)
-          }
-        }
       )
     );
   });
@@ -869,29 +702,6 @@ function buildNodeSeries(data, isCenter) {
   };
 }
 
-function syncCallouts(layout) {
-  calloutEl.innerHTML = layout.callouts
-    .map(
-      (callout) => `
-        <div
-          class="tier-callout"
-          style="
-            --pill-x: ${callout.x}px;
-            --pill-y: ${callout.y}px;
-            --pill-width: ${callout.width}px;
-            --pill-height: ${callout.height}px;
-            --pill-font-size: ${callout.fontSize}px;
-            --pill-letter-spacing: ${callout.letterSpacing}px;
-            --tier-rgb: ${callout.rgb};
-          "
-        >
-          <span>${callout.label}</span>
-        </div>
-      `
-    )
-    .join("");
-}
-
 function syncShellAtmosphere(layout) {
   shellEl.style.setProperty("--core-x", `${layout.center.x}px`);
   shellEl.style.setProperty("--core-y", `${layout.center.y}px`);
@@ -909,7 +719,6 @@ function renderChart() {
   const layout = computeLayout(width, height);
 
   syncShellAtmosphere(layout);
-  syncCallouts(layout);
 
   chart.setOption(
     {

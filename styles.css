@@ -67,7 +67,7 @@ body {
 }
 
 .widget-header {
-  padding: 12px 16px 6px;
+  padding: 12px 16px 8px;
 }
 
 .widget-header h2 {
@@ -77,6 +77,58 @@ body {
   font-weight: 700;
   letter-spacing: -0.03em;
   color: var(--text);
+}
+
+.tier-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin-top: 9px;
+}
+
+.tier-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.tier-legend-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+.tier-legend-item-1 .tier-legend-dot {
+  background: var(--tier-1);
+  box-shadow: 0 0 10px rgba(var(--tier-1-rgb), 0.72);
+}
+
+.tier-legend-item-2 .tier-legend-dot {
+  background: var(--tier-2);
+  box-shadow: 0 0 10px rgba(var(--tier-2-rgb), 0.72);
+}
+
+.tier-legend-item-3 .tier-legend-dot {
+  background: var(--tier-3);
+  box-shadow: 0 0 10px rgba(var(--tier-3-rgb), 0.72);
+}
+
+.tier-legend-item-4 .tier-legend-dot {
+  background: var(--tier-4);
+  box-shadow: 0 0 10px rgba(var(--tier-4-rgb), 0.72);
 }
 
 .widget-body {
@@ -148,54 +200,6 @@ body {
   z-index: 1;
   width: 100%;
   height: 100%;
-}
-
-.tier-callouts {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.tier-callout {
-  position: absolute;
-  left: var(--pill-x);
-  top: var(--pill-y);
-  width: var(--pill-width);
-  height: var(--pill-height);
-  display: grid;
-  place-items: center;
-  transform: translate(-50%, -50%);
-  border-radius: 999px;
-  border: 1px solid rgba(var(--tier-rgb), 0.88);
-  background:
-    linear-gradient(180deg, rgba(14, 18, 42, 0.96), rgba(10, 15, 34, 0.94));
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.04),
-    0 0 18px rgba(var(--tier-rgb), 0.46),
-    0 10px 24px rgba(0, 0, 0, 0.28);
-  backdrop-filter: blur(8px);
-}
-
-.tier-callout::before {
-  content: "";
-  position: absolute;
-  inset: 1px;
-  border-radius: inherit;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 45%),
-    linear-gradient(180deg, rgba(var(--tier-rgb), 0.12), rgba(var(--tier-rgb), 0.03));
-  opacity: 0.9;
-}
-
-.tier-callout span {
-  position: relative;
-  z-index: 1;
-  font-size: var(--pill-font-size);
-  font-weight: 700;
-  letter-spacing: var(--pill-letter-spacing);
-  color: rgba(255, 255, 255, 0.82);
-  text-transform: uppercase;
 }
 
 ::-webkit-scrollbar {
