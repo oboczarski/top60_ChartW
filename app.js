@@ -690,10 +690,10 @@ function buildNodeSeries(data, isCenter) {
             text: item.shortName,
             fill: "rgba(255,255,255,0.94)",
             font: `400 ${item.nameFontSize}px "Product Sans", "Google Sans", sans-serif`,
-            padding: isCenter ? [3, 5, 3, 5] : [2, 4, 2, 4],
+            padding: isCenter ? [2, 6, 3, 5] : [2, 4, 2, 4],
             backgroundColor: isCenter
-              ? "rgba(10,16,36,0.88)"
-              : "rgba(9,14,33,0.84)",
+              ? "rgba(10,16,36,0.48)"
+              : "rgba(33, 41, 55, 0.94)",
             borderColor: echarts.color.modifyAlpha(item.color, isCenter ? 0.5 : 0.38),
             borderWidth: 1,
             borderRadius: 999,
