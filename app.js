@@ -289,7 +289,7 @@ function buildRawLayout(width, height) {
       nameOffsetY: isCenter
         ? nodeRadius * 0.56
         : player.tier === 4
-          ? nodeRadius * 0.78
+          ? nodeRadius * 0.81
           : player.tier === 3
           ? nodeRadius * 0.75
           : nodeRadius * 0.68
