@@ -1,0 +1,382 @@
+:root {
+  --surface: #040714;
+  --surface-panel: rgba(5, 9, 24, 0.94);
+  --surface-shell: rgba(6, 10, 24, 0.98);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-soft: rgba(255, 255, 255, 0.07);
+  --stroke-faint: rgba(255, 255, 255, 0.04);
+  --text: rgba(255, 255, 255, 0.97);
+  --text-2: rgba(255, 255, 255, 0.72);
+  --text-3: rgba(255, 255, 255, 0.48);
+  --tier-1: #bb74ff;
+  --tier-2: #8d63ff;
+  --tier-3: #48d1ff;
+  --tier-4: #25f4c5;
+  --tier-1-rgb: 187, 116, 255;
+  --tier-2-rgb: 141, 99, 255;
+  --tier-3-rgb: 72, 209, 255;
+  --tier-4-rgb: 37, 244, 197;
+  --core-x: 54%;
+  --core-y: 62%;
+  --chart-scale: 0.28;
+  --chart-font-family: "Product Sans", "Google Sans", sans-serif;
+  --chart-text-strong: #fff;
+  --chart-text-name: rgba(255, 255, 255, 0.94);
+
+  --chart-tooltip-bg: rgba(7, 11, 28, 0.96);
+  --chart-tooltip-border: rgba(255, 255, 255, 0.08);
+  --chart-tooltip-text-muted: rgba(255, 255, 255, 0.7);
+  --chart-tooltip-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+  --chart-tooltip-radius: 14px;
+  --chart-tooltip-padding: 10px 12px;
+
+  --chart-name-font-weight: 400;
+
+  --chart-pos-font-weight-center: 700;
+  --chart-pos-font-weight-outer: 700;
+
+  --chart-grade-font-weight-center: 400;
+  --chart-grade-font-weight-outer: 600;
+
+  --chart-pos-font-factor-center: 0.31;
+  --chart-pos-font-min-center: 13;
+  --chart-pos-font-max-center: 13.3;
+  --chart-pos-font-factor-outer: 0.42;
+  --chart-pos-font-min-outer: 7.5;
+  --chart-pos-font-max-outer: 9.5;
+
+  --chart-grade-font-factor-center: 0.74;
+  --chart-grade-font-min-center: 34;
+  --chart-grade-font-max-center: 34;
+  --chart-grade-font-factor-outer: 0.82;
+  --chart-grade-font-min-outer: 9.2;
+  --chart-grade-font-max-outer: 13.4;
+
+  --chart-name-font-factor-center: 0.34;
+  --chart-name-font-min-center: 11;
+  --chart-name-font-max-center: 14.2;
+  --chart-name-font-factor-outer: 0.5;
+  --chart-name-font-min-outer: 6;
+  --chart-name-font-max-outer: 8.5;
+  --chart-name-font-floor-outer: 5.7;
+  --chart-name-font-mid-cutoff: 10;
+  --chart-name-font-mid-reduction: 0.5;
+  --chart-name-font-long-cutoff: 13;
+  --chart-name-font-long-reduction: 0.9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--surface);
+  color: var(--text);
+  font-family:
+    "Product Sans",
+    "Google Sans",
+    sans-serif;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.page {
+  min-height: 100vh;
+  display: grid;
+  place-items: start center;
+  padding: 14px;
+  background:
+    radial-gradient(circle at 18% 14%, rgba(187, 116, 255, 0.12), transparent 24%),
+    radial-gradient(circle at 82% 18%, rgba(72, 209, 255, 0.08), transparent 20%),
+    linear-gradient(180deg, #040714 0%, #03050f 100%);
+}
+
+.widget-card {
+  width: 360px;
+  max-width: 375px;
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(187, 116, 255, 0.13), transparent 34%),
+    radial-gradient(circle at 86% 72%, rgba(72, 209, 255, 0.09), transparent 30%),
+    linear-gradient(180deg, rgba(5, 9, 24, 0.98), rgba(3, 6, 18, 0.98));
+  box-shadow:
+    0 24px 90px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.widget-header {
+  padding: 12px 16px 8px;
+}
+
+.widget-header h2 {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.tier-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin-top: 9px;
+}
+
+.tier-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.tier-legend-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+.tier-legend-item-1 .tier-legend-dot {
+  background: var(--tier-1);
+  box-shadow: 0 0 10px rgba(var(--tier-1-rgb), 0.72);
+}
+
+.tier-legend-item-2 .tier-legend-dot {
+  background: var(--tier-2);
+  box-shadow: 0 0 10px rgba(var(--tier-2-rgb), 0.72);
+}
+
+.tier-legend-item-3 .tier-legend-dot {
+  background: var(--tier-3);
+  box-shadow: 0 0 10px rgba(var(--tier-3-rgb), 0.72);
+}
+
+.tier-legend-item-4 .tier-legend-dot {
+  background: var(--tier-4);
+  box-shadow: 0 0 10px rgba(var(--tier-4-rgb), 0.72);
+}
+
+.widget-body {
+  padding: 0 6px 6px;
+}
+
+.chart-shell {
+  --pos-qb: #fc3688;
+  --pos-rb: #25f4c5;
+  --pos-wr: #48d1ff;
+  --pos-te: #8d63ff;
+  --tier-1-glow: rgba(187, 116, 255, 0.42);
+  --tier-2-glow: rgba(141, 99, 255, 0.4);
+  --tier-3-glow: rgba(72, 209, 255, 0.38);
+  --tier-4-glow: rgba(37, 244, 197, 0.34);
+
+  /* 3 rings of chart and dashedline color */
+  --tier-2-band-stroke: rgba(141, 99, 255, 0.34);
+  --tier-2-band-fill: rgba(141, 99, 255, 0.03);
+  --tier-3-band-stroke: rgba(72, 209, 255, 0.26);
+  --tier-3-band-fill: rgba(72, 209, 255, 0.024);
+  --tier-4-band-stroke: rgba(37, 244, 197, 0.2);
+  --tier-4-band-fill: rgba(37, 244, 197, 0.02);
+  
+  /* Chart Circle BG color */
+  --chart-outer-backdrop-fill: rgba(0, 0, 0, 0.14);
+  --chart-outer-backdrop-stroke: rgba(255, 255, 255, 0.04);
+  --chart-outer-accent-stroke: rgba(141, 99, 255, 0.08);
+
+  /* border for each ring */
+  --chart-band-edge-inner: rgba(255, 255, 255, 0.055);
+  --chart-band-edge-outer: rgba(255, 255, 255, 0.05);
+  
+  /* Things around center going with center */
+  --chart-core-orbit-1-stroke: rgba(255, 255, 255, 0.08);
+  --chart-core-orbit-2-stroke: rgba(168, 107, 255, 0.15);
+  --chart-core-orbit-3-stroke: rgba(73, 215, 255, 0.1);
+  
+  /* Spokey things around center  */
+  --chart-core-spoke-stroke: rgba(168, 107, 255, 0.18);
+  --chart-core-ring-outer-stroke: rgba(168, 107, 255, 0.12);
+  --chart-core-ring-inner-stroke: rgba(255, 88, 214, 0.14);
+  
+  /* dash distance and stuff */
+  --chart-band-dash-a-min: 3;
+  --chart-band-dash-a-scale: 16.8;
+  --chart-band-dash-b-min: 5;
+  --chart-band-dash-b-scale: 26.4;
+
+  --chart-core-dash-a-min: 2;
+  --chart-core-dash-a-scale: 11;
+  --chart-core-dash-b-min: 5;
+  --chart-core-dash-b-scale: 26.4;
+  --chart-core-orbit-3-dash-a-min: 1.5;
+  --chart-core-orbit-3-dash-a-scale: 4.4;
+  --chart-core-orbit-3-dash-b-min: 4;
+  --chart-core-orbit-3-dash-b-scale: 19.8;
+  --chart-core-ring-inner-dash-a-min: 1;
+  --chart-core-ring-inner-dash-a-scale: 2.2;
+  --chart-core-ring-inner-dash-b-min: 3;
+  --chart-core-ring-inner-dash-b-scale: 15.4;
+  
+  /*dash thickness ithink */
+  --chart-band-ring-line-min: 1;
+  --chart-band-ring-line-scale: 3.36;
+  
+  /* Spokey things coming from center */
+  --chart-spoke-large-min: 1.2;
+  --chart-spoke-large-scale: 8.8;
+  --chart-spoke-small-min: 1;
+  --chart-spoke-small-scale: 4.4;
+  
+  --chart-core-ring-outer-line-min: 6;
+  --chart-core-ring-outer-line-scale: 36;
+  --chart-core-ring-inner-line-min: 3.5;
+  --chart-core-ring-inner-line-scale: 14.4;
+  
+  --connector-opacity: 0.62;
+  --connector-shadow-blur-min: 6;
+  --connector-shadow-blur-scale: 8.8;
+  --connector-tier-2-color: #8d63ff;
+  --connector-tier-2-width-min: 1;
+  --connector-tier-2-width-scale: 5.88;
+  --connector-tier-3-color: #48d1ff;
+  --connector-tier-3-width-min: 1;
+  --connector-tier-3-width-scale: 5.04;
+  --connector-tier-4-color: #25f4c5;
+  --connector-tier-4-width-min: 1;
+  --connector-tier-4-width-scale: 4.2;
+  
+  --chart-node-halo-opacity-center: 0.06;
+  --chart-node-halo-opacity-outer: 0.091;
+  --chart-node-halo-blur-center: 8;
+  --chart-node-halo-blur-outer: 8;
+  
+  --chart-node-shell-fill-center: rgba(255, 255, 255, 0.04);
+  --chart-node-shell-fill-outer: rgba(8, 13, 34, 0.96);
+  --chart-node-shell-stroke-center: rgba(255, 255, 255, 0.12);
+  --chart-node-core-fill-outer: rgba(12, 18, 42, 0.96);
+  --chart-node-core-stroke-outer: rgba(255, 255, 255, 0.08);
+  --chart-node-inner-fill-center: rgba(24, 14, 49, 0.28);
+  --chart-node-inner-stroke-center: rgba(255, 255, 255, 0.16);
+  --chart-node-shell-stroke-width-center-min: 2.2;
+  --chart-node-shell-stroke-width-center-factor: 0.08;
+  --chart-node-shell-stroke-width-outer-min: 1.4;
+  --chart-node-shell-stroke-width-outer-factor: 0.11;
+  
+  --chart-node-core-stroke-width-center-min: 2.4;
+  --chart-node-core-stroke-width-center-factor: 0.08;
+  
+  --chart-node-core-stroke-width-outer: 1;
+  --chart-node-inner-stroke-width-center: 1;
+  
+  --chart-center-gradient-stop-1: rgba(246, 237, 255, 0.98);
+  --chart-center-gradient-stop-2: rgba(222, 193, 255, 0.96);
+  --chart-center-gradient-stop-4: rgba(52, 17, 100, 1);
+  
+  /*Chart name chips stuff */
+  --chart-name-chip-padding-center: 1 5 3 4;
+  --chart-name-chip-padding-outer: 1 3 2 3;
+  --chart-name-chip-bg-center: rgba(10, 16, 36, 0.28);
+  --chart-name-chip-bg-outer: rgba(33, 41, 55, 0.9);
+
+  --chart-name-chip-border-width: 1;
+  --chart-name-chip-border-radius: 999;
+  --chart-name-chip-border-alpha-center: 0.5;
+  --chart-name-chip-border-alpha-outer: 0.38;
+  
+  --chart-name-chip-shadow-blur-center: 4;
+  --chart-name-chip-shadow-blur-outer: 3;
+  --chart-name-chip-shadow-alpha-center: 0.3;
+  --chart-name-chip-shadow-alpha-outer: 0.32;
+  position: relative;
+  height: 388px;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid var(--border-soft);
+  border-radius: 22px;
+  background:
+    radial-gradient(
+      circle at var(--core-x) var(--core-y),
+      rgba(187, 116, 255, 0.1) 0,
+      rgba(187, 116, 255, 0.06) 14%,
+      transparent 44%
+    ),
+    radial-gradient(circle at 22% 26%, rgba(72, 209, 255, 0.06), transparent 22%),
+    radial-gradient(circle at 84% 26%, rgba(37, 244, 197, 0.05), transparent 22%),
+    linear-gradient(180deg, rgba(5, 9, 24, 0.94), rgba(7, 10, 28, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 16px 48px rgba(0, 0, 0, 0.35);
+}
+
+.chart-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.64;
+  background-image:
+    radial-gradient(circle at 5% 10%, rgba(255, 255, 255, 0.52) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 17% 22%, rgba(255, 255, 255, 0.42) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 34% 14%, rgba(255, 255, 255, 0.4) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 52% 10%, rgba(255, 255, 255, 0.36) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 72% 20%, rgba(255, 255, 255, 0.38) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 88% 12%, rgba(255, 255, 255, 0.32) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 10% 76%, rgba(255, 255, 255, 0.34) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 24% 88%, rgba(255, 255, 255, 0.28) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 82% 74%, rgba(255, 255, 255, 0.28) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 94% 86%, rgba(255, 255, 255, 0.32) 0 1px, transparent 1.6px);
+}
+
+.chart-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at var(--core-x) var(--core-y),
+      rgba(255, 255, 255, 0.08) 0,
+      rgba(187, 116, 255, 0.12) 12%,
+      rgba(72, 209, 255, 0.04) 26%,
+      transparent 44%
+    ),
+    radial-gradient(circle at 18% 34%, rgba(141, 99, 255, 0.07), transparent 18%),
+    radial-gradient(circle at 84% 66%, rgba(72, 209, 255, 0.06), transparent 20%);
+}
+
+.chart {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+}
