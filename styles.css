@@ -10,12 +10,12 @@
   --text-3: rgba(255, 255, 255, 0.48);
   --tier-1: #bb74ff;
   --tier-2: #8d63ff;
-  --tier-3: #48d1ff;
-  --tier-4: #25f4c5;
+  --tier-3: #25f4c5;
+  --tier-4: #48d1ff;
   --tier-1-rgb: 187, 116, 255;
   --tier-2-rgb: 141, 99, 255;
-  --tier-3-rgb: 72, 209, 255;
-  --tier-4-rgb: 37, 244, 197;
+  --tier-3-rgb: 37, 244, 197;
+  --tier-4-rgb: 72, 209, 255;
   --core-x: 54%;
   --core-y: 62%;
   --chart-scale: 0.28;
@@ -186,16 +186,16 @@ body {
   --pos-te: #8d63ff;
   --tier-1-glow: rgba(187, 116, 255, 0.42);
   --tier-2-glow: rgba(141, 99, 255, 0.4);
-  --tier-3-glow: rgba(72, 209, 255, 0.38);
-  --tier-4-glow: rgba(37, 244, 197, 0.34);
+  --tier-3-glow: rgba(37, 244, 197, 0.34);
+  --tier-4-glow: rgba(72, 209, 255, 0.38);
 
   /* 3 rings of chart and dashedline color */
   --tier-2-band-stroke: rgba(141, 99, 255, 0.34);
   --tier-2-band-fill: rgba(141, 99, 255, 0.03);
-  --tier-3-band-stroke: rgba(72, 209, 255, 0.26);
-  --tier-3-band-fill: rgba(72, 209, 255, 0.024);
-  --tier-4-band-stroke: rgba(37, 244, 197, 0.2);
-  --tier-4-band-fill: rgba(37, 244, 197, 0.02);
+  --tier-3-band-stroke: rgba(37, 244, 197, 0.2);
+  --tier-3-band-fill: rgba(37, 244, 197, 0.02);
+  --tier-4-band-stroke: rgba(72, 209, 255, 0.26);
+  --tier-4-band-fill: rgba(72, 209, 255, 0.024);
   
   /* Chart Circle BG color */
   --chart-outer-backdrop-fill: rgba(0, 0, 0, 0.14);
@@ -256,10 +256,10 @@ body {
   --connector-tier-2-color: #8d63ff;
   --connector-tier-2-width-min: 1;
   --connector-tier-2-width-scale: 5.88;
-  --connector-tier-3-color: #48d1ff;
+  --connector-tier-3-color: #25f4c5;
   --connector-tier-3-width-min: 1;
   --connector-tier-3-width-scale: 5.04;
-  --connector-tier-4-color: #25f4c5;
+  --connector-tier-4-color: #48d1ff;
   --connector-tier-4-width-min: 1;
   --connector-tier-4-width-scale: 4.2;
   
@@ -267,11 +267,21 @@ body {
   --chart-node-halo-opacity-outer: 0.091;
   --chart-node-halo-blur-center: 8;
   --chart-node-halo-blur-outer: 8;
+  --chart-node-halo-blur-tier-2: 8;
+  --chart-node-halo-blur-tier-3: 6.9;
+  --chart-node-halo-blur-tier-4: 6.3;
+  --chart-node-halo-spread-center-min: 16;
+  --chart-node-halo-spread-center-scale: 34;
+  --chart-node-halo-spread-tier-2-min: 7;
+  --chart-node-halo-spread-tier-2-scale: 15;
+  --chart-node-halo-spread-tier-3-min: 5.8;
+  --chart-node-halo-spread-tier-3-scale: 12.4;
+  --chart-node-halo-spread-tier-4-min: 5.1;
+  --chart-node-halo-spread-tier-4-scale: 10.8;
   
   --chart-node-shell-fill-center: rgba(255, 255, 255, 0.04);
-  --chart-node-shell-fill-outer: rgba(8, 13, 34, 0.96);
+  --chart-node-fill-outer-alpha: 0.1;
   --chart-node-shell-stroke-center: rgba(255, 255, 255, 0.12);
-  --chart-node-core-fill-outer: rgba(12, 18, 42, 0.96);
   --chart-node-core-stroke-outer: rgba(255, 255, 255, 0.08);
   --chart-node-inner-fill-center: rgba(24, 14, 49, 0.28);
   --chart-node-inner-stroke-center: rgba(255, 255, 255, 0.16);

@@ -329,25 +329,51 @@ function readChartTheme() {
       ),
       haloBlurCenter: readCssNumber(styles, "--chart-node-halo-blur-center", 28),
       haloBlurOuter: readCssNumber(styles, "--chart-node-halo-blur-outer", 18),
+      haloBlurByTier: {
+        2: readCssNumber(
+          styles,
+          "--chart-node-halo-blur-tier-2",
+          readCssNumber(styles, "--chart-node-halo-blur-outer", 18)
+        ),
+        3: readCssNumber(
+          styles,
+          "--chart-node-halo-blur-tier-3",
+          readCssNumber(styles, "--chart-node-halo-blur-outer", 18)
+        ),
+        4: readCssNumber(
+          styles,
+          "--chart-node-halo-blur-tier-4",
+          readCssNumber(styles, "--chart-node-halo-blur-outer", 18)
+        )
+      },
+      haloSpread: {
+        center: {
+          min: readCssNumber(styles, "--chart-node-halo-spread-center-min", 16),
+          scale: readCssNumber(styles, "--chart-node-halo-spread-center-scale", 34)
+        },
+        2: {
+          min: readCssNumber(styles, "--chart-node-halo-spread-tier-2-min", 7),
+          scale: readCssNumber(styles, "--chart-node-halo-spread-tier-2-scale", 15)
+        },
+        3: {
+          min: readCssNumber(styles, "--chart-node-halo-spread-tier-3-min", 7),
+          scale: readCssNumber(styles, "--chart-node-halo-spread-tier-3-scale", 15)
+        },
+        4: {
+          min: readCssNumber(styles, "--chart-node-halo-spread-tier-4-min", 7),
+          scale: readCssNumber(styles, "--chart-node-halo-spread-tier-4-scale", 15)
+        }
+      },
       shellFillCenter: readCssVar(
         styles,
         "--chart-node-shell-fill-center",
         "rgba(255,255,255,0.04)"
       ),
-      shellFillOuter: readCssVar(
-        styles,
-        "--chart-node-shell-fill-outer",
-        "rgba(8,13,34,0.96)"
-      ),
+      outerFillAlpha: readCssNumber(styles, "--chart-node-fill-outer-alpha", 0.1),
       shellStrokeCenter: readCssVar(
         styles,
         "--chart-node-shell-stroke-center",
         "rgba(255,255,255,0.12)"
-      ),
-      coreFillOuter: readCssVar(
-        styles,
-        "--chart-node-core-fill-outer",
-        "rgba(12,18,42,0.96)"
       ),
       coreStrokeOuter: readCssVar(
         styles,
@@ -668,6 +694,18 @@ function getOuterNameSize(player, nodeRadius, theme) {
   return Math.max(nameTheme.floor, size);
 }
 
+function getHaloRadius(player, nodeRadius, scale, theme) {
+  if (player.tier === 1) {
+    const centerHalo = theme.nodes.haloSpread.center;
+
+    return nodeRadius + Math.max(centerHalo.min, centerHalo.scale * scale);
+  }
+
+  const tierHalo = theme.nodes.haloSpread[player.tier];
+
+  return nodeRadius + Math.max(tierHalo.min, tierHalo.scale * scale);
+}
+
 function buildRawLayout(width, height, theme) {
   const availableWidth = width - chartPadding.left - chartPadding.right;
   const availableHeight = height - chartPadding.top - chartPadding.bottom;
@@ -705,8 +743,7 @@ function buildRawLayout(width, height, theme) {
       x: center.x + (player.x - REFERENCE_CENTER_X) * scale,
       y: center.y + (player.y - REFERENCE_CENTER_Y) * scale,
       nodeRadius,
-      haloRadius:
-        nodeRadius + (isCenter ? Math.max(16, 34 * scale) : Math.max(7, 15 * scale)),
+      haloRadius: getHaloRadius(player, nodeRadius, scale, theme),
       shellRadius: isCenter ? nodeRadius + Math.max(7, 10 * scale) : nodeRadius,
       coreRadius: isCenter
         ? nodeRadius
@@ -1134,7 +1171,9 @@ function buildNodeSeries(data, isCenter, theme) {
           style: {
             fill: item.color,
             opacity: isCenter ? nodeTheme.haloOpacityCenter : nodeTheme.haloOpacityOuter,
-            shadowBlur: isCenter ? nodeTheme.haloBlurCenter : nodeTheme.haloBlurOuter,
+            shadowBlur: isCenter
+              ? nodeTheme.haloBlurCenter
+              : nodeTheme.haloBlurByTier[item.tier] ?? nodeTheme.haloBlurOuter,
             shadowColor: item.color
           }
         },
@@ -1143,7 +1182,9 @@ function buildNodeSeries(data, isCenter, theme) {
           shape: { cx: x, cy: y, r: item.shellRadius },
           silent: true,
           style: {
-            fill: isCenter ? nodeTheme.shellFillCenter : nodeTheme.shellFillOuter,
+            fill: isCenter
+              ? nodeTheme.shellFillCenter
+              : echarts.color.modifyAlpha(item.color, nodeTheme.outerFillAlpha),
             stroke: isCenter ? nodeTheme.shellStrokeCenter : item.color,
             lineWidth: strokeWidth
           }
@@ -1155,7 +1196,7 @@ function buildNodeSeries(data, isCenter, theme) {
           style: {
             fill: isCenter
               ? gradientForCenterNode(item.color, theme)
-              : nodeTheme.coreFillOuter,
+              : echarts.color.modifyAlpha(item.color, nodeTheme.outerFillAlpha),
             stroke: isCenter ? item.color : nodeTheme.coreStrokeOuter,
             lineWidth: isCenter
               ? Math.max(
