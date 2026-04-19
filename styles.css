@@ -80,12 +80,12 @@ body {
 }
 
 .widget-body {
-  padding: 0 6px 10px;
+  padding: 0 6px 6px;
 }
 
 .chart-shell {
   position: relative;
-  height: 302px;
+  height: 388px;
   overflow: hidden;
   isolation: isolate;
   border: 1px solid var(--border-soft);
@@ -196,110 +196,6 @@ body {
   letter-spacing: var(--pill-letter-spacing);
   color: rgba(255, 255, 255, 0.82);
   text-transform: uppercase;
-}
-
-.chips-row {
-  margin-top: 8px;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 4px;
-}
-
-.stat-chip {
-  position: relative;
-  min-width: 0;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 13px;
-  background:
-    linear-gradient(180deg, rgba(10, 14, 33, 0.95), rgba(6, 9, 22, 0.98));
-  padding: 8px 7px 7px;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 10px 30px rgba(0, 0, 0, 0.28);
-}
-
-.stat-chip::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 2px;
-  background: linear-gradient(90deg, rgba(var(--tier-rgb), 0.18), var(--tier-color));
-}
-
-.stat-chip::after {
-  content: "";
-  position: absolute;
-  right: -18px;
-  bottom: -22px;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(var(--tier-rgb), 0.24), transparent 70%);
-}
-
-.stat-chip-top {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.stat-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--tier-color);
-  box-shadow: 0 0 12px rgba(var(--tier-rgb), 0.72);
-  flex: 0 0 auto;
-}
-
-.stat-label {
-  min-width: 0;
-  font-size: 11px;
-  line-height: 1;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.78);
-  white-space: nowrap;
-}
-
-.stat-chip-bottom {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.stat-count {
-  font-size: 28px;
-  line-height: 0.9;
-  font-weight: 300;
-  color: var(--text);
-}
-
-.stat-meta {
-  text-align: right;
-  line-height: 1;
-  flex: 0 0 auto;
-}
-
-.stat-sub {
-  display: block;
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--text-3);
-}
-
-.stat-pct {
-  display: block;
-  margin-top: 3px;
-  font-size: 12px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.9);
 }
 
 ::-webkit-scrollbar {

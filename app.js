@@ -83,10 +83,10 @@ const centerConfig = {
 };
 
 const tierCalloutConfig = {
-  4: { angle: 304, radius: tierBands[4].radius, offsetX: 116 },
-  3: { angle: 298, radius: tierBands[3].radius, offsetX: 116 },
-  2: { angle: 292, radius: tierBands[2].radius, offsetX: 116 },
-  1: { angle: 286, radius: centerConfig.nodeRadius + 64, offsetX: 116 }
+  4: { angle: 304, radius: tierBands[4].radius, offsetX: 88 },
+  3: { angle: 298, radius: tierBands[3].radius, offsetX: 88 },
+  2: { angle: 292, radius: tierBands[2].radius, offsetX: 88 },
+  1: { angle: 286, radius: centerConfig.nodeRadius + 64, offsetX: 88 }
 };
 
 const chartPadding = {
@@ -204,8 +204,8 @@ function buildReferenceCallouts() {
       elbowX: anchor.x - 44,
       targetX: anchor.x - 44 - config.offsetX,
       targetY: anchor.y,
-      width: 84,
-      height: 28
+      width: 66,
+      height: 22
     };
   });
 }
@@ -250,51 +250,6 @@ function measureReferenceBounds() {
 }
 
 const referenceBounds = measureReferenceBounds();
-
-function buildTierSummary() {
-  return TIER_ORDER.map((tier) => {
-    const count = players.filter((player) => player.tier === tier).length;
-    const pct = (count / players.length) * 100;
-
-    return {
-      tier,
-      count,
-      pct,
-      ...tierMeta[tier]
-    };
-  });
-}
-
-function buildSummaryChips() {
-  const chips = document.getElementById("summaryChips");
-  const summary = buildTierSummary();
-
-  chips.innerHTML = summary
-    .map(
-      (item) => `
-        <div
-          class="stat-chip"
-          style="
-            --tier-color: ${item.color};
-            --tier-rgb: ${item.rgb};
-          "
-        >
-          <div class="stat-chip-top">
-            <span class="stat-dot"></span>
-            <span class="stat-label">${item.label}</span>
-          </div>
-          <div class="stat-chip-bottom">
-            <span class="stat-count">${item.count}</span>
-            <span class="stat-meta">
-              <span class="stat-sub">of 16</span>
-              <span class="stat-pct">${item.pct.toFixed(1)}%</span>
-            </span>
-          </div>
-        </div>
-      `
-    )
-    .join("");
-}
 
 function distributeCalloutTargets(callouts, minY, maxY, gap) {
   const sorted = [...callouts].sort((a, b) => a.targetY - b.targetY);
@@ -354,10 +309,10 @@ function buildRawLayout(width, height) {
       availableHeight / (referenceBounds.maxY - referenceBounds.minY)
     ) * 0.985;
 
-  const pillWidth = clamp(width * 0.18, 60, 70);
-  const pillHeight = clamp(height * 0.075, 20, 24);
-  const pillFontSize = clamp(width * 0.028, 9.2, 10.6);
-  const pillLetterSpacing = clamp(width * 0.005, 1.2, 1.8);
+  const pillWidth = clamp(width * 0.145, 50, 56);
+  const pillHeight = clamp(height * 0.044, 16, 18);
+  const pillFontSize = clamp(width * 0.021, 6.7, 7.8);
+  const pillLetterSpacing = clamp(width * 0.0032, 0.8, 1.2);
   const center = {
     x: REFERENCE_CENTER_X * scale,
     y: REFERENCE_CENTER_Y * scale
@@ -373,7 +328,7 @@ function buildRawLayout(width, height) {
 
   const playerLayout = referencePlayers.map((player) => {
     const isCenter = player.tier === 1;
-    const nodeRadius = player.nodeRadius * scale;
+    const nodeRadius = player.nodeRadius * scale * (isCenter ? 1.05 : 1.08);
 
     return {
       ...player,
@@ -394,8 +349,8 @@ function buildRawLayout(width, height) {
         ? clamp(nodeRadius * 0.28, 9, 11.5)
         : clamp(nodeRadius * 0.42, 6.2, 8.7),
       gradeFontSize: isCenter
-        ? clamp(nodeRadius * 0.82, 24, 34)
-        : clamp(nodeRadius * 0.92, 9.8, 14.6),
+        ? clamp(nodeRadius * 0.74, 23, 32)
+        : clamp(nodeRadius * 0.82, 9.2, 13.4),
       nameFontSize: isCenter
         ? clamp(nodeRadius * 0.34, 11, 14.2)
         : getOuterNameSize(player, nodeRadius),
@@ -1011,7 +966,6 @@ function renderChart() {
   );
 }
 
-buildSummaryChips();
 renderChart();
 
 let resizeFrame = 0;
