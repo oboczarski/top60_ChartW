@@ -42,7 +42,7 @@
   --chart-pos-font-min-center: 13;
   --chart-pos-font-max-center: 13.3;
   --chart-pos-font-factor-outer: 0.42;
-  --chart-pos-font-min-outer: 7.5;
+  --chart-pos-font-min-outer: 8.5;
   --chart-pos-font-max-outer: 9.5;
 
   --chart-grade-font-factor-center: 0.74;
@@ -89,10 +89,7 @@ body {
   display: grid;
   place-items: start center;
   padding: 14px;
-  background:
-    radial-gradient(circle at 18% 14%, rgba(187, 116, 255, 0.12), transparent 24%),
-    radial-gradient(circle at 82% 18%, rgba(72, 209, 255, 0.08), transparent 20%),
-    linear-gradient(180deg, #040714 0%, #03050f 100%);
+  background: radial-gradient(circle at 18% 14%, rgba(187, 116, 255, 0.12), transparent 24%), radial-gradient(circle at 82% 18%, rgba(72, 209, 255, 0.08), transparent 20%), linear-gradient(180deg, #383f61 0%, #03050f 100%);
 }
 
 .widget-card {
@@ -101,10 +98,7 @@ body {
   border: 1px solid var(--border);
   border-radius: 26px;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 12% 18%, rgba(187, 116, 255, 0.13), transparent 34%),
-    radial-gradient(circle at 86% 72%, rgba(72, 209, 255, 0.09), transparent 30%),
-    linear-gradient(180deg, rgba(5, 9, 24, 0.98), rgba(3, 6, 18, 0.98));
+  background: #0000;
   box-shadow:
     0 24px 72px rgba(0, 0, 0, 0.42),
     inset 0 1px 0 rgba(255, 255, 255, 0.03);
@@ -329,10 +323,10 @@ body {
       transparent 44%
     ),
     radial-gradient(circle at 22% 26%, rgba(72, 209, 255, 0.06), transparent 22%),
-    linear-gradient(180deg, rgba(5, 9, 24, 0.94), rgba(7, 10, 28, 0.98));
+    linear-gradient(180deg, rgba(5, 9, 24, 0.44), rgba(7, 10, 28, 0.48));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    0 16px 36px rgba(0, 0, 0, 0.32);
+    0 16px 6px rgba(0, 0, 0, 0.32);
 }
 
 .chart-shell::before {
