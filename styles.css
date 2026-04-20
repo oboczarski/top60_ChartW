@@ -6,7 +6,7 @@
   --tier-1: #bb74ff;
   --tier-2: #6f00ff;
   --tier-3: #25d2f4;
-  --tier-4: #ff8f84;
+  --tier-4: #ff84ad;
   --tier-1-rgb: 187, 116, 255;
   --tier-2-rgb: 111, 0, 255;
   --tier-3-rgb: 37, 244, 197;
@@ -184,26 +184,26 @@ body {
   --pos-te: #c072ff;
 
   /* 3 rings of chart and dashedline color */
-  --tier-2-band-stroke: rgba(121, 0, 255, 0.84);
+  --tier-2-band-stroke: rgba(121, 0, 255, 0.54);
   --tier-2-band-fill: rgba(141, 99, 255, 0);
-  --tier-3-band-stroke: rgba(0, 154, 247, 0.32);
+  --tier-3-band-stroke: rgba(0, 154, 247, 0.12);
   --tier-3-band-fill: rgba(37, 244, 197, 0);
-  --tier-4-band-stroke: rgba(255, 103, 102, 0.32);
+  --tier-4-band-stroke: rgba(255, 103, 102, 0.12);
   --tier-4-band-fill: rgba(255, 143, 132, 0);
   
   
     /* dash distance and stuff */
-  --chart-band-dash-a-min: 0.5;
+  --chart-band-dash-a-min: 0.25;
   --chart-band-dash-a-scale: 1;
   --chart-band-dash-b-min: 4;
   --chart-band-dash-b-scale: 1;
 
   /*dash thickness ithink */
-  --chart-band-ring-line-min: 12;
+  --chart-band-ring-line-min: 21;
   --chart-band-ring-line-scale: 15;
   
   /* Chart Circle BG color */
-  --chart-outer-backdrop-fill: rgba(0, 0, 0, 0.07);
+  --chart-outer-backdrop-fill: rgba(0, 0, 0, 0.007);
   --chart-outer-backdrop-stroke: rgba(255, 255, 255, 0.004);
   --chart-outer-accent-stroke: rgba(141, 99, 255, 0.008);
 
