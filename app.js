@@ -30,7 +30,7 @@ const REFERENCE_CENTER_Y = 600;
 
 const GEOMETRY = {
   centerNodeRadius: 102,
-  centerScale: 0.98,
+  centerScale: 0.955,
   outerScale: 1.08,
   backdropInset: 18,
   chartPadding: { top: 12, right: 10, bottom: 10, left: 10 },
@@ -621,7 +621,7 @@ function computeLayout(width, height, theme) {
         ? clamp(nodeRadius * nameTheme.factor, nameTheme.min, nameTheme.max)
         : getOuterNameSize(player.shortName, nodeRadius, nameTheme),
       nameOffsetY: isCenter
-        ? nodeRadius * 0.62
+        ? nodeRadius * 0.69
         : player.tier === 4
           ? nodeRadius * 0.81
           : player.tier === 3

@@ -41,8 +41,8 @@
   --chart-pos-font-bump-tier-3: 0.24;
   --chart-pos-font-bump-tier-4: 0;
   --chart-grade-font-factor-center: 1;
-  --chart-grade-font-min-center: 42;
-  --chart-grade-font-max-center: 42;
+  --chart-grade-font-min-center: 40;
+  --chart-grade-font-max-center: 40;
   --chart-grade-font-factor-outer: 0.82;
   --chart-grade-font-min-outer: 9.2;
   --chart-grade-font-max-outer: 13.4;
@@ -50,8 +50,8 @@
   --chart-grade-font-bump-tier-3: 3.5;
   --chart-grade-font-bump-tier-4: 0;
   --chart-name-font-factor-center: 0.34;
-  --chart-name-font-min-center: 11;
-  --chart-name-font-max-center: 14.2;
+  --chart-name-font-min-center: 13;
+  --chart-name-font-max-center: 13;
   --chart-name-font-factor-outer: 0.5;
   --chart-name-font-min-outer: 6;
   --chart-name-font-max-outer: 8.5;
@@ -120,7 +120,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px 10px;
-  margin-bottom: -21px;
+  margin-bottom: -14px;
   margin-top: 4px;
 }
 
@@ -150,7 +150,7 @@ body {
 }
 
 .tier-legend-item-1 .tier-legend-dot {
-  background: var(--tier-1);
+  background: #a071ff;
   box-shadow: 0 0 10px rgba(var(--tier-1-rgb), 0.72);
 }
 
