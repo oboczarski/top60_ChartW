@@ -440,6 +440,79 @@ function readChartTheme() {
         "--chart-node-sphere-shadow-offset-outer",
         0.12
       ),
+      shellHighlightAlpha: {
+        center: readCssNumber(
+          styles,
+          "--chart-node-shell-highlight-alpha-center",
+          0.2
+        ),
+        outer: readCssNumber(
+          styles,
+          "--chart-node-shell-highlight-alpha-outer",
+          0.12
+        )
+      },
+      shellEdgeAlpha: {
+        center: readCssNumber(styles, "--chart-node-shell-edge-alpha-center", 0.42),
+        outer: readCssNumber(styles, "--chart-node-shell-edge-alpha-outer", 0.3)
+      },
+      rim: {
+        alpha: {
+          center: readCssNumber(styles, "--chart-node-rim-alpha-center", 0.96),
+          outer: readCssNumber(styles, "--chart-node-rim-alpha-outer", 0.88)
+        },
+        width: {
+          center: {
+            min: readCssNumber(
+              styles,
+              "--chart-node-rim-width-center-min",
+              2.4
+            ),
+            factor: readCssNumber(
+              styles,
+              "--chart-node-rim-width-center-factor",
+              0.082
+            )
+          },
+          outer: {
+            min: readCssNumber(styles, "--chart-node-rim-width-outer-min", 1.2),
+            factor: readCssNumber(
+              styles,
+              "--chart-node-rim-width-outer-factor",
+              0.094
+            )
+          }
+        },
+        innerColor: readCssVar(
+          styles,
+          "--chart-node-inner-rim-color",
+          "rgba(255,255,255,1)"
+        ),
+        innerAlpha: {
+          center: readCssNumber(
+            styles,
+            "--chart-node-inner-rim-alpha-center",
+            0.18
+          ),
+          outer: readCssNumber(
+            styles,
+            "--chart-node-inner-rim-alpha-outer",
+            0.12
+          )
+        },
+        innerWidth: {
+          center: readCssNumber(
+            styles,
+            "--chart-node-inner-rim-width-center",
+            1.35
+          ),
+          outer: readCssNumber(
+            styles,
+            "--chart-node-inner-rim-width-outer",
+            0.9
+          )
+        }
+      },
       sphereEdgeShadow: readCssVar(
         styles,
         "--chart-node-sphere-edge-shadow",
@@ -490,6 +563,94 @@ function readChartTheme() {
         "--chart-node-sphere-color-alpha-edge",
         0.96
       ),
+      specular: {
+        offset: {
+          center: {
+            x: readCssNumber(
+              styles,
+              "--chart-node-specular-offset-x-center",
+              -0.22
+            ),
+            y: readCssNumber(
+              styles,
+              "--chart-node-specular-offset-y-center",
+              -0.32
+            )
+          },
+          outer: {
+            x: readCssNumber(
+              styles,
+              "--chart-node-specular-offset-x-outer",
+              -0.2
+            ),
+            y: readCssNumber(
+              styles,
+              "--chart-node-specular-offset-y-outer",
+              -0.3
+            )
+          }
+        },
+        radius: {
+          center: readCssNumber(
+            styles,
+            "--chart-node-specular-radius-center",
+            0.56
+          ),
+          outer: readCssNumber(
+            styles,
+            "--chart-node-specular-radius-outer",
+            0.48
+          )
+        },
+        opacity: {
+          center: readCssNumber(
+            styles,
+            "--chart-node-specular-opacity-center",
+            0.34
+          ),
+          outer: readCssNumber(
+            styles,
+            "--chart-node-specular-opacity-outer",
+            0.26
+          )
+        }
+      },
+      glint: {
+        offset: {
+          center: {
+            x: readCssNumber(
+              styles,
+              "--chart-node-glint-offset-x-center",
+              -0.13
+            ),
+            y: readCssNumber(
+              styles,
+              "--chart-node-glint-offset-y-center",
+              -0.38
+            )
+          },
+          outer: {
+            x: readCssNumber(
+              styles,
+              "--chart-node-glint-offset-x-outer",
+              -0.12
+            ),
+            y: readCssNumber(
+              styles,
+              "--chart-node-glint-offset-y-outer",
+              -0.36
+            )
+          }
+        },
+        size: {
+          center: readCssNumber(styles, "--chart-node-glint-size-center", 0.15),
+          outer: readCssNumber(styles, "--chart-node-glint-size-outer", 0.12)
+        },
+        alpha: {
+          center: readCssNumber(styles, "--chart-node-glint-alpha-center", 0.72),
+          outer: readCssNumber(styles, "--chart-node-glint-alpha-outer", 0.58)
+        }
+      },
       innerFillCenter: readCssVar(
         styles,
         "--chart-node-inner-fill-center",
@@ -644,6 +805,27 @@ function readChartTheme() {
           }
         }
       },
+      posShadow: {
+        color: readCssVar(
+          styles,
+          "--chart-pos-shadow-color",
+          "rgba(0,0,0,0.58)"
+        ),
+        blur: {
+          center: readCssNumber(
+            styles,
+            "--chart-pos-shadow-blur-center",
+            3.2
+          ),
+          outer: readCssNumber(
+            styles,
+            "--chart-pos-shadow-blur-outer",
+            2.2
+          )
+        },
+        offsetX: readCssNumber(styles, "--chart-pos-shadow-offset-x", 0),
+        offsetY: readCssNumber(styles, "--chart-pos-shadow-offset-y", 0.7)
+      },
       grade: {
         center: {
           weight: readCssNumber(styles, "--chart-grade-font-weight-center", 800),
@@ -662,6 +844,27 @@ function readChartTheme() {
             4: readCssNumber(styles, "--chart-grade-font-bump-tier-4", 0)
           }
         }
+      },
+      gradeShadow: {
+        color: readCssVar(
+          styles,
+          "--chart-grade-shadow-color",
+          "rgba(0,0,0,0.62)"
+        ),
+        blur: {
+          center: readCssNumber(
+            styles,
+            "--chart-grade-shadow-blur-center",
+            4
+          ),
+          outer: readCssNumber(
+            styles,
+            "--chart-grade-shadow-blur-outer",
+            2.8
+          )
+        },
+        offsetX: readCssNumber(styles, "--chart-grade-shadow-offset-x", 0),
+        offsetY: readCssNumber(styles, "--chart-grade-shadow-offset-y", 0.8)
       },
       name: {
         weight: readCssNumber(styles, "--chart-name-font-weight", 400),
@@ -1014,15 +1217,19 @@ function makeConnectorGradient(start, end, color, theme, isHighlight = false) {
           )
         },
         {
-          offset: 0.58,
+          offset: 0.36,
           color: echarts.color.modifyAlpha(
             theme.text.strong,
             theme.connectors.highlightMidAlpha
           )
         },
         {
-          offset: 1,
+          offset: 0.84,
           color: echarts.color.modifyAlpha(color, theme.connectors.highlightEndAlpha)
+        },
+        {
+          offset: 1,
+          color: echarts.color.modifyAlpha(color, 0)
         }
       ],
       true
@@ -1044,14 +1251,17 @@ function makeConnectorGradient(start, end, color, theme, isHighlight = false) {
       },
       {
         offset: 0.24,
-        color: echarts.color.modifyAlpha(color, theme.connectors.gradientMidAlpha * 0.56)
+        color: echarts.color.modifyAlpha(
+          theme.text.strong,
+          theme.connectors.gradientStartAlpha * 0.72
+        )
       },
       {
-        offset: 0.7,
+        offset: 0.52,
         color: echarts.color.modifyAlpha(color, theme.connectors.gradientMidAlpha)
       },
       {
-        offset: 0.92,
+        offset: 0.86,
         color: echarts.color.modifyAlpha(color, theme.connectors.gradientEndAlpha)
       },
       {
@@ -1063,31 +1273,70 @@ function makeConnectorGradient(start, end, color, theme, isHighlight = false) {
   );
 }
 
-function gradientForOuterNode(color, fillColor, theme) {
-  return new echarts.graphic.RadialGradient(0.34, 0.26, 0.94, [
-    { offset: 0, color: theme.nodes.sphereSpecularCore },
-    { offset: 0.1, color: theme.nodes.sphereSpecularSoft },
+function gradientForGlassShell(color, fillColor, theme, isCenter) {
+  const highlightAlpha = isCenter
+    ? theme.nodes.shellHighlightAlpha.center
+    : theme.nodes.shellHighlightAlpha.outer;
+  const edgeAlpha = isCenter
+    ? theme.nodes.shellEdgeAlpha.center
+    : theme.nodes.shellEdgeAlpha.outer;
+
+  return new echarts.graphic.RadialGradient(0.28, 0.24, 1, [
+    {
+      offset: 0,
+      color: echarts.color.modifyAlpha(theme.text.strong, highlightAlpha)
+    },
     {
       offset: 0.22,
+      color: echarts.color.modifyAlpha(color, theme.nodes.sphereColorAlphaInner * 0.52)
+    },
+    { offset: 0.74, color: fillColor },
+    {
+      offset: 1,
+      color: echarts.color.modifyAlpha(color, edgeAlpha)
+    }
+  ]);
+}
+
+function gradientForOuterNode(color, fillColor, theme) {
+  return new echarts.graphic.RadialGradient(0.34, 0.26, 0.94, [
+    {
+      offset: 0,
+      color: echarts.color.modifyAlpha(theme.text.strong, 0.12)
+    },
+    {
+      offset: 0.16,
       color: echarts.color.modifyAlpha(color, theme.nodes.sphereColorAlphaInner)
     },
     {
-      offset: 0.46,
+      offset: 0.48,
       color: echarts.color.modifyAlpha(color, theme.nodes.sphereColorAlphaMid)
     },
-    { offset: 0.62, color: fillColor },
+    { offset: 0.8, color: fillColor },
     {
-      offset: 0.82,
+      offset: 0.96,
       color: echarts.color.modifyAlpha(color, theme.nodes.sphereColorAlphaEdge)
     },
     { offset: 1, color: theme.nodes.sphereEdgeShadow }
   ]);
 }
 
-function gradientForHighlight(theme) {
-  return new echarts.graphic.RadialGradient(0.36, 0.3, 0.96, [
-    { offset: 0, color: theme.nodes.sphereSpecularSoft },
-    { offset: 0.52, color: echarts.color.modifyAlpha(theme.text.strong, 0.14) },
+function gradientForHighlight(theme, isCenter) {
+  return new echarts.graphic.RadialGradient(0.34, 0.28, 1, [
+    {
+      offset: 0,
+      color: echarts.color.modifyAlpha(
+        theme.nodes.sphereSpecularCore,
+        isCenter ? 0.54 : 0.42
+      )
+    },
+    {
+      offset: 0.34,
+      color: echarts.color.modifyAlpha(
+        theme.nodes.sphereSpecularSoft,
+        isCenter ? 0.28 : 0.22
+      )
+    },
     { offset: 1, color: theme.nodes.sphereHighlightFade }
   ]);
 }
@@ -1369,15 +1618,21 @@ function buildGraphic(layout, theme) {
 }
 
 function gradientForCenterNode(color, theme) {
-  return new echarts.graphic.RadialGradient(0.34, 0.24, 0.98, [
-    { offset: 0, color: theme.nodes.sphereSpecularCore },
-    { offset: 0.07, color: theme.nodes.centerGradientStop1 },
-    { offset: 0.2, color: theme.nodes.centerGradientStop2 },
+  return new echarts.graphic.RadialGradient(0.3, 0.24, 1, [
     {
-      offset: 0.46,
-      color: echarts.color.modifyAlpha(color, Math.max(0.68, theme.nodes.sphereColorAlphaMid))
+      offset: 0,
+      color: echarts.color.modifyAlpha(theme.text.strong, 0.18)
     },
-    { offset: 0.72, color: color },
+    { offset: 0.08, color: theme.nodes.centerGradientStop1 },
+    { offset: 0.24, color: theme.nodes.centerGradientStop2 },
+    {
+      offset: 0.54,
+      color: echarts.color.modifyAlpha(
+        color,
+        Math.max(0.68, theme.nodes.sphereColorAlphaMid)
+      )
+    },
+    { offset: 0.8, color: color },
     { offset: 1, color: theme.nodes.centerGradientStop4 }
   ]);
 }
@@ -1405,14 +1660,30 @@ function buildNodeSeries(data, isCenter, theme) {
       const gradeTypography = isCenter
         ? theme.typography.grade.center
         : theme.typography.grade.outer;
-      const strokeWidth = isCenter
+      const posShadow = {
+        color: theme.typography.posShadow.color,
+        blur: isCenter
+          ? theme.typography.posShadow.blur.center
+          : theme.typography.posShadow.blur.outer,
+        offsetX: theme.typography.posShadow.offsetX,
+        offsetY: theme.typography.posShadow.offsetY
+      };
+      const gradeShadow = {
+        color: theme.typography.gradeShadow.color,
+        blur: isCenter
+          ? theme.typography.gradeShadow.blur.center
+          : theme.typography.gradeShadow.blur.outer,
+        offsetX: theme.typography.gradeShadow.offsetX,
+        offsetY: theme.typography.gradeShadow.offsetY
+      };
+      const rimWidth = isCenter
         ? Math.max(
-            nodeTheme.shellStrokeWidthCenterMin,
-            item.nodeRadius * nodeTheme.shellStrokeWidthCenterFactor
+            nodeTheme.rim.width.center.min,
+            item.nodeRadius * nodeTheme.rim.width.center.factor
           )
         : Math.max(
-            nodeTheme.shellStrokeWidthOuterMin,
-            item.nodeRadius * nodeTheme.shellStrokeWidthOuterFactor
+            nodeTheme.rim.width.outer.min,
+            item.nodeRadius * nodeTheme.rim.width.outer.factor
           );
       const shadowOffsetFactor = isCenter
         ? nodeTheme.sphereShadowOffsetCenter
@@ -1423,18 +1694,37 @@ function buildNodeSeries(data, isCenter, theme) {
         ? nodeTheme.shellFillCenter
         : nodeTheme.fillByTier[item.tier] ||
           echarts.color.modifyAlpha(item.color, nodeTheme.outerFillAlpha);
+      const bodyRadius = item.shellRadius - Math.max(0.7, rimWidth * 0.72);
       const coreFill = isCenter
         ? gradientForCenterNode(item.color, theme)
         : gradientForOuterNode(item.color, shellFill, theme);
-      const rimWidth = isCenter
-        ? Math.max(1.5, strokeWidth * 0.78)
-        : Math.max(0.9, strokeWidth * 0.68);
-      const glintRadius = item.coreRadius * (isCenter ? 0.22 : 0.2);
-      const highlightRadius = item.coreRadius * (isCenter ? 0.82 : 0.78);
-      const highlightX = x - item.coreRadius * (isCenter ? 0.18 : 0.16);
-      const highlightY = y - item.coreRadius * (isCenter ? 0.22 : 0.18);
-      const glintX = x - item.coreRadius * (isCenter ? 0.13 : 0.12);
-      const glintY = y - item.coreRadius * (isCenter ? 0.3 : 0.28);
+      const innerRimAlpha = isCenter
+        ? nodeTheme.rim.innerAlpha.center
+        : nodeTheme.rim.innerAlpha.outer;
+      const innerRimWidth = isCenter
+        ? nodeTheme.rim.innerWidth.center
+        : nodeTheme.rim.innerWidth.outer;
+      const specularOffset = isCenter
+        ? nodeTheme.specular.offset.center
+        : nodeTheme.specular.offset.outer;
+      const specularOpacity = isCenter
+        ? nodeTheme.specular.opacity.center
+        : nodeTheme.specular.opacity.outer;
+      const highlightRadius =
+        bodyRadius *
+        (isCenter ? nodeTheme.specular.radius.center : nodeTheme.specular.radius.outer);
+      const highlightX = x + bodyRadius * specularOffset.x;
+      const highlightY = y + bodyRadius * specularOffset.y;
+      const glintOffset = isCenter
+        ? nodeTheme.glint.offset.center
+        : nodeTheme.glint.offset.outer;
+      const glintRadius =
+        bodyRadius * (isCenter ? nodeTheme.glint.size.center : nodeTheme.glint.size.outer);
+      const glintAlpha = isCenter
+        ? nodeTheme.glint.alpha.center
+        : nodeTheme.glint.alpha.outer;
+      const glintX = x + bodyRadius * glintOffset.x;
+      const glintY = y + bodyRadius * glintOffset.y;
 
       const children = [
         {
@@ -1468,44 +1758,30 @@ function buildNodeSeries(data, isCenter, theme) {
           shape: { cx: x, cy: y, r: item.shellRadius },
           silent: true,
           style: {
-            fill: shellFill,
-            stroke: isCenter ? nodeTheme.shellStrokeCenter : item.color,
-            lineWidth: strokeWidth
+            fill: gradientForGlassShell(item.color, shellFill, theme, isCenter)
           }
         },
         {
           type: "circle",
-          shape: { cx: x, cy: y, r: item.shellRadius - strokeWidth * 0.45 },
+          shape: { cx: x, cy: y, r: item.shellRadius - rimWidth * 0.5 },
           silent: true,
           style: {
-            stroke: nodeTheme.sphereRimShadow,
-            lineWidth: Math.max(1, rimWidth * 1.35),
+            stroke: echarts.color.modifyAlpha(
+              item.color,
+              isCenter ? nodeTheme.rim.alpha.center : nodeTheme.rim.alpha.outer
+            ),
+            lineWidth: rimWidth,
             fill: "transparent"
           }
         },
         {
           type: "circle",
-          shape: { cx: x, cy: y, r: item.coreRadius },
+          shape: { cx: x, cy: y, r: bodyRadius },
           silent: true,
           style: {
             fill: coreFill,
-            stroke: isCenter ? item.color : nodeTheme.coreStrokeOuter,
-            lineWidth: isCenter
-              ? Math.max(
-                  nodeTheme.coreStrokeWidthCenterMin,
-                  item.nodeRadius * nodeTheme.coreStrokeWidthCenterFactor
-                )
-              : nodeTheme.coreStrokeWidthOuter
-          }
-        },
-        {
-          type: "circle",
-          shape: { cx: x, cy: y, r: item.coreRadius - 0.5 },
-          silent: true,
-          style: {
-            stroke: nodeTheme.sphereRimHighlight,
-            lineWidth: rimWidth,
-            fill: "transparent"
+            stroke: "transparent",
+            lineWidth: 0
           }
         },
         {
@@ -1513,8 +1789,8 @@ function buildNodeSeries(data, isCenter, theme) {
           shape: { cx: highlightX, cy: highlightY, r: highlightRadius },
           silent: true,
           style: {
-            fill: gradientForHighlight(theme),
-            opacity: isCenter ? 0.72 : 0.58
+            fill: gradientForHighlight(theme, isCenter),
+            opacity: specularOpacity
           }
         },
         {
@@ -1524,7 +1800,7 @@ function buildNodeSeries(data, isCenter, theme) {
           style: {
             fill: echarts.color.modifyAlpha(
               theme.nodes.sphereSpecularGlint,
-              isCenter ? 0.82 : 0.68
+              glintAlpha
             )
           }
         }
@@ -1553,6 +1829,24 @@ function buildNodeSeries(data, isCenter, theme) {
         });
       }
 
+      children.push({
+        type: "circle",
+        shape: {
+          cx: x,
+          cy: y,
+          r: bodyRadius + Math.max(0.2, rimWidth * 0.12)
+        },
+        silent: true,
+        style: {
+          stroke: echarts.color.modifyAlpha(
+            nodeTheme.rim.innerColor,
+            innerRimAlpha
+          ),
+          lineWidth: innerRimWidth,
+          fill: "transparent"
+        }
+      });
+
       children.push(
         {
           type: "text",
@@ -1563,6 +1857,10 @@ function buildNodeSeries(data, isCenter, theme) {
             text: item.pos,
             fill: item.posColor,
             font: `${posTypography.weight} ${item.posFontSize}px ${theme.fontFamily}`,
+            shadowColor: posShadow.color,
+            shadowBlur: posShadow.blur,
+            shadowOffsetX: posShadow.offsetX,
+            shadowOffsetY: posShadow.offsetY,
             textAlign: "center",
             textVerticalAlign: "middle"
           }
@@ -1576,6 +1874,10 @@ function buildNodeSeries(data, isCenter, theme) {
             text: String(item.grade),
             fill: theme.text.strong,
             font: `${gradeTypography.weight} ${item.gradeFontSize}px ${theme.fontFamily}`,
+            shadowColor: gradeShadow.color,
+            shadowBlur: gradeShadow.blur,
+            shadowOffsetX: gradeShadow.offsetX,
+            shadowOffsetY: gradeShadow.offsetY,
             textAlign: "center",
             textVerticalAlign: "middle"
           }
