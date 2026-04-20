@@ -285,26 +285,6 @@ function readChartTheme() {
       coreDashAScale: readCssNumber(styles, "--chart-core-dash-a-scale", 11),
       coreDashBMin: readCssNumber(styles, "--chart-core-dash-b-min", 5),
       coreDashBScale: readCssNumber(styles, "--chart-core-dash-b-scale", 26.4),
-      coreOrbit3DashAMin: readCssNumber(
-        styles,
-        "--chart-core-orbit-3-dash-a-min",
-        1.5
-      ),
-      coreOrbit3DashAScale: readCssNumber(
-        styles,
-        "--chart-core-orbit-3-dash-a-scale",
-        4.4
-      ),
-      coreOrbit3DashBMin: readCssNumber(
-        styles,
-        "--chart-core-orbit-3-dash-b-min",
-        4
-      ),
-      coreOrbit3DashBScale: readCssNumber(
-        styles,
-        "--chart-core-orbit-3-dash-b-scale",
-        19.8
-      ),
       coreRingInnerDashAMin: readCssNumber(
         styles,
         "--chart-core-ring-inner-dash-a-min",
@@ -412,9 +392,8 @@ function readChartTheme() {
       fillByTier: {
         2: readCssVar(styles, "--chart-node-fill-tier-2", "#8d63ff18"),
         3: readCssVar(styles, "--chart-node-fill-tier-3", "#25f4c518"),
-        4: readCssVar(styles, "--chart-node-fill-tier-4", "#48d1ff18")
+        4: readCssVar(styles, "--chart-node-fill-tier-4", "#ff8f8418")
       },
-      outerFillAlpha: readCssNumber(styles, "--chart-node-fill-outer-alpha", 0.1),
       sphereShadowFill: readCssVar(
         styles,
         "--chart-node-sphere-shadow-fill",
@@ -769,7 +748,67 @@ function readChartTheme() {
           )
         },
         offsetX: readCssNumber(styles, "--chart-pos-shadow-offset-x", 0),
-        offsetY: readCssNumber(styles, "--chart-pos-shadow-offset-y", 0.7)
+        offsetY: readCssNumber(styles, "--chart-pos-shadow-offset-y", 0.7),
+        centerUnderlayColor: readCssVar(
+          styles,
+          "--chart-pos-underlay-color-center",
+          "rgba(4,1,12,0.9)"
+        ),
+        centerUnderlaySizeBump: readCssNumber(
+          styles,
+          "--chart-pos-underlay-size-bump-center",
+          0.1
+        ),
+        centerUnderlayOffsetX: readCssNumber(
+          styles,
+          "--chart-pos-underlay-offset-x-center",
+          0.3
+        ),
+        centerUnderlayOffsetY: readCssNumber(
+          styles,
+          "--chart-pos-underlay-offset-y-center",
+          1.05
+        ),
+        outerUnderlayColor: readCssVar(
+          styles,
+          "--chart-pos-underlay-color-outer",
+          "rgba(4,1,12,0.82)"
+        ),
+        outerUnderlaySizeBump: readCssNumber(
+          styles,
+          "--chart-pos-underlay-size-bump-outer",
+          0.05
+        ),
+        outerUnderlayOffsetX: readCssNumber(
+          styles,
+          "--chart-pos-underlay-offset-x-outer",
+          0.15
+        ),
+        outerUnderlayOffsetY: readCssNumber(
+          styles,
+          "--chart-pos-underlay-offset-y-outer",
+          0.8
+        ),
+        tier3UnderlayColor: readCssVar(
+          styles,
+          "--chart-pos-underlay-color-tier-3",
+          "rgba(4,1,12,0.9)"
+        ),
+        tier3UnderlaySizeBump: readCssNumber(
+          styles,
+          "--chart-pos-underlay-size-bump-tier-3",
+          0.08
+        ),
+        tier3UnderlayOffsetX: readCssNumber(
+          styles,
+          "--chart-pos-underlay-offset-x-tier-3",
+          0.2
+        ),
+        tier3UnderlayOffsetY: readCssNumber(
+          styles,
+          "--chart-pos-underlay-offset-y-tier-3",
+          0.95
+        )
       },
       grade: {
         center: {
@@ -1052,11 +1091,6 @@ function buildRawLayout(width, height, theme) {
     const posGradeSeparation = Math.round(
       (posVisualHeight + gradeVisualHeight) / 2 + posGradeGap
     );
-    const posOffsetY =
-      gradeOffsetY -
-      posGradeSeparation -
-      (isCenter ? theme.typography.posLift.center : theme.typography.posLift.outer);
-
     return {
       ...player,
       color: theme.tiers[player.tier].color,
@@ -1073,7 +1107,6 @@ function buildRawLayout(width, height, theme) {
       nameFontSize: isCenter
         ? clamp(nodeRadius * nameType.factor, nameType.min, nameType.max)
         : getOuterNameSize(player, nodeRadius, theme),
-      posOffsetY,
       gradeOffsetY,
       nameOffsetY: isCenter
         ? nodeRadius * 0.56
@@ -1629,7 +1662,19 @@ function buildNodeSeries(data, isCenter, theme) {
           ? theme.typography.posShadow.blur.center
           : theme.typography.posShadow.blur.outer,
         offsetX: theme.typography.posShadow.offsetX,
-        offsetY: theme.typography.posShadow.offsetY
+        offsetY: theme.typography.posShadow.offsetY,
+        centerUnderlayColor: theme.typography.posShadow.centerUnderlayColor,
+        centerUnderlaySizeBump: theme.typography.posShadow.centerUnderlaySizeBump,
+        centerUnderlayOffsetX: theme.typography.posShadow.centerUnderlayOffsetX,
+        centerUnderlayOffsetY: theme.typography.posShadow.centerUnderlayOffsetY,
+        outerUnderlayColor: theme.typography.posShadow.outerUnderlayColor,
+        outerUnderlaySizeBump: theme.typography.posShadow.outerUnderlaySizeBump,
+        outerUnderlayOffsetX: theme.typography.posShadow.outerUnderlayOffsetX,
+        outerUnderlayOffsetY: theme.typography.posShadow.outerUnderlayOffsetY,
+        tier3UnderlayColor: theme.typography.posShadow.tier3UnderlayColor,
+        tier3UnderlaySizeBump: theme.typography.posShadow.tier3UnderlaySizeBump,
+        tier3UnderlayOffsetX: theme.typography.posShadow.tier3UnderlayOffsetX,
+        tier3UnderlayOffsetY: theme.typography.posShadow.tier3UnderlayOffsetY
       };
       const gradeShadow = {
         color: theme.typography.gradeShadow.centerColor,
@@ -1653,8 +1698,7 @@ function buildNodeSeries(data, isCenter, theme) {
       const shadowOffsetY = Math.round(item.nodeRadius * shadowOffsetFactor);
       const shellFill = isCenter
         ? nodeTheme.shellFillCenter
-        : nodeTheme.fillByTier[item.tier] ||
-          echarts.color.modifyAlpha(item.color, nodeTheme.outerFillAlpha);
+        : nodeTheme.fillByTier[item.tier];
       const bodyRadius = item.shellRadius - Math.max(0.7, rimWidth * 0.72);
       const coreFill = isCenter
         ? gradientForCenterNode(item.color, theme)
@@ -1811,6 +1855,46 @@ function buildNodeSeries(data, isCenter, theme) {
       children.push(
         {
           type: "text",
+          x:
+            x +
+            (isCenter
+              ? posShadow.centerUnderlayOffsetX
+              : item.tier === 3
+                ? posShadow.tier3UnderlayOffsetX
+                : posShadow.outerUnderlayOffsetX),
+          y:
+            posTextY +
+            (isCenter
+              ? posShadow.centerUnderlayOffsetY
+              : item.tier === 3
+                ? posShadow.tier3UnderlayOffsetY
+                : posShadow.outerUnderlayOffsetY),
+          silent: true,
+          style: {
+            text: item.pos,
+            fill: isCenter
+              ? posShadow.centerUnderlayColor
+              : item.tier === 3
+                ? posShadow.tier3UnderlayColor
+                : posShadow.outerUnderlayColor,
+            font: `${posTypography.weight} ${
+              item.posFontSize +
+              (isCenter
+                ? posShadow.centerUnderlaySizeBump
+                : item.tier === 3
+                  ? posShadow.tier3UnderlaySizeBump
+                : posShadow.outerUnderlaySizeBump)
+            }px ${theme.fontFamily}`,
+            shadowColor: posShadow.color,
+            shadowBlur: posShadow.blur,
+            shadowOffsetX: posShadow.offsetX,
+            shadowOffsetY: posShadow.offsetY,
+            textAlign: "center",
+            textVerticalAlign: "middle"
+          }
+        },
+        {
+          type: "text",
           x,
           y: posTextY,
           silent: true,
@@ -1947,7 +2031,6 @@ function buildNodeSeries(data, isCenter, theme) {
 function syncShellAtmosphere(layout) {
   shellEl.style.setProperty("--core-x", `${layout.center.x}px`);
   shellEl.style.setProperty("--core-y", `${layout.center.y}px`);
-  shellEl.style.setProperty("--chart-scale", layout.scale.toFixed(3));
 }
 
 function renderChart() {
