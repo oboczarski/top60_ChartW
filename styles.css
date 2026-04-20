@@ -112,6 +112,7 @@ body {
   font-weight: 700;
   letter-spacing: -0.03em;
   color: var(--text);
+  text-align: center;
 }
 
 .tier-legend {
@@ -175,7 +176,7 @@ body {
 }
 
 .chart-shell {
-  max-height: 340px;
+  max-height: 336px;
   --pos-qb: #ff6363;
   --pos-rb: #25f4c5;
   --pos-wr: #3cbbfb;
