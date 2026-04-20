@@ -308,15 +308,15 @@ body {
   --chart-name-chip-padding-center: 1 5 3 4;
   --chart-name-chip-padding-outer: 1 3 2 3;
   --chart-name-chip-bg-center: rgba(10, 16, 36, 0.28);
-  --chart-name-chip-bg-outer: rgba(33, 41, 55, 0.9);
+  --chart-name-chip-bg-outer: rgba(33, 41, 55, 0.8);
   --chart-name-chip-border-width: 1;
   --chart-name-chip-border-radius: 999;
   --chart-name-chip-border-alpha-center: 0.5;
-  --chart-name-chip-border-alpha-outer: 0.38;
+  --chart-name-chip-border-alpha-outer: 0.3;
   --chart-name-chip-shadow-blur-center: 3;
   --chart-name-chip-shadow-blur-outer: 2;
   --chart-name-chip-shadow-alpha-center: 0.3;
-  --chart-name-chip-shadow-alpha-outer: 0.32;
+  --chart-name-chip-shadow-alpha-outer: 0.02;
   --chart-pos-shadow-color: rgba(0, 0, 0, 0.58);
   --chart-pos-shadow-blur-center: 4.2;
   --chart-pos-shadow-blur-outer: 2.2;
