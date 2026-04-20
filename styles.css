@@ -44,6 +44,9 @@
   --chart-pos-font-factor-outer: 0.42;
   --chart-pos-font-min-outer: 8.5;
   --chart-pos-font-max-outer: 9.5;
+  --chart-pos-font-bump-tier-2: 0.42;
+  --chart-pos-font-bump-tier-3: 0.24;
+  --chart-pos-font-bump-tier-4: 0;
 
   --chart-grade-font-factor-center: 0.74;
   --chart-grade-font-min-center: 34;
@@ -51,6 +54,9 @@
   --chart-grade-font-factor-outer: 0.82;
   --chart-grade-font-min-outer: 9.2;
   --chart-grade-font-max-outer: 13.4;
+  --chart-grade-font-bump-tier-2: 0.56;
+  --chart-grade-font-bump-tier-3: 0.32;
+  --chart-grade-font-bump-tier-4: 0;
 
   --chart-name-font-factor-center: 0.34;
   --chart-name-font-min-center: 11;
@@ -274,6 +280,9 @@ body {
   --chart-node-halo-spread-tier-4-scale: 10.8;
   
   --chart-node-shell-fill-center: rgba(255, 255, 255, 0.04);
+  --chart-node-fill-tier-2: #8d63ff18;
+  --chart-node-fill-tier-3: #25f4c518;
+  --chart-node-fill-tier-4: #48d1ff18;
   --chart-node-fill-outer-alpha: 0.1;
   --chart-node-shell-stroke-center: rgba(255, 255, 255, 0.12);
   --chart-node-core-stroke-outer: rgba(255, 255, 255, 0.08);

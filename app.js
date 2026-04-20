@@ -369,6 +369,11 @@ function readChartTheme() {
         "--chart-node-shell-fill-center",
         "rgba(255,255,255,0.04)"
       ),
+      fillByTier: {
+        2: readCssVar(styles, "--chart-node-fill-tier-2", "#8d63ff18"),
+        3: readCssVar(styles, "--chart-node-fill-tier-3", "#25f4c518"),
+        4: readCssVar(styles, "--chart-node-fill-tier-4", "#48d1ff18")
+      },
       outerFillAlpha: readCssNumber(styles, "--chart-node-fill-outer-alpha", 0.1),
       shellStrokeCenter: readCssVar(
         styles,
@@ -518,7 +523,12 @@ function readChartTheme() {
           weight: readCssNumber(styles, "--chart-pos-font-weight-outer", 700),
           factor: readCssNumber(styles, "--chart-pos-font-factor-outer", 0.42),
           min: readCssNumber(styles, "--chart-pos-font-min-outer", 6.2),
-          max: readCssNumber(styles, "--chart-pos-font-max-outer", 8.7)
+          max: readCssNumber(styles, "--chart-pos-font-max-outer", 8.7),
+          bumpByTier: {
+            2: readCssNumber(styles, "--chart-pos-font-bump-tier-2", 0),
+            3: readCssNumber(styles, "--chart-pos-font-bump-tier-3", 0),
+            4: readCssNumber(styles, "--chart-pos-font-bump-tier-4", 0)
+          }
         }
       },
       grade: {
@@ -532,7 +542,12 @@ function readChartTheme() {
           weight: readCssNumber(styles, "--chart-grade-font-weight-outer", 700),
           factor: readCssNumber(styles, "--chart-grade-font-factor-outer", 0.82),
           min: readCssNumber(styles, "--chart-grade-font-min-outer", 9.2),
-          max: readCssNumber(styles, "--chart-grade-font-max-outer", 13.4)
+          max: readCssNumber(styles, "--chart-grade-font-max-outer", 13.4),
+          bumpByTier: {
+            2: readCssNumber(styles, "--chart-grade-font-bump-tier-2", 0),
+            3: readCssNumber(styles, "--chart-grade-font-bump-tier-3", 0),
+            4: readCssNumber(styles, "--chart-grade-font-bump-tier-4", 0)
+          }
         }
       },
       name: {
@@ -735,6 +750,12 @@ function buildRawLayout(width, height, theme) {
       ? theme.typography.grade.center
       : theme.typography.grade.outer;
     const nameType = theme.typography.name.center;
+    const posFontBump =
+      !isCenter && posType.bumpByTier ? posType.bumpByTier[player.tier] || 0 : 0;
+    const gradeFontBump =
+      !isCenter && gradeType.bumpByTier
+        ? gradeType.bumpByTier[player.tier] || 0
+        : 0;
 
     return {
       ...player,
@@ -749,12 +770,13 @@ function buildRawLayout(width, height, theme) {
         ? nodeRadius
         : Math.max(6.5, nodeRadius - Math.max(2.5, 6 * scale)),
       innerRadius: isCenter ? Math.max(14, nodeRadius - Math.max(4, 14 * scale)) : 0,
-      posFontSize: clamp(nodeRadius * posType.factor, posType.min, posType.max),
+      posFontSize:
+        clamp(nodeRadius * posType.factor, posType.min, posType.max) + posFontBump,
       gradeFontSize: clamp(
         nodeRadius * gradeType.factor,
         gradeType.min,
         gradeType.max
-      ),
+      ) + gradeFontBump,
       nameFontSize: isCenter
         ? clamp(nodeRadius * nameType.factor, nameType.min, nameType.max)
         : getOuterNameSize(player, nodeRadius, theme),
@@ -859,6 +881,10 @@ function buildConnectorData(layout, theme) {
   return layout.outerPlayers.map((player) => {
     const direction = vectorFromAngle(player.angle);
     const connectorTheme = theme.connectors.tiers[player.tier];
+    const nodeEdgePoint = [
+      player.x - direction.x * player.shellRadius,
+      player.y - direction.y * player.shellRadius
+    ];
 
     return {
       coords: [
@@ -866,7 +892,7 @@ function buildConnectorData(layout, theme) {
           layout.center.x + direction.x * (layout.centerPlayer.nodeRadius + Math.max(8, 12 * layout.scale)),
           layout.center.y + direction.y * (layout.centerPlayer.nodeRadius + Math.max(8, 12 * layout.scale))
         ],
-        [player.x, player.y]
+        nodeEdgePoint
       ],
       lineStyle: {
         color: connectorTheme.color,
@@ -1170,7 +1196,8 @@ function buildNodeSeries(data, isCenter, theme) {
           style: {
             fill: isCenter
               ? nodeTheme.shellFillCenter
-              : echarts.color.modifyAlpha(item.color, nodeTheme.outerFillAlpha),
+              : nodeTheme.fillByTier[item.tier] ||
+                echarts.color.modifyAlpha(item.color, nodeTheme.outerFillAlpha),
             stroke: isCenter ? nodeTheme.shellStrokeCenter : item.color,
             lineWidth: strokeWidth
           }
@@ -1182,7 +1209,8 @@ function buildNodeSeries(data, isCenter, theme) {
           style: {
             fill: isCenter
               ? gradientForCenterNode(item.color, theme)
-              : echarts.color.modifyAlpha(item.color, nodeTheme.outerFillAlpha),
+              : nodeTheme.fillByTier[item.tier] ||
+                echarts.color.modifyAlpha(item.color, nodeTheme.outerFillAlpha),
             stroke: isCenter ? item.color : nodeTheme.coreStrokeOuter,
             lineWidth: isCenter
               ? Math.max(
