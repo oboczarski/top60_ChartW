@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roster Tiering — Apache ECharts</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <style>
+    :root {
+      --bg: #090b14;
+      --panel: rgba(9, 13, 25, 0.88);
+      --panel-2: rgba(13, 16, 29, 0.94);
+      --border: rgba(255, 255, 255, 0.07);
+      --text: #eef2ff;
+      --muted: rgba(226, 232, 240, 0.6);
+      --tier1: #c026d3;
+      --tier2: #4338ca;
+      --tier3: #0284c7;
+      --tier4: #0d9488;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at 50% 48%, rgba(192, 38, 211, 0.08), transparent 18%),
+        radial-gradient(circle at 20% 10%, rgba(56, 189, 248, 0.08), transparent 24%),
+        radial-gradient(circle at 80% 16%, rgba(45, 212, 191, 0.08), transparent 24%),
+        linear-gradient(180deg, #0a0d18 0%, #090b14 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow: hidden;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      height: 68px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 24px;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(13, 16, 29, 0.98), rgba(13, 16, 29, 0.9));
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .brand-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 35% 35%, #f5b4ff 0%, #d946ef 38%, #86198f 100%);
+      box-shadow: 0 0 18px rgba(217, 70, 239, 0.7);
+      flex: 0 0 auto;
+    }
+
+    .brand-text {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: rgba(241, 245, 249, 0.95);
+    }
+
+    .nav {
+      justify-self: center;
+      display: inline-flex;
+      align-items: center;
+      gap: 28px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: rgba(226, 232, 240, 0.55);
+    }
+
+    .nav a {
+      color: inherit;
+      text-decoration: none;
+      position: relative;
+      padding: 4px 0;
+    }
+
+    .nav a.active {
+      color: white;
+    }
+
+    .nav a.active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -12px;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(232, 121, 249, 0.2), rgba(232, 121, 249, 1), rgba(232, 121, 249, 0.2));
+      box-shadow: 0 0 14px rgba(232, 121, 249, 0.55);
+    }
+
+    .search {
+      width: min(280px, 100%);
+      justify-self: end;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.28);
+      color: rgba(148, 163, 184, 0.72);
+      font-size: 12px;
+      letter-spacing: 0.03em;
+    }
+
+    .stage {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 22px 22px 16px;
+      gap: 18px;
+    }
+
+    .chart-shell {
+      width: min(100%, 1180px);
+      flex: 1;
+      min-height: 0;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.018), transparent 52%),
+        linear-gradient(180deg, rgba(14, 18, 32, 0.96), rgba(8, 11, 21, 0.98));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.03),
+        0 16px 60px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(255, 255, 255, 0.015);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .chart-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(192, 38, 211, 0.06), transparent 22%),
+        radial-gradient(circle at 30% 20%, rgba(56, 189, 248, 0.05), transparent 30%),
+        radial-gradient(circle at 70% 25%, rgba(45, 212, 191, 0.05), transparent 32%);
+      pointer-events: none;
+    }
+
+    #chart {
+      width: 100%;
+      height: 100%;
+      min-height: 620px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 22px;
+      padding: 0 10px;
+      color: rgba(226, 232, 240, 0.72);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      box-shadow: 0 0 14px currentColor;
+    }
+
+    .tier1-dot { color: #d946ef; background: #d946ef; }
+    .tier2-dot { color: #6366f1; background: #6366f1; }
+    .tier3-dot { color: #0ea5e9; background: #0ea5e9; }
+    .tier4-dot { color: #2dd4bf; background: #2dd4bf; }
+
+    @media (max-width: 920px) {
+      .topbar {
+        grid-template-columns: 1fr;
+        height: auto;
+        gap: 12px;
+        padding: 14px 16px;
+      }
+
+      .nav,
+      .search {
+        justify-self: start;
+      }
+
+      .nav a.active::after {
+        bottom: -6px;
+      }
+
+      .stage {
+        padding: 14px 14px 12px;
+      }
+
+      .chart-shell {
+        border-radius: 24px;
+      }
+
+      #chart {
+        min-height: 560px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .brand-text {
+        font-size: 15px;
+        letter-spacing: 0.1em;
+      }
+
+      .nav {
+        gap: 18px;
+        font-size: 12px;
+        flex-wrap: wrap;
+      }
+
+      .search {
+        width: 100%;
+      }
+
+      #chart {
+        min-height: 500px;
+      }
+
+      .legend {
+        gap: 14px 16px;
+        font-size: 11px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <span class="brand-text">ROSTER TIERING</span>
+      </div>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="javascript:void(0)">Statistics</a>
+        <a href="javascript:void(0)" class="active">Overview</a>
+        <a href="javascript:void(0)">Dashboard</a>
+      </nav>
+
+      <div class="search">Search player...</div>
+    </header>
+
+    <main class="stage">
+      <section class="chart-shell">
+        <div id="chart"></div>
+      </section>
+
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot tier1-dot"></span><span>Tier 1</span></div>
+        <div class="legend-item"><span class="legend-dot tier2-dot"></span><span>Tier 2</span></div>
+        <div class="legend-item"><span class="legend-dot tier3-dot"></span><span>Tier 3</span></div>
+        <div class="legend-item"><span class="legend-dot tier4-dot"></span><span>Tier 4</span></div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const DATA = {
+      tier1: [
+        { id: 't1-1', name: 'Jeremiyah Love', grade: 94, tier: 1, pos: 'RB' }
+      ],
+      tier2: [
+        { id: 't2-1', name: 'Fernando Mendoza', grade: 90, tier: 2, pos: 'QB' },
+        { id: 't2-2', name: 'Carnell Tate', grade: 89, tier: 2, pos: 'WR' },
+        { id: 't2-3', name: 'Makai Lemon', grade: 88, tier: 2, pos: 'WR' },
+        { id: 't2-4', name: 'Jordyn Tyson', grade: 87, tier: 2, pos: 'WR' }
+      ],
+      tier3: [
+        { id: 't3-1', name: 'KC Concepcion', grade: 84, tier: 3, pos: 'WR' },
+        { id: 't3-2', name: 'Kenyon Sadiq', grade: 80, tier: 3, pos: 'TE' },
+        { id: 't3-3', name: 'Omar Cooper', grade: 81, tier: 3, pos: 'WR' },
+        { id: 't3-4', name: 'Denzel Boston', grade: 80, tier: 3, pos: 'WR' }
+      ],
+      tier4: [
+        { id: 't4-1', name: 'Jadarian Price', grade: 74, tier: 4, pos: 'RB' },
+        { id: 't4-2', name: 'Ty Simpson', grade: 76, tier: 4, pos: 'QB' },
+        { id: 't4-3', name: 'Eli Stowers', grade: 77, tier: 4, pos: 'TE' },
+        { id: 't4-4', name: 'Mike Washington', grade: 73, tier: 4, pos: 'RB' },
+        { id: 't4-5', name: 'Jonah Coleman', grade: 72, tier: 4, pos: 'RB' },
+        { id: 't4-6', name: 'Elijah Sarratt', grade: 75, tier: 4, pos: 'WR' },
+        { id: 't4-7', name: 'Emmett Johnson', grade: 70, tier: 4, pos: 'RB' }
+      ]
+    };
+
+    const RADII = {
+      tier2: 152,
+      tier3: 246,
+      tier4: 334
+    };
+
+    const NODE_RADII = {
+      tier1: 66,
+      tier2: 44,
+      tier3: 36,
+      tier4: 31
+    };
+
+    const COLORS = {
+      tier1: { main: '#c026d3', glow: '#e879f9', text: '#fdf4ff', edge: 'rgba(232,121,249,0.85)' },
+      tier2: { main: '#4338ca', glow: '#818cf8', text: '#e0e7ff', edge: 'rgba(129,140,248,0.78)' },
+      tier3: { main: '#0284c7', glow: '#38bdf8', text: '#e0f2fe', edge: 'rgba(56,189,248,0.74)' },
+      tier4: { main: '#0d9488', glow: '#2dd4bf', text: '#ccfbf1', edge: 'rgba(45,212,191,0.72)' }
+    };
+
+    const chart = echarts.init(document.getElementById('chart'), null, { renderer: 'canvas' });
+    let hoveredId = null;
+
+    function getCoordinates(centerX, centerY, radius, angleDeg) {
+      const angleRad = (angleDeg - 90) * (Math.PI / 180);
+      return {
+        x: centerX + radius * Math.cos(angleRad),
+        y: centerY + radius * Math.sin(angleRad)
+      };
+    }
+
+    function abbreviateName(name) {
+      const parts = String(name).trim().split(' ').filter(Boolean);
+      if (parts.length < 2) return name;
+      return parts[0].charAt(0) + '. ' + parts.slice(1).join(' ');
+    }
+
+    function makeGradient(color) {
+      return new echarts.graphic.RadialGradient(0.32, 0.28, 0.92, [
+        { offset: 0, color: color.glow },
+        { offset: 0.68, color: color.main },
+        { offset: 1, color: echarts.color.lift(color.main, -0.22) }
+      ]);
+    }
+
+    function getScale(width, height) {
+      return Math.min(width, height) / 1000;
+    }
+
+    function getTier2Label(node, scale) {
+      const gap = 18 * scale;
+      const angle = ((node.angle % 360) + 360) % 360;
+
+      if (angle === 0) {
+        return { x: node.x, y: node.y - node.radius - gap, align: 'center' };
+      }
+      if (angle === 90) {
+        return { x: node.x + node.radius + gap, y: node.y, align: 'left' };
+      }
+      if (angle === 180) {
+        return { x: node.x, y: node.y + node.radius + gap, align: 'center' };
+      }
+      return { x: node.x - node.radius - gap, y: node.y, align: 'right' };
+    }
+
+    function getRadialLabel(node, centerX, centerY, scale, gap, tangentStrength) {
+      const dx = node.x - centerX;
+      const dy = node.y - centerY;
+      const distance = Math.hypot(dx, dy) || 1;
+      const ux = dx / distance;
+      const uy = dy / distance;
+      const tx = -uy;
+      const ty = ux;
+
+      let tangent = 0;
+      if (Math.abs(ux) > 0.35) {
+        tangent = ux > 0 ? tangentStrength * scale : -tangentStrength * scale;
+      }
+
+      let align = 'center';
+      if (ux > 0.34) align = 'left';
+      if (ux < -0.34) align = 'right';
+
+      return {
+        x: node.x + ux * (node.radius + gap * scale) + tx * tangent,
+        y: node.y + uy * (node.radius + gap * scale) + ty * tangent,
+        align
+      };
+    }
+
+    function getLabelPosition(node, centerX, centerY, scale) {
+      if (node.tier === 1) {
+        return {
+          x: node.x,
+          y: node.y + node.radius + 12 * scale,
+          align: 'center'
+        };
+      }
+
+      if (node.tier === 2) {
+        return getTier2Label(node, scale);
+      }
+
+      if (node.tier === 3) {
+        return getRadialLabel(node, centerX, centerY, scale, 28, 8);
+      }
+
+      return getRadialLabel(node, centerX, centerY, scale, 32, 10);
+    }
+
+    function buildNodes(width, height) {
+      const scale = getScale(width, height);
+      const centerX = width / 2;
+      const centerY = height / 2;
+      const nodes = [];
+
+      const centerNode = {
+        ...DATA.tier1[0],
+        shortName: abbreviateName(DATA.tier1[0].name),
+        x: centerX,
+        y: centerY,
+        radius: NODE_RADII.tier1 * scale,
+        color: COLORS.tier1,
+        angle: 180
+      };
+      centerNode.label = getLabelPosition(centerNode, centerX, centerY, scale);
+      nodes.push(centerNode);
+
+      DATA.tier2.forEach((player, i) => {
+        const angle = i * (360 / DATA.tier2.length);
+        const coords = getCoordinates(centerX, centerY, RADII.tier2 * scale, angle);
+        const node = {
+          ...player,
+          shortName: abbreviateName(player.name),
+          ...coords,
+          radius: NODE_RADII.tier2 * scale,
+          angle,
+          color: COLORS.tier2
+        };
+        node.label = getLabelPosition(node, centerX, centerY, scale);
+        nodes.push(node);
+      });
+
+      DATA.tier3.forEach((player, i) => {
+        const angle = 45 + i * (360 / DATA.tier3.length);
+        const coords = getCoordinates(centerX, centerY, RADII.tier3 * scale, angle);
+        const node = {
+          ...player,
+          shortName: abbreviateName(player.name),
+          ...coords,
+          radius: NODE_RADII.tier3 * scale,
+          angle,
+          color: COLORS.tier3
+        };
+        node.label = getLabelPosition(node, centerX, centerY, scale);
+        nodes.push(node);
+      });
+
+      DATA.tier4.forEach((player, i) => {
+        const angle = 22.5 + i * (360 / DATA.tier4.length);
+        const coords = getCoordinates(centerX, centerY, RADII.tier4 * scale, angle);
+        const node = {
+          ...player,
+          shortName: abbreviateName(player.name),
+          ...coords,
+          radius: NODE_RADII.tier4 * scale,
+          angle,
+          color: COLORS.tier4
+        };
+        node.label = getLabelPosition(node, centerX, centerY, scale);
+        nodes.push(node);
+      });
+
+      return { nodes, centerX, centerY, scale };
+    }
+
+    function buildGraphics(centerX, centerY, scale) {
+      return [
+        {
+          type: 'circle',
+          shape: { cx: centerX, cy: centerY, r: 386 * scale },
+          silent: true,
+          z: 0,
+          style: {
+            stroke: 'rgba(255,255,255,0.028)',
+            lineWidth: 1,
+            fill: 'transparent'
+          }
+        },
+        {
+          type: 'circle',
+          shape: { cx: centerX, cy: centerY, r: RADII.tier2 * scale },
+          silent: true,
+          z: 0,
+          style: {
+            stroke: 'rgba(255,255,255,0.042)',
+            lineWidth: 1,
+            fill: 'transparent'
+          }
+        },
+        {
+          type: 'circle',
+          shape: { cx: centerX, cy: centerY, r: RADII.tier3 * scale },
+          silent: true,
+          z: 0,
+          style: {
+            stroke: 'rgba(255,255,255,0.038)',
+            lineWidth: 1,
+            fill: 'transparent'
+          }
+        },
+        {
+          type: 'circle',
+          shape: { cx: centerX, cy: centerY, r: RADII.tier4 * scale },
+          silent: true,
+          z: 0,
+          style: {
+            stroke: 'rgba(255,255,255,0.05)',
+            lineWidth: 1,
+            lineDash: [5 * scale, 9 * scale],
+            fill: 'transparent'
+          }
+        },
+        {
+          type: 'circle',
+          shape: { cx: centerX, cy: centerY, r: 86 * scale },
+          silent: true,
+          z: 0,
+          style: {
+            stroke: 'rgba(192,38,211,0.22)',
+            lineWidth: 4 * scale,
+            lineDash: [3 * scale, 5 * scale],
+            fill: 'transparent'
+          }
+        },
+        {
+          type: 'circle',
+          shape: { cx: centerX, cy: centerY, r: 102 * scale },
+          silent: true,
+          z: 0,
+          style: {
+            stroke: 'rgba(255,255,255,0.08)',
+            lineWidth: 1,
+            lineDash: [1 * scale, 7 * scale],
+            fill: 'transparent'
+          }
+        },
+        {
+          type: 'text',
+          left: centerX,
+          top: centerY - 104 * scale,
+          silent: true,
+          z: 1,
+          style: {
+            text: 'TIER 1',
+            x: 0,
+            y: 0,
+            textAlign: 'center',
+            textVerticalAlign: 'middle',
+            fill: 'rgba(255,255,255,0.54)',
+            font: `${Math.max(10, Math.round(12 * scale))}px Inter, sans-serif`,
+            letterSpacing: 4 * scale
+          }
+        }
+      ];
+    }
+
+    function buildOption() {
+      const width = chart.getWidth();
+      const height = chart.getHeight();
+      const { nodes, centerX, centerY, scale } = buildNodes(width, height);
+
+      const nodeData = nodes.map((node) => {
+        const muted = hoveredId && hoveredId !== node.id && hoveredId !== 't1-1';
+        const active = hoveredId === node.id;
+        const isCenter = node.tier === 1;
+        const gradeFont = isCenter
+          ? Math.round(36 * scale)
+          : node.tier === 2
+            ? Math.round(22 * scale)
+            : node.tier === 3
+              ? Math.round(18 * scale)
+              : Math.round(16 * scale);
+
+        return {
+          id: node.id,
+          name: node.name,
+          x: node.x,
+          y: node.y,
+          value: node.grade,
+          symbolSize: (node.radius * 2) * (active ? 1.08 : 1),
+          draggable: false,
+          itemStyle: {
+            color: makeGradient(node.color),
+            opacity: muted ? 0.2 : 1,
+            shadowBlur: isCenter ? 30 * scale : (active ? 24 * scale : 18 * scale),
+            shadowColor: node.color.glow,
+            borderColor: isCenter ? 'rgba(255,255,255,0.38)' : (active ? node.color.glow : 'rgba(255,255,255,0.12)'),
+            borderWidth: isCenter ? 2 : (active ? 2 : 1)
+          },
+          label: {
+            show: true,
+            position: 'inside',
+            formatter: `{grade|${node.grade}}`,
+            rich: {
+              grade: {
+                color: '#ffffff',
+                fontSize: gradeFont,
+                fontWeight: 800,
+                lineHeight: gradeFont + 4,
+                textShadowColor: 'rgba(0,0,0,0.45)',
+                textShadowBlur: 6
+              }
+            }
+          },
+          tooltip: {
+            formatter: `${node.name}<br/>Tier ${node.tier} • ${node.pos}<br/>Grade: ${node.grade}`
+          }
+        };
+      });
+
+      const labelData = nodes.map((node) => {
+        const muted = hoveredId && hoveredId !== node.id && hoveredId !== 't1-1';
+        const fontSize = node.tier === 1 ? Math.max(12, Math.round(12 * scale)) : Math.max(10, Math.round(10.5 * scale));
+        const chipPaddingX = node.tier === 1 ? Math.round(10 * scale) : Math.round(9 * scale);
+        const chipPaddingY = Math.round(4 * scale);
+
+        return {
+          id: `label-${node.id}`,
+          x: node.label.x,
+          y: node.label.y,
+          value: 1,
+          symbolSize: 1,
+          itemStyle: {
+            color: 'rgba(0,0,0,0)'
+          },
+          silent: true,
+          label: {
+            show: true,
+            position: 'inside',
+            align: node.label.align,
+            verticalAlign: 'middle',
+            opacity: muted ? 0.24 : 1,
+            padding: [chipPaddingY, chipPaddingX, chipPaddingY, chipPaddingX],
+            borderRadius: Math.round(8 * scale),
+            borderWidth: 1,
+            borderColor: 'rgba(255,255,255,0.08)',
+            backgroundColor: 'rgba(3, 7, 18, 0.66)',
+            formatter: `{line|${node.pos} • ${node.shortName}}`,
+            rich: {
+              line: {
+                color: node.color.text,
+                fontSize,
+                fontWeight: 700,
+                lineHeight: fontSize + 2,
+                align: node.label.align,
+                padding: 0
+              }
+            }
+          }
+        };
+      });
+
+      const linkData = nodes
+        .filter((node) => node.tier !== 1)
+        .map((node) => {
+          const muted = hoveredId && hoveredId !== node.id && hoveredId !== 't1-1';
+          const active = hoveredId === node.id;
+          return {
+            source: 't1-1',
+            target: node.id,
+            lineStyle: {
+              color: node.color.edge,
+              opacity: muted ? 0.12 : (active ? 0.95 : 0.42),
+              width: active ? 3 : 1.7
+            }
+          };
+        });
+
+      return {
+        animationDuration: 280,
+        animationDurationUpdate: 220,
+        animationEasingUpdate: 'cubicOut',
+        backgroundColor: 'transparent',
+        tooltip: {
+          trigger: 'item',
+          backgroundColor: 'rgba(7, 10, 20, 0.95)',
+          borderColor: 'rgba(255,255,255,0.08)',
+          borderWidth: 1,
+          textStyle: {
+            color: '#eef2ff',
+            fontSize: 12,
+            lineHeight: 18
+          },
+          extraCssText: 'backdrop-filter: blur(10px); border-radius: 12px; box-shadow: 0 10px 28px rgba(0,0,0,0.35);',
+          formatter(params) {
+            if (!params.data || !params.data.name) return '';
+            const d = params.data;
+            return `${d.name}<br/>Tier ${d.tier || ''} • ${d.pos || ''}<br/>Grade: ${d.grade || d.value || ''}`;
+          }
+        },
+        graphic: buildGraphics(centerX, centerY, scale),
+        series: [
+          {
+            name: 'nodes',
+            type: 'graph',
+            layout: 'none',
+            roam: false,
+            coordinateSystem: null,
+            z: 3,
+            edgeSymbol: ['none', 'none'],
+            lineStyle: {
+              width: 1.7,
+              opacity: 0.4
+            },
+            data: nodeData.map((node, idx) => ({
+              ...node,
+              tier: nodes[idx].tier,
+              pos: nodes[idx].pos,
+              grade: nodes[idx].grade
+            })),
+            links: linkData,
+            emphasis: {
+              disabled: true
+            },
+            select: {
+              disabled: true
+            }
+          },
+          {
+            name: 'labels',
+            type: 'graph',
+            layout: 'none',
+            roam: false,
+            coordinateSystem: null,
+            z: 4,
+            silent: true,
+            edgeSymbol: ['none', 'none'],
+            lineStyle: { opacity: 0 },
+            data: labelData,
+            links: [],
+            emphasis: {
+              disabled: true
+            },
+            select: {
+              disabled: true
+            }
+          }
+        ]
+      };
+    }
+
+    function render() {
+      chart.setOption(buildOption(), true);
+    }
+
+    render();
+
+    chart.on('mouseover', { seriesName: 'nodes' }, (params) => {
+      if (!params.data || hoveredId === params.data.id) return;
+      hoveredId = params.data.id;
+      render();
+    });
+
+    chart.on('mouseout', { seriesName: 'nodes' }, () => {
+      if (hoveredId === null) return;
+      hoveredId = null;
+      render();
+    });
+
+    chart.getZr().on('globalout', () => {
+      if (hoveredId === null) return;
+      hoveredId = null;
+      render();
+    });
+
+    window.addEventListener('resize', () => {
+      chart.resize();
+      render();
+    });
+  </script>
+</body>
+</html>
