@@ -9,7 +9,7 @@
   --text-2: rgba(255, 255, 255, 0.72);
   --text-3: rgba(255, 255, 255, 0.48);
   --tier-1: #bb74ff;
-  --tier-2: #8d63ff;
+  --tier-2: #6f00ff;
   --tier-3: #25f4c5;
   --tier-4: #48d1ff;
   --tier-1-rgb: 187, 116, 255;
@@ -284,7 +284,7 @@ body {
   --chart-node-halo-spread-tier-4-scale: 10.8;
   
   --chart-node-shell-fill-center: rgba(255, 255, 255, 0.04);
-  --chart-node-fill-tier-2: #8d63ff18;
+  --chart-node-fill-tier-2: #5900ff43;
   --chart-node-fill-tier-3: #25f4c518;
   --chart-node-fill-tier-4: #48d1ff18;
   --chart-node-fill-outer-alpha: 0.1;
