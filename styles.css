@@ -3,8 +3,8 @@
   --border: rgba(255, 255, 255, 0.1);
   --border-soft: rgba(255, 255, 255, 0.07);
   --text: rgba(255, 255, 255, 0.97);
-  --tier-1: #bb74ff;
-  --tier-2: #6f00ff;
+  --tier-1: #7637ff;
+  --tier-2: #5e28ff;
   --tier-3: #25d2f4;
   --tier-4: #ff84ad;
   --tier-1-rgb: 187, 116, 255;
@@ -259,7 +259,7 @@ body {
   --connector-tier-2-color: #8d63ff;
   --connector-tier-2-width-min: 1;
   --connector-tier-2-width-scale: 5.88;
-  --connector-tier-3-color: #25f4c5;
+  --connector-tier-3-color: #2589f4;
   --connector-tier-3-width-min: 1;
   --connector-tier-3-width-scale: 5.04;
   --connector-tier-4-color: #fb594a;
