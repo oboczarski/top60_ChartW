@@ -30,7 +30,7 @@ const REFERENCE_CENTER_Y = 600;
 
 const GEOMETRY = {
   centerNodeRadius: 102,
-  centerScale: 1.05,
+  centerScale: 0.98,
   outerScale: 1.08,
   backdropInset: 18,
   chartPadding: { top: 12, right: 10, bottom: 10, left: 10 },
@@ -621,7 +621,7 @@ function computeLayout(width, height, theme) {
         ? clamp(nodeRadius * nameTheme.factor, nameTheme.min, nameTheme.max)
         : getOuterNameSize(player.shortName, nodeRadius, nameTheme),
       nameOffsetY: isCenter
-        ? nodeRadius * 0.56
+        ? nodeRadius * 0.62
         : player.tier === 4
           ? nodeRadius * 0.81
           : player.tier === 3
@@ -1031,7 +1031,7 @@ function buildNodeSeries(players, theme) {
         theme.nodes.shadowFill,
         "transparent",
         0,
-        { opacity: isCenter ? 0.92 : 0.82 }
+        { opacity: isCenter ? 0.58 : 0.82 }
       );
       pushCircle(
         children,
