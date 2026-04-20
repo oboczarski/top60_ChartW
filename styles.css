@@ -39,8 +39,8 @@
   --chart-grade-font-weight-outer: 400;
 
   --chart-pos-font-factor-center: 0.31;
-  --chart-pos-font-min-center: 13;
-  --chart-pos-font-max-center: 13.3;
+  --chart-pos-font-min-center: 14;
+  --chart-pos-font-max-center: 14.3;
   --chart-pos-font-factor-outer: 0.42;
   --chart-pos-font-min-outer: 8.5;
   --chart-pos-font-max-outer: 9.5;
@@ -59,7 +59,7 @@
   --chart-grade-font-min-outer: 9.2;
   --chart-grade-font-max-outer: 13.4;
   --chart-grade-font-bump-tier-2: 6;
-  --chart-grade-font-bump-tier-3: 1;
+  --chart-grade-font-bump-tier-3: 3;
   --chart-grade-font-bump-tier-4: 0;
 
   --chart-name-font-factor-center: 0.34;
