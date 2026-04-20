@@ -1175,7 +1175,10 @@ function buildNodeSeries(data, isCenter, theme) {
       const x = point[0];
       const y = point[1];
       const gradeTextY = Math.round(y + item.gradeOffsetY);
-      const posTextY = gradeTextY - item.posGradeSeparation;
+      const posLift = isCenter
+        ? theme.typography.posLift.center
+        : theme.typography.posLift.outer;
+      const posTextY = Math.round(gradeTextY - item.posGradeSeparation - posLift);
       const nodeTheme = theme.nodes;
       const posTypography = isCenter
         ? theme.typography.pos.center
