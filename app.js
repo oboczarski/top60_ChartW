@@ -1830,6 +1830,25 @@ function buildNodeSeries(data, isCenter, theme) {
           ? [
               {
                 type: "text",
+                x: x + gradeShadow.offsetX * 0.7,
+                y: gradeTextY + gradeShadow.offsetY * 0.7,
+                silent: true,
+                style: {
+                  text: String(item.grade),
+                  fill: echarts.color.modifyAlpha(gradeShadow.color, 0.82),
+                  font: `${gradeTypography.weight} ${
+                    item.gradeFontSize + 0.1
+                  }px ${theme.fontFamily}`,
+                  shadowColor: gradeShadow.color,
+                  shadowBlur: gradeShadow.blur,
+                  shadowOffsetX: gradeShadow.offsetX,
+                  shadowOffsetY: gradeShadow.offsetY,
+                  textAlign: "center",
+                  textVerticalAlign: "middle"
+                }
+              },
+              {
+                type: "text",
                 x: x + gradeShadow.centerUnderlayOffsetX,
                 y: gradeTextY + gradeShadow.centerUnderlayOffsetY,
                 silent: true,
@@ -1839,10 +1858,6 @@ function buildNodeSeries(data, isCenter, theme) {
                   font: `${gradeTypography.weight} ${
                     item.gradeFontSize + gradeShadow.centerUnderlaySizeBump
                   }px ${theme.fontFamily}`,
-                  shadowColor: gradeShadow.color,
-                  shadowBlur: gradeShadow.blur,
-                  shadowOffsetX: gradeShadow.offsetX,
-                  shadowOffsetY: gradeShadow.offsetY,
                   textAlign: "center",
                   textVerticalAlign: "middle"
                 }
@@ -1861,9 +1876,9 @@ function buildNodeSeries(data, isCenter, theme) {
             ...(isCenter
               ? {
                   shadowColor: gradeShadow.color,
-                  shadowBlur: gradeShadow.blur * 0.45,
-                  shadowOffsetX: 0,
-                  shadowOffsetY: 0.15
+                  shadowBlur: gradeShadow.blur * 0.34,
+                  shadowOffsetX: gradeShadow.offsetX * 0.32,
+                  shadowOffsetY: gradeShadow.offsetY * 0.32
                 }
               : {}),
             textAlign: "center",
