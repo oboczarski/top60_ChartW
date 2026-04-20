@@ -9,11 +9,11 @@
   --text-2: rgba(255, 255, 255, 0.72);
   --text-3: rgba(255, 255, 255, 0.48);
   --tier-1: #bb74ff;
-  --tier-2: #6f00ff00;
-  --tier-3: #25f4c500;
-  --tier-4: #48d1ff00;
+  --tier-2: #6f00ff;
+  --tier-3: #25f4c5;
+  --tier-4: #48d1ff;
   --tier-1-rgb: 187, 116, 255;
-  --tier-2-rgb: 141, 99, 255;
+  --tier-2-rgb: 111, 0, 255;
   --tier-3-rgb: 37, 244, 197;
   --tier-4-rgb: 72, 209, 255;
   --core-x: 54%;
@@ -296,8 +296,6 @@ body {
   --chart-node-fill-tier-3: #25f4c518;
   --chart-node-fill-tier-4: #48d1ff18;
   --chart-node-fill-outer-alpha: 0.1;
-  --chart-node-shell-stroke-center: rgba(255, 255, 255, 0.12);
-  --chart-node-core-stroke-outer: rgba(255, 255, 255, 0.08);
   --chart-node-sphere-shadow-fill: rgba(3, 8, 20, 0.6);
   --chart-node-sphere-shadow-offset-center: 0.08;
   --chart-node-sphere-shadow-offset-outer: 0.12;
@@ -317,8 +315,6 @@ body {
   --chart-node-inner-rim-width-center: 1.35;
   --chart-node-inner-rim-width-outer: 0.9;
   --chart-node-sphere-edge-shadow: rgba(6, 10, 24, 0.94);
-  --chart-node-sphere-rim-highlight: rgba(255, 255, 255, 0.27);
-  --chart-node-sphere-rim-shadow: rgba(255, 255, 255, 0);
   --chart-node-sphere-specular-core: rgba(255, 255, 255, 0.98);
   --chart-node-sphere-specular-soft: rgba(255, 255, 255, 0.58);
   --chart-node-sphere-specular-glint: rgba(255, 255, 255, 0.82);
@@ -344,15 +340,6 @@ body {
   --chart-node-glint-alpha-outer: 0.58;
   --chart-node-inner-fill-center: rgba(24, 14, 49, 0.28);
   --chart-node-inner-stroke-center: rgba(255, 255, 255, 0.16);
-  --chart-node-shell-stroke-width-center-min: 2.2;
-  --chart-node-shell-stroke-width-center-factor: 0.08;
-  --chart-node-shell-stroke-width-outer-min: 1.4;
-  --chart-node-shell-stroke-width-outer-factor: 0.11;
-  
-  --chart-node-core-stroke-width-center-min: 2.4;
-  --chart-node-core-stroke-width-center-factor: 0.08;
-  
-  --chart-node-core-stroke-width-outer: 1;
   --chart-node-inner-stroke-width-center: 1;
   
   --chart-center-gradient-stop-1: rgba(246, 237, 255, 0.98);
@@ -379,11 +366,10 @@ body {
   --chart-pos-shadow-blur-outer: 2.2;
   --chart-pos-shadow-offset-x: 0;
   --chart-pos-shadow-offset-y: 0.7;
-  --chart-grade-shadow-color: rgba(0, 0, 0, 0.62);
-  --chart-grade-shadow-blur-center: 4;
-  --chart-grade-shadow-blur-outer: 2.8;
-  --chart-grade-shadow-offset-x: 0;
-  --chart-grade-shadow-offset-y: 0.8;
+  --chart-grade-shadow-color-center: rgba(0, 0, 0, 0.66);
+  --chart-grade-shadow-blur-center: 4.4;
+  --chart-grade-shadow-offset-x-center: 0;
+  --chart-grade-shadow-offset-y-center: 0.9;
   position: relative;
   height: 388px;
   overflow: hidden;

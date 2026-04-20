@@ -415,16 +415,6 @@ function readChartTheme() {
         4: readCssVar(styles, "--chart-node-fill-tier-4", "#48d1ff18")
       },
       outerFillAlpha: readCssNumber(styles, "--chart-node-fill-outer-alpha", 0.1),
-      shellStrokeCenter: readCssVar(
-        styles,
-        "--chart-node-shell-stroke-center",
-        "rgba(255,255,255,0.12)"
-      ),
-      coreStrokeOuter: readCssVar(
-        styles,
-        "--chart-node-core-stroke-outer",
-        "rgba(255,255,255,0.08)"
-      ),
       sphereShadowFill: readCssVar(
         styles,
         "--chart-node-sphere-shadow-fill",
@@ -517,16 +507,6 @@ function readChartTheme() {
         styles,
         "--chart-node-sphere-edge-shadow",
         "rgba(6,10,24,0.94)"
-      ),
-      sphereRimHighlight: readCssVar(
-        styles,
-        "--chart-node-sphere-rim-highlight",
-        "rgba(255,255,255,0.22)"
-      ),
-      sphereRimShadow: readCssVar(
-        styles,
-        "--chart-node-sphere-rim-shadow",
-        "rgba(4,10,24,0.34)"
       ),
       sphereSpecularCore: readCssVar(
         styles,
@@ -660,41 +640,6 @@ function readChartTheme() {
         styles,
         "--chart-node-inner-stroke-center",
         "rgba(255,255,255,0.16)"
-      ),
-      shellStrokeWidthCenterMin: readCssNumber(
-        styles,
-        "--chart-node-shell-stroke-width-center-min",
-        2.2
-      ),
-      shellStrokeWidthCenterFactor: readCssNumber(
-        styles,
-        "--chart-node-shell-stroke-width-center-factor",
-        0.08
-      ),
-      shellStrokeWidthOuterMin: readCssNumber(
-        styles,
-        "--chart-node-shell-stroke-width-outer-min",
-        1.4
-      ),
-      shellStrokeWidthOuterFactor: readCssNumber(
-        styles,
-        "--chart-node-shell-stroke-width-outer-factor",
-        0.11
-      ),
-      coreStrokeWidthCenterMin: readCssNumber(
-        styles,
-        "--chart-node-core-stroke-width-center-min",
-        2.4
-      ),
-      coreStrokeWidthCenterFactor: readCssNumber(
-        styles,
-        "--chart-node-core-stroke-width-center-factor",
-        0.08
-      ),
-      coreStrokeWidthOuter: readCssNumber(
-        styles,
-        "--chart-node-core-stroke-width-outer",
-        1
       ),
       innerStrokeWidthCenter: readCssNumber(
         styles,
@@ -846,25 +791,26 @@ function readChartTheme() {
         }
       },
       gradeShadow: {
-        color: readCssVar(
+        centerColor: readCssVar(
           styles,
-          "--chart-grade-shadow-color",
-          "rgba(0,0,0,0.62)"
+          "--chart-grade-shadow-color-center",
+          "rgba(0,0,0,0.66)"
         ),
-        blur: {
-          center: readCssNumber(
-            styles,
-            "--chart-grade-shadow-blur-center",
-            4
-          ),
-          outer: readCssNumber(
-            styles,
-            "--chart-grade-shadow-blur-outer",
-            2.8
-          )
-        },
-        offsetX: readCssNumber(styles, "--chart-grade-shadow-offset-x", 0),
-        offsetY: readCssNumber(styles, "--chart-grade-shadow-offset-y", 0.8)
+        centerBlur: readCssNumber(
+          styles,
+          "--chart-grade-shadow-blur-center",
+          4.4
+        ),
+        centerOffsetX: readCssNumber(
+          styles,
+          "--chart-grade-shadow-offset-x-center",
+          0
+        ),
+        centerOffsetY: readCssNumber(
+          styles,
+          "--chart-grade-shadow-offset-y-center",
+          0.9
+        )
       },
       name: {
         weight: readCssNumber(styles, "--chart-name-font-weight", 400),
@@ -1100,9 +1046,6 @@ function buildRawLayout(width, height, theme) {
       nodeRadius,
       haloRadius: getHaloRadius(player, nodeRadius, scale, theme),
       shellRadius: isCenter ? nodeRadius + Math.max(7, 10 * scale) : nodeRadius,
-      coreRadius: isCenter
-        ? nodeRadius
-        : Math.max(6.5, nodeRadius - Math.max(2.5, 6 * scale)),
       innerRadius: isCenter ? Math.max(14, nodeRadius - Math.max(4, 14 * scale)) : 0,
       posFontSize,
       gradeFontSize,
@@ -1669,12 +1612,10 @@ function buildNodeSeries(data, isCenter, theme) {
         offsetY: theme.typography.posShadow.offsetY
       };
       const gradeShadow = {
-        color: theme.typography.gradeShadow.color,
-        blur: isCenter
-          ? theme.typography.gradeShadow.blur.center
-          : theme.typography.gradeShadow.blur.outer,
-        offsetX: theme.typography.gradeShadow.offsetX,
-        offsetY: theme.typography.gradeShadow.offsetY
+        color: theme.typography.gradeShadow.centerColor,
+        blur: theme.typography.gradeShadow.centerBlur,
+        offsetX: theme.typography.gradeShadow.centerOffsetX,
+        offsetY: theme.typography.gradeShadow.centerOffsetY
       };
       const rimWidth = isCenter
         ? Math.max(
@@ -1874,10 +1815,14 @@ function buildNodeSeries(data, isCenter, theme) {
             text: String(item.grade),
             fill: theme.text.strong,
             font: `${gradeTypography.weight} ${item.gradeFontSize}px ${theme.fontFamily}`,
-            shadowColor: gradeShadow.color,
-            shadowBlur: gradeShadow.blur,
-            shadowOffsetX: gradeShadow.offsetX,
-            shadowOffsetY: gradeShadow.offsetY,
+            ...(isCenter
+              ? {
+                  shadowColor: gradeShadow.color,
+                  shadowBlur: gradeShadow.blur,
+                  shadowOffsetX: gradeShadow.offsetX,
+                  shadowOffsetY: gradeShadow.offsetY
+                }
+              : {}),
             textAlign: "center",
             textVerticalAlign: "middle"
           }
