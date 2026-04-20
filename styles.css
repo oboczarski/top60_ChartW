@@ -1,7 +1,7 @@
 :root {
   --surface: #040714;
   --border: rgba(255, 255, 255, 0.1);
-  --border-soft: rgba(255, 255, 255, 0.07);
+  --border-soft: rgb(255 255 255 / 0%);
   --text: rgba(255, 255, 255, 0.97);
   --tier-1: #7637ff;
   --tier-2: #5e28ff;
@@ -16,22 +16,17 @@
   --chart-font-family: "Product Sans", "Google Sans", sans-serif;
   --chart-text-strong: #fff;
   --chart-text-name: rgba(255, 255, 255, 0.94);
-
   --chart-tooltip-bg: rgba(7, 11, 28, 0.96);
   --chart-tooltip-border: rgba(255, 255, 255, 0.08);
   --chart-tooltip-text-muted: rgba(255, 255, 255, 0.7);
   --chart-tooltip-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
   --chart-tooltip-radius: 14px;
   --chart-tooltip-padding: 10px 12px;
-
   --chart-name-font-weight: 400;
-
   --chart-pos-font-weight-center: 700;
   --chart-pos-font-weight-outer: 700;
-
   --chart-grade-font-weight-center: 400;
   --chart-grade-font-weight-outer: 400;
-
   --chart-pos-font-factor-center: 0.31;
   --chart-pos-font-min-center: 14;
   --chart-pos-font-max-center: 14.3;
@@ -45,7 +40,6 @@
   --chart-pos-font-bump-tier-2: 1.5;
   --chart-pos-font-bump-tier-3: 0.24;
   --chart-pos-font-bump-tier-4: 0;
-
   --chart-grade-font-factor-center: 1;
   --chart-grade-font-min-center: 42;
   --chart-grade-font-max-center: 42;
@@ -55,7 +49,6 @@
   --chart-grade-font-bump-tier-2: 6;
   --chart-grade-font-bump-tier-3: 3.5;
   --chart-grade-font-bump-tier-4: 0;
-
   --chart-name-font-factor-center: 0.34;
   --chart-name-font-min-center: 11;
   --chart-name-font-max-center: 14.2;
@@ -97,7 +90,7 @@ body {
 }
 
 .widget-card {
-  width: 360px;
+  width: 336px;
   max-width: 375px;
   border: 1px solid var(--border);
   border-radius: 26px;
@@ -109,7 +102,7 @@ body {
 }
 
 .widget-header {
-  padding: 12px 16px 8px;
+  padding: 3px 24px 0px;
 }
 
 .widget-header h2 {
@@ -126,13 +119,15 @@ body {
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 10px;
-  margin-top: 9px;
+  margin-bottom: -21px;
+  margin-top: 4px;
 }
 
 .tier-legend-item {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  margin-top: 0px;
   min-width: 0;
   padding: 4px 8px;
   border-radius: 999px;
@@ -178,6 +173,7 @@ body {
 }
 
 .chart-shell {
+  max-height: 321px;
   --pos-qb: #ff6363;
   --pos-rb: #25f4c5;
   --pos-wr: #3cbbfb;
@@ -209,7 +205,6 @@ body {
   /* border for each ring */
   --chart-band-edge-inner: rgba(205, 215, 255, 0.051);
   --chart-band-edge-outer: rgba(205, 215, 255, 0.061);
-  
   --chart-core-orbit-3-stroke: rgba(123, 15, 255, 0.15);
   --chart-core-ring-inner-stroke: rgba(255, 88, 214, 0);
   --chart-core-ring-inner-dash-a-min: 1;
@@ -218,7 +213,6 @@ body {
   --chart-core-ring-inner-dash-b-scale: 1.4;
   --chart-core-ring-inner-line-min: 1;
   --chart-core-ring-inner-line-scale: 21.4;
-  
   --connector-opacity: 0.62;
   --connector-shadow-blur-min: 4;
   --connector-shadow-blur-scale: 6.2;
@@ -239,7 +233,6 @@ body {
   --connector-tier-4-color: #ff84ad;
   --connector-tier-4-width-min: 1;
   --connector-tier-4-width-scale: 4.2;
-  
   --chart-node-halo-opacity-center: 0.06;
   --chart-node-halo-opacity-outer: 0.091;
   --chart-node-halo-blur-center: 6;
@@ -255,7 +248,6 @@ body {
   --chart-node-halo-spread-tier-3-scale: 11;
   --chart-node-halo-spread-tier-4-min: 5.1;
   --chart-node-halo-spread-tier-4-scale: 10.8;
-  
   --chart-node-shell-fill-center: rgba(255, 255, 255, 0.06);
   --chart-node-fill-tier-2: #5900ff43;
   --chart-node-fill-tier-3: #25d2f418;
@@ -305,7 +297,6 @@ body {
   --chart-node-inner-fill-center: rgba(18, 10, 39, 0.42);
   --chart-node-inner-stroke-center: rgba(255, 255, 255, 0.16);
   --chart-node-inner-stroke-width-center: 1;
-  
   --chart-center-gradient-stop-1: rgba(246, 237, 255, 0.98);
   --chart-center-gradient-stop-2: rgba(196, 162, 244, 0.94);
   --chart-center-gradient-stop-4: rgba(40, 11, 82, 1);
@@ -315,12 +306,10 @@ body {
   --chart-name-chip-padding-outer: 1 3 2 3;
   --chart-name-chip-bg-center: rgba(10, 16, 36, 0.28);
   --chart-name-chip-bg-outer: rgba(33, 41, 55, 0.9);
-
   --chart-name-chip-border-width: 1;
   --chart-name-chip-border-radius: 999;
   --chart-name-chip-border-alpha-center: 0.5;
   --chart-name-chip-border-alpha-outer: 0.38;
-  
   --chart-name-chip-shadow-blur-center: 3;
   --chart-name-chip-shadow-blur-outer: 2;
   --chart-name-chip-shadow-alpha-center: 0.3;
