@@ -90,7 +90,7 @@ body {
 }
 
 .widget-card {
-  width: 336px;
+  width: 348px;
   max-width: 375px;
   border: 1px solid var(--border);
   border-radius: 26px;
@@ -173,7 +173,7 @@ body {
 }
 
 .chart-shell {
-  max-height: 321px;
+  max-height: 340px;
   --pos-qb: #ff6363;
   --pos-rb: #25f4c5;
   --pos-wr: #3cbbfb;
