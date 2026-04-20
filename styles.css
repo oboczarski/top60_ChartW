@@ -59,7 +59,7 @@
   --chart-grade-font-min-outer: 9.2;
   --chart-grade-font-max-outer: 13.4;
   --chart-grade-font-bump-tier-2: 6;
-  --chart-grade-font-bump-tier-3: 3;
+  --chart-grade-font-bump-tier-3: 3.5;
   --chart-grade-font-bump-tier-4: 0;
 
   --chart-name-font-factor-center: 0.34;
@@ -184,10 +184,10 @@ body {
 }
 
 .chart-shell {
-  --pos-qb: #fc3688;
+  --pos-qb: #ff6363;
   --pos-rb: #25f4c5;
-  --pos-wr: #48d1ff;
-  --pos-te: #8d63ff;
+  --pos-wr: #3cbbfb;
+  --pos-te: #c072ff;
   --tier-1-glow: rgba(187, 116, 255, 0.42);
   --tier-2-glow: rgba(141, 99, 255, 0.4);
   --tier-3-glow: rgba(37, 244, 197, 0.34);
