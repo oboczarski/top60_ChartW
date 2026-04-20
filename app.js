@@ -621,7 +621,7 @@ function computeLayout(width, height, theme) {
         ? clamp(nodeRadius * nameTheme.factor, nameTheme.min, nameTheme.max)
         : getOuterNameSize(player.shortName, nodeRadius, nameTheme),
       nameOffsetY: isCenter
-        ? nodeRadius * 0.69
+        ? nodeRadius * 0.73
         : player.tier === 4
           ? nodeRadius * 0.81
           : player.tier === 3
