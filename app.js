@@ -1030,21 +1030,7 @@ function buildGraphic(layout, theme) {
       layout.coreOrbitRadii[2],
       "transparent",
       theme.graphics.coreOrbit3Stroke,
-      1,
-      {
-        style: {
-          lineDash: [
-            Math.max(
-              theme.graphics.coreOrbit3DashAMin,
-              theme.graphics.coreOrbit3DashAScale * layout.scale
-            ),
-            Math.max(
-              theme.graphics.coreOrbit3DashBMin,
-              theme.graphics.coreOrbit3DashBScale * layout.scale
-            )
-          ]
-        }
-      }
+      1
     )
   );
 

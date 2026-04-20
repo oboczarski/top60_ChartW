@@ -106,7 +106,7 @@ body {
     radial-gradient(circle at 86% 72%, rgba(72, 209, 255, 0.09), transparent 30%),
     linear-gradient(180deg, rgba(5, 9, 24, 0.98), rgba(3, 6, 18, 0.98));
   box-shadow:
-    0 24px 90px rgba(0, 0, 0, 0.45),
+    0 24px 72px rgba(0, 0, 0, 0.42),
     inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
@@ -251,8 +251,8 @@ body {
   --chart-core-ring-inner-line-scale: 14.4;
   
   --connector-opacity: 0.62;
-  --connector-shadow-blur-min: 6;
-  --connector-shadow-blur-scale: 8.8;
+  --connector-shadow-blur-min: 4;
+  --connector-shadow-blur-scale: 6.2;
   --connector-tier-2-color: #8d63ff;
   --connector-tier-2-width-min: 1;
   --connector-tier-2-width-scale: 5.88;
@@ -265,17 +265,17 @@ body {
   
   --chart-node-halo-opacity-center: 0.06;
   --chart-node-halo-opacity-outer: 0.091;
-  --chart-node-halo-blur-center: 8;
-  --chart-node-halo-blur-outer: 8;
-  --chart-node-halo-blur-tier-2: 8;
-  --chart-node-halo-blur-tier-3: 6.9;
-  --chart-node-halo-blur-tier-4: 6.3;
+  --chart-node-halo-blur-center: 6;
+  --chart-node-halo-blur-outer: 6;
+  --chart-node-halo-blur-tier-2: 5.8;
+  --chart-node-halo-blur-tier-3: 4.8;
+  --chart-node-halo-blur-tier-4: 4.4;
   --chart-node-halo-spread-center-min: 16;
   --chart-node-halo-spread-center-scale: 34;
-  --chart-node-halo-spread-tier-2-min: 7;
-  --chart-node-halo-spread-tier-2-scale: 15;
-  --chart-node-halo-spread-tier-3-min: 5.8;
-  --chart-node-halo-spread-tier-3-scale: 12.4;
+  --chart-node-halo-spread-tier-2-min: 6;
+  --chart-node-halo-spread-tier-2-scale: 13;
+  --chart-node-halo-spread-tier-3-min: 5;
+  --chart-node-halo-spread-tier-3-scale: 11;
   --chart-node-halo-spread-tier-4-min: 5.1;
   --chart-node-halo-spread-tier-4-scale: 10.8;
   
@@ -311,8 +311,8 @@ body {
   --chart-name-chip-border-alpha-center: 0.5;
   --chart-name-chip-border-alpha-outer: 0.38;
   
-  --chart-name-chip-shadow-blur-center: 4;
-  --chart-name-chip-shadow-blur-outer: 3;
+  --chart-name-chip-shadow-blur-center: 3;
+  --chart-name-chip-shadow-blur-outer: 2;
   --chart-name-chip-shadow-alpha-center: 0.3;
   --chart-name-chip-shadow-alpha-outer: 0.32;
   position: relative;
@@ -329,11 +329,10 @@ body {
       transparent 44%
     ),
     radial-gradient(circle at 22% 26%, rgba(72, 209, 255, 0.06), transparent 22%),
-    radial-gradient(circle at 84% 26%, rgba(37, 244, 197, 0.05), transparent 22%),
     linear-gradient(180deg, rgba(5, 9, 24, 0.94), rgba(7, 10, 28, 0.98));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    0 16px 48px rgba(0, 0, 0, 0.35);
+    0 16px 36px rgba(0, 0, 0, 0.32);
 }
 
 .chart-shell::before {
@@ -370,8 +369,7 @@ body {
       rgba(72, 209, 255, 0.04) 26%,
       transparent 44%
     ),
-    radial-gradient(circle at 18% 34%, rgba(141, 99, 255, 0.07), transparent 18%),
-    radial-gradient(circle at 84% 66%, rgba(72, 209, 255, 0.06), transparent 20%);
+    radial-gradient(circle at 18% 34%, rgba(141, 99, 255, 0.07), transparent 18%);
 }
 
 .chart {
