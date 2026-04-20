@@ -52,9 +52,9 @@
   --chart-pos-font-bump-tier-3: 0.24;
   --chart-pos-font-bump-tier-4: 0;
 
-  --chart-grade-font-factor-center: 0.74;
-  --chart-grade-font-min-center: 40;
-  --chart-grade-font-max-center: 40;
+  --chart-grade-font-factor-center: 1;
+  --chart-grade-font-min-center: 42;
+  --chart-grade-font-max-center: 42;
   --chart-grade-font-factor-outer: 0.82;
   --chart-grade-font-min-outer: 9.2;
   --chart-grade-font-max-outer: 13.4;
@@ -370,8 +370,10 @@ body {
   --chart-grade-shadow-blur-center: 5.8;
   --chart-grade-shadow-offset-x-center: 0;
   --chart-grade-shadow-offset-y-center: 0.2;
-  --chart-grade-stroke-color-center: rgba(13, 6, 27, 0.88);
-  --chart-grade-stroke-width-center: 4.8;
+  --chart-grade-underlay-color-center: rgba(13, 6, 27, 0.92);
+  --chart-grade-underlay-size-bump-center: 1.5;
+  --chart-grade-underlay-offset-x-center: 0.15;
+  --chart-grade-underlay-offset-y-center: 0.8;
   position: relative;
   height: 388px;
   overflow: hidden;

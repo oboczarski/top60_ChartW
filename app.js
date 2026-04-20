@@ -811,15 +811,25 @@ function readChartTheme() {
           "--chart-grade-shadow-offset-y-center",
           0.9
         ),
-        centerStrokeColor: readCssVar(
+        centerUnderlayColor: readCssVar(
           styles,
-          "--chart-grade-stroke-color-center",
-          "rgba(13,6,27,0.72)"
+          "--chart-grade-underlay-color-center",
+          "rgba(13,6,27,0.92)"
         ),
-        centerStrokeWidth: readCssNumber(
+        centerUnderlaySizeBump: readCssNumber(
           styles,
-          "--chart-grade-stroke-width-center",
-          2.8
+          "--chart-grade-underlay-size-bump-center",
+          1.5
+        ),
+        centerUnderlayOffsetX: readCssNumber(
+          styles,
+          "--chart-grade-underlay-offset-x-center",
+          0.15
+        ),
+        centerUnderlayOffsetY: readCssNumber(
+          styles,
+          "--chart-grade-underlay-offset-y-center",
+          0.8
         )
       },
       name: {
@@ -1816,6 +1826,29 @@ function buildNodeSeries(data, isCenter, theme) {
             textVerticalAlign: "middle"
           }
         },
+        ...(isCenter
+          ? [
+              {
+                type: "text",
+                x: x + gradeShadow.centerUnderlayOffsetX,
+                y: gradeTextY + gradeShadow.centerUnderlayOffsetY,
+                silent: true,
+                style: {
+                  text: String(item.grade),
+                  fill: gradeShadow.centerUnderlayColor,
+                  font: `${gradeTypography.weight} ${
+                    item.gradeFontSize + gradeShadow.centerUnderlaySizeBump
+                  }px ${theme.fontFamily}`,
+                  shadowColor: gradeShadow.color,
+                  shadowBlur: gradeShadow.blur,
+                  shadowOffsetX: gradeShadow.offsetX,
+                  shadowOffsetY: gradeShadow.offsetY,
+                  textAlign: "center",
+                  textVerticalAlign: "middle"
+                }
+              }
+            ]
+          : []),
         {
           type: "text",
           x,
@@ -1827,13 +1860,10 @@ function buildNodeSeries(data, isCenter, theme) {
             font: `${gradeTypography.weight} ${item.gradeFontSize}px ${theme.fontFamily}`,
             ...(isCenter
               ? {
-                  stroke: gradeShadow.centerStrokeColor,
-                  lineWidth: gradeShadow.centerStrokeWidth,
-                  lineJoin: "round",
                   shadowColor: gradeShadow.color,
-                  shadowBlur: gradeShadow.blur,
-                  shadowOffsetX: gradeShadow.offsetX,
-                  shadowOffsetY: gradeShadow.offsetY
+                  shadowBlur: gradeShadow.blur * 0.45,
+                  shadowOffsetX: 0,
+                  shadowOffsetY: 0.15
                 }
               : {}),
             textAlign: "center",
