@@ -810,6 +810,16 @@ function readChartTheme() {
           styles,
           "--chart-grade-shadow-offset-y-center",
           0.9
+        ),
+        centerStrokeColor: readCssVar(
+          styles,
+          "--chart-grade-stroke-color-center",
+          "rgba(13,6,27,0.72)"
+        ),
+        centerStrokeWidth: readCssNumber(
+          styles,
+          "--chart-grade-stroke-width-center",
+          2.8
         )
       },
       name: {
@@ -1817,6 +1827,9 @@ function buildNodeSeries(data, isCenter, theme) {
             font: `${gradeTypography.weight} ${item.gradeFontSize}px ${theme.fontFamily}`,
             ...(isCenter
               ? {
+                  stroke: gradeShadow.centerStrokeColor,
+                  lineWidth: gradeShadow.centerStrokeWidth,
+                  lineJoin: "round",
                   shadowColor: gradeShadow.color,
                   shadowBlur: gradeShadow.blur,
                   shadowOffsetX: gradeShadow.offsetX,
