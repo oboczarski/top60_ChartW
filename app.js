@@ -512,6 +512,14 @@ function readChartTheme() {
       )
     },
     typography: {
+      stackGap: {
+        center: readCssNumber(styles, "--chart-pos-grade-gap-center", 1.6),
+        outer: readCssNumber(styles, "--chart-pos-grade-gap-outer", 1.2)
+      },
+      posLift: {
+        center: readCssNumber(styles, "--chart-pos-label-lift-center", 0),
+        outer: readCssNumber(styles, "--chart-pos-label-lift-outer", 0)
+      },
       pos: {
         center: {
           weight: readCssNumber(styles, "--chart-pos-font-weight-center", 700),
@@ -756,6 +764,24 @@ function buildRawLayout(width, height, theme) {
       !isCenter && gradeType.bumpByTier
         ? gradeType.bumpByTier[player.tier] || 0
         : 0;
+    const posFontSize =
+      clamp(nodeRadius * posType.factor, posType.min, posType.max) + posFontBump;
+    const gradeFontSize =
+      clamp(nodeRadius * gradeType.factor, gradeType.min, gradeType.max) +
+      gradeFontBump;
+    const posGradeGap = isCenter
+      ? theme.typography.stackGap.center
+      : theme.typography.stackGap.outer;
+    const gradeOffsetY = isCenter ? -nodeRadius * 0.01 : nodeRadius * 0.04;
+    const posVisualHeight = posFontSize * (isCenter ? 0.58 : 0.54);
+    const gradeVisualHeight = gradeFontSize * (isCenter ? 0.62 : 0.58);
+    const posGradeSeparation = Math.round(
+      (posVisualHeight + gradeVisualHeight) / 2 + posGradeGap
+    );
+    const posOffsetY =
+      gradeOffsetY -
+      posGradeSeparation -
+      (isCenter ? theme.typography.posLift.center : theme.typography.posLift.outer);
 
     return {
       ...player,
@@ -770,24 +796,14 @@ function buildRawLayout(width, height, theme) {
         ? nodeRadius
         : Math.max(6.5, nodeRadius - Math.max(2.5, 6 * scale)),
       innerRadius: isCenter ? Math.max(14, nodeRadius - Math.max(4, 14 * scale)) : 0,
-      posFontSize:
-        clamp(nodeRadius * posType.factor, posType.min, posType.max) + posFontBump,
-      gradeFontSize: clamp(
-        nodeRadius * gradeType.factor,
-        gradeType.min,
-        gradeType.max
-      ) + gradeFontBump,
+      posFontSize,
+      gradeFontSize,
+      posGradeSeparation,
       nameFontSize: isCenter
         ? clamp(nodeRadius * nameType.factor, nameType.min, nameType.max)
         : getOuterNameSize(player, nodeRadius, theme),
-      posOffsetY: isCenter
-        ? -nodeRadius * 0.57
-        : player.tier === 2
-          ? -nodeRadius * 0.43
-          : player.tier === 3
-            ? -nodeRadius * 0.48
-            : -nodeRadius * 0.55,
-      gradeOffsetY: isCenter ? -nodeRadius * 0.01 : nodeRadius * 0.04,
+      posOffsetY,
+      gradeOffsetY,
       nameOffsetY: isCenter
         ? nodeRadius * 0.56
         : player.tier === 4
@@ -1158,6 +1174,8 @@ function buildNodeSeries(data, isCenter, theme) {
       const point = api.coord([item.x, item.y]);
       const x = point[0];
       const y = point[1];
+      const gradeTextY = Math.round(y + item.gradeOffsetY);
+      const posTextY = gradeTextY - item.posGradeSeparation;
       const nodeTheme = theme.nodes;
       const posTypography = isCenter
         ? theme.typography.pos.center
@@ -1239,7 +1257,7 @@ function buildNodeSeries(data, isCenter, theme) {
         {
           type: "text",
           x,
-          y: y + item.posOffsetY,
+          y: posTextY,
           silent: true,
           style: {
             text: item.pos,
@@ -1252,7 +1270,7 @@ function buildNodeSeries(data, isCenter, theme) {
         {
           type: "text",
           x,
-          y: y + item.gradeOffsetY,
+          y: gradeTextY,
           silent: true,
           style: {
             text: String(item.grade),

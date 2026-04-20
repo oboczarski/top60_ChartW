@@ -44,7 +44,11 @@
   --chart-pos-font-factor-outer: 0.42;
   --chart-pos-font-min-outer: 8.5;
   --chart-pos-font-max-outer: 9.5;
-  --chart-pos-font-bump-tier-2: 0.42;
+  --chart-pos-grade-gap-center: 1.15;
+  --chart-pos-grade-gap-outer: 0.55;
+  --chart-pos-label-lift-center: 0.75;
+  --chart-pos-label-lift-outer: 22.1;
+  --chart-pos-font-bump-tier-2: 0.64;
   --chart-pos-font-bump-tier-3: 0.24;
   --chart-pos-font-bump-tier-4: 0;
 
@@ -54,7 +58,7 @@
   --chart-grade-font-factor-outer: 0.82;
   --chart-grade-font-min-outer: 9.2;
   --chart-grade-font-max-outer: 13.4;
-  --chart-grade-font-bump-tier-2: 0.56;
+  --chart-grade-font-bump-tier-2: 0.84;
   --chart-grade-font-bump-tier-3: 0.32;
   --chart-grade-font-bump-tier-4: 0;
 
