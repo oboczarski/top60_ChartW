@@ -183,15 +183,15 @@ body {
   --pos-te: #c072ff;
 
   /* 3 rings of chart and dashedline color */
-  --tier-2-band-stroke: rgba(121, 0, 255, 0.54);
+  --tier-2-band-stroke: rgba(83, 58, 112, 0.74);
   --tier-2-band-fill: rgba(141, 99, 255, 0);
-  --tier-3-band-stroke: rgba(37, 210, 244, 0.12);
+  --tier-3-band-stroke: rgba(95, 221, 246, 0.12);
   --tier-3-band-fill: rgba(37, 210, 244, 0);
-  --tier-4-band-stroke: rgba(255, 132, 173, 0.12);
+  --tier-4-band-stroke: rgba(251, 163, 193, 0.12);
   --tier-4-band-fill: rgba(255, 132, 173, 0);
 
   /* dash distance and stuff */
-  --chart-band-dash-a-min: 0.25;
+  --chart-band-dash-a-min: 0.75;
   --chart-band-dash-a-scale: 1;
   --chart-band-dash-b-min: 4;
   --chart-band-dash-b-scale: 1;
